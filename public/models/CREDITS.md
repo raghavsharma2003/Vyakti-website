@@ -8,10 +8,11 @@
   `examples/models/gltf/LeePerrySmith/LeePerrySmith.glb`
   (<https://github.com/mrdoob/three.js>)
 - Licence: **CC BY 3.0** (<https://creativecommons.org/licenses/by/3.0/>)
-- Geometry: 9,279 vertices, 17,684 triangles, one mesh, POSITION + NORMAL +
-  TEXCOORD_0
-- This copy has texture references pruned, since the site renders the model as
-  a point cloud and never samples a material.
+- Original: 9,279 vertices, 17,684 triangles, POSITION + NORMAL + TEXCOORD_0
+- **Shipped copy: 75 KB, POSITION and indices only, simplified to 35% of the
+  original triangle count.** The site renders the model as a point cloud, so it
+  never samples a material, recomputes normals on load, and ignores UVs.
+  Simplification is invisible at the scale the cloud is drawn.
 
 ### Required attribution
 
@@ -32,11 +33,16 @@ has comparable topology (9,746 vertices). It was evaluated and left out to keep
 the bundle small; re-download it from Poly Haven rather than restoring it from
 git history.
 
-## Regenerating a geometry-only build
+## Regenerating the shipped build
 
-Textures are dead weight for a point cloud. To strip them from a fresh
-download:
+Starting from the original `LeePerrySmith.glb`:
 
 ```bash
-npx @gltf-transform/cli prune input.glb head-geo.glb
+npx @gltf-transform/cli weld    LeePerrySmith.glb welded.glb
+npx @gltf-transform/cli simplify welded.glb simplified.glb --ratio 0.35 --error 0.0015
+# then drop every attribute except POSITION, and prune the orphaned accessors
 ```
+
+The last step is a short @gltf-transform/functions script: set each primitive's
+non-POSITION semantics and material to null, then run `dedup()` and `prune()`.
+Keeping NORMAL and TEXCOORD_0 costs roughly 30 KB and buys nothing here.
