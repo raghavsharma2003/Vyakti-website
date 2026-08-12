@@ -1,0 +1,272 @@
+@import "tailwindcss";
+
+/* ============================================================
+   Vyakti design tokens.
+
+   Palette note: the warm near-black and the ember accent are not a
+   default reach. They are lifted from the existing product build
+   (splash #12110E, record accent #F0653A), so the site and the app
+   read as one brand. One accent, locked, used on every page.
+
+   Type: one family (Geist) plus its mono. Tracking is size-specific,
+   never a single global value.
+   ============================================================ */
+
+@theme {
+  /* Dark is the brand's primary expression. Light is a real, tested
+     second mode, not an afterthought. Values resolve via --c-* below. */
+  --color-void: var(--c-void);
+  --color-ink: var(--c-ink);
+  --color-surface: var(--c-surface);
+  --color-raised: var(--c-raised);
+  --color-hairline: var(--c-hairline);
+  --color-bone: var(--c-bone);
+  --color-ash: var(--c-ash);
+  --color-slate: var(--c-slate);
+  --color-ember: var(--c-ember);
+  --color-sage: var(--c-sage);
+  /* Label colour for solid ember fills. Flips by mode so the CTA clears AA
+     in both: dark text on the bright dark-mode ember, white on the deeper
+     light-mode ember. */
+  --color-on-ember: var(--c-on-ember);
+
+  --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, "SF Mono", monospace;
+
+  /* Fluid scale, 360px to 1440px. */
+  --text-eyebrow: 0.6875rem;
+  --text-micro: 0.75rem;
+  --text-small: 0.875rem;
+  --text-body: clamp(0.9375rem, 0.89rem + 0.22vw, 1.0625rem);
+  --text-lead: clamp(1.0625rem, 0.98rem + 0.4vw, 1.3125rem);
+  --text-h3: clamp(1.25rem, 1.11rem + 0.62vw, 1.75rem);
+  --text-h2: clamp(1.75rem, 1.35rem + 1.75vw, 3.25rem);
+  --text-h1: clamp(2.5rem, 1.72rem + 3.45vw, 5.25rem);
+
+  /* One easing family. Never ease-in on UI. */
+  --ease-out-quint: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+
+  --duration-fast: 140ms;
+  --duration-base: 240ms;
+  --duration-slow: 420ms;
+  --duration-reveal: 620ms;
+
+  /* Shape lock: interactive elements are pill, containers are 12px. */
+  --radius-sm: 8px;
+  --radius: 12px;
+  --radius-lg: 18px;
+}
+
+:root {
+  color-scheme: dark;
+
+  --c-void: #0a0907;
+  --c-ink: #12110e;
+  --c-surface: #191713;
+  --c-raised: #211e19;
+  --c-hairline: #2c2922;
+  --c-bone: #f4f1ea;
+  --c-ash: #a49d91;
+  --c-slate: #7a746a;
+  --c-ember: #f0653a;
+  --c-sage: #7fc8a9;
+  --c-on-ember: #14120e;
+
+  --shadow-lift: 0 1px 2px rgba(0, 0, 0, 0.4), 0 12px 32px rgba(0, 0, 0, 0.32);
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color-scheme: light;
+
+    --c-void: #eceae5;
+    --c-ink: #f6f6f4;
+    --c-surface: #ffffff;
+    --c-raised: #ffffff;
+    --c-hairline: #dedbd4;
+    --c-bone: #16140f;
+    --c-ash: #57524a;
+    /* Dark enough that the small mono labels still clear AA on the light ground. */
+    --c-slate: #5f594f;
+    /* Darkened so the accent still clears AA on a light ground. */
+    --c-ember: #c8431a;
+    --c-sage: #1f6b4f;
+    --c-on-ember: #ffffff;
+
+    --shadow-lift: 0 1px 2px rgba(22, 20, 15, 0.06),
+      0 12px 32px rgba(22, 20, 15, 0.08);
+  }
+}
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    border-color: var(--color-hairline);
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    background-color: var(--color-ink);
+  }
+
+  /* Lenis owns scrolling; native smooth would fight it. */
+  html.lenis,
+  html.lenis body {
+    height: auto;
+  }
+  html.lenis {
+    scroll-behavior: auto;
+  }
+  [data-lenis-prevent] {
+    overscroll-behavior: contain;
+  }
+
+  body {
+    background-color: var(--color-ink);
+    color: var(--color-bone);
+    font-family: var(--font-sans);
+    font-size: var(--text-body);
+    line-height: 1.6;
+    font-feature-settings: "kern", "liga", "calt";
+    overflow-x: clip;
+  }
+
+  ::selection {
+    background-color: color-mix(in oklab, var(--color-ember) 28%, transparent);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-ember);
+    outline-offset: 3px;
+    border-radius: 3px;
+  }
+
+  /* Tracking tightens as type grows, per optical sizing. */
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-weight: 500;
+    text-wrap: balance;
+  }
+
+  h1 {
+    font-size: var(--text-h1);
+    line-height: 1.02;
+    letter-spacing: -0.035em;
+  }
+
+  h2 {
+    font-size: var(--text-h2);
+    line-height: 1.06;
+    letter-spacing: -0.028em;
+  }
+
+  h3 {
+    font-size: var(--text-h3);
+    line-height: 1.18;
+    letter-spacing: -0.018em;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-ink);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-hairline);
+    border-radius: 99px;
+    border: 3px solid var(--color-ink);
+  }
+}
+
+@layer utilities {
+  /* Rationed: at most one of these per three sections. */
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: var(--text-eyebrow);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-slate);
+  }
+
+  .shell {
+    width: 100%;
+    max-width: 1240px;
+    margin-inline: auto;
+    padding-inline: clamp(1.25rem, 5vw, 3.5rem);
+  }
+
+  .shell-narrow {
+    width: 100%;
+    max-width: 760px;
+    margin-inline: auto;
+    padding-inline: clamp(1.25rem, 5vw, 3.5rem);
+  }
+
+  .measure {
+    max-width: 62ch;
+  }
+
+  /* Hairline that fades at both ends. */
+  .rule {
+    height: 1px;
+    background: linear-gradient(
+      to right,
+      transparent,
+      var(--color-hairline) 10%,
+      var(--color-hairline) 90%,
+      transparent
+    );
+  }
+}
+
+@layer components {
+  /* One entrance, used everywhere. Reveals once and stays revealed. */
+  [data-reveal] {
+    opacity: 0;
+    transform: translate3d(0, 16px, 0);
+    transition:
+      opacity var(--duration-reveal) var(--ease-out-quint),
+      transform var(--duration-reveal) var(--ease-out-quint);
+    transition-delay: var(--reveal-delay, 0ms);
+    will-change: transform, opacity;
+  }
+
+  [data-reveal].is-revealed {
+    opacity: 1;
+    transform: none;
+    will-change: auto;
+  }
+
+  .no-js [data-reveal] {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
