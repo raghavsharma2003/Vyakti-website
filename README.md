@@ -1,36 +1,70 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# vyakti.ai
 
-## Getting Started
+Marketing and research site for **Vyakti**, an AI research lab working on human
+indistinguishability in conversation. Built with Next.js 16 (App Router,
+Turbopack), React 19, Tailwind v4 and Three.js.
 
-First, run the development server:
+## Running it
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev      # http://localhost:3000
+npm run build    # production build
+npm start        # serve the build
+npx eslint .     # lint
+npx tsc --noEmit # typecheck
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Structure
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+src/app/            routes: /, /research, /meera, /company
+  opengraph-image   generated 1200x630 social card
+  sitemap.ts        route list for search engines
+  robots.ts
+src/components/
+  hero-stage        pinned hero: owns the scroll runway and copy beats
+  head/             the WebGL face (scene, shaders, capability gate)
+  turn-diagram      annotated conversation figure
+  site-header       site-footer  ui/cta  reveal  smooth-scroll
+src/lib/site.ts     copy source of truth: nav, footer, research tracks
+docs/research/      competitor and landscape research behind the positioning
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Design system
 
-## Learn More
+Tokens live in `src/app/globals.css`. Colours resolve through `--c-*` custom
+properties so the dark and light themes are one set of semantic names, not two
+parallel stylesheets.
 
-To learn more about Next.js, take a look at the following resources:
+- **Type.** One family (Geist) plus Geist Mono for labels and data. Tracking is
+  size-specific and tightens as type grows.
+- **Colour.** Warm near-black surfaces with a single ember accent, carried over
+  from the product build so the site and the app read as one brand. Solid ember
+  fills use `--color-on-ember`, which flips per theme to hold AA contrast.
+- **Motion.** One easing family and four durations. Scroll reveals fire once and
+  stay revealed. Everything collapses under `prefers-reduced-motion`.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## The face
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+`/models/head-geo.glb` is surface-sampled into a 72k point cloud (26k on small
+screens) and drawn with a custom shader. Scroll progress drives four beats:
+assemble, listen, speak, disperse.
 
-## Deploy on Vercel
+Two things are load-bearing:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Sampling uses a **seeded PRNG**, so the cloud is identical on every render and
+  the pass stays pure enough to run during render.
+- The animation loop reads uniforms off the **live material ref**, not a
+  memoised object. Suspense can replay the component, and a closure captured
+  before the replay animates an orphaned copy while the material that is
+  actually on screen keeps its initial values.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The page degrades to a soft warm gradient when WebGL is unavailable or the user
+has asked for reduced motion.
+
+## Credits
+
+Head geometry is the "Infinite" head scan by Lee Perry-Smith
+(Infinite-Realities), distributed with three.js under CC BY 3.0. Full details in
+`public/models/CREDITS.md`.

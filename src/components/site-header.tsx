@@ -24,7 +24,13 @@ export function SiteHeader() {
     return () => observer.disconnect();
   }, []);
 
-  useEffect(() => setOpen(false), [pathname]);
+  // Close the menu on navigation by adjusting state during render, which is
+  // React's documented alternative to a setState-in-effect.
+  const [navigatedFrom, setNavigatedFrom] = useState(pathname);
+  if (navigatedFrom !== pathname) {
+    setNavigatedFrom(pathname);
+    setOpen(false);
+  }
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";

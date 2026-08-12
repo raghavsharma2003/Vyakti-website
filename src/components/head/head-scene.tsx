@@ -25,6 +25,22 @@ function lerp(a: number, b: number, t: number) {
   return a + (b - a) * t;
 }
 
+/**
+ * Seeded PRNG (mulberry32). The sampling pass runs during render, so it has to
+ * be deterministic: the same seed gives the same cloud on the server and the
+ * client, and across re-renders.
+ */
+function makeRandom(seed: number) {
+  let a = seed >>> 0;
+  return () => {
+    a = (a + 0x6d2b79f5) >>> 0;
+    let t = a;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
 /** Smooth, frame-rate independent approach toward a target. */
 function damp(current: number, target: number, lambda: number, dt: number) {
   return lerp(current, target, 1 - Math.exp(-lambda * dt));
@@ -57,7 +73,10 @@ function useFacePoints(count: number) {
     src.translate(-center.x, -center.y, -center.z);
     src.scale(scale, scale, scale);
 
-    const sampler = new MeshSurfaceSampler(new THREE.Mesh(src)).build();
+    const random = makeRandom(0x5eed_1234);
+    const sampler = new MeshSurfaceSampler(new THREE.Mesh(src)).setRandomGenerator(
+      random,
+    ).build();
 
     const positions = new Float32Array(count * 3);
     const normals = new Float32Array(count * 3);
@@ -74,9 +93,9 @@ function useFacePoints(count: number) {
       normals.set([n.x, n.y, n.z], i * 3);
 
       // Per-point escape vector for the dispersion pass.
-      d.set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize();
+      d.set(random() - 0.5, random() - 0.5, random() - 0.5).normalize();
       directions.set([d.x, d.y, d.z], i * 3);
-      randoms[i] = Math.random();
+      randoms[i] = random();
     }
 
     const geometry = new THREE.BufferGeometry();

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { Cta } from "@/components/ui/cta";
 import { VyaktiHead } from "@/components/head";
 
@@ -27,7 +27,9 @@ function windowOpacity(p: number, start: number, end: number) {
 export function HeroStage() {
   const runway = useRef<HTMLDivElement>(null);
   const stage = useRef<HTMLDivElement>(null);
-  const progress = useRef({ current: 0 });
+  // A stable mutable box rather than a ref, so it can be read during render
+  // and handed to the WebGL scene without tripping the refs-in-render rule.
+  const progress = useMemo(() => ({ current: 0 }), []);
 
   // One animation frame loop for the whole section. It writes CSS custom
   // properties and a plain object the WebGL scene reads, so scrolling never
@@ -43,7 +45,7 @@ export function HeroStage() {
         const rect = el.getBoundingClientRect();
         const span = rect.height - window.innerHeight;
         const p = span > 0 ? Math.min(Math.max(-rect.top / span, 0), 1) : 0;
-        progress.current.current = p;
+        progress.current = p;
 
         BEATS.forEach((beat, i) => {
           st.style.setProperty(
@@ -57,7 +59,7 @@ export function HeroStage() {
 
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, []);
+  }, [progress]);
 
   return (
     <section ref={runway} className="relative h-[320vh]" aria-label="Introduction">
@@ -67,7 +69,7 @@ export function HeroStage() {
         style={{ ["--beat-0" as string]: 1, ["--beat-1" as string]: 0, ["--beat-2" as string]: 0 }}
       >
         <VyaktiHead
-          progress={progress.current}
+          progress={progress}
           className="absolute inset-0 z-0 md:left-[26%]"
         />
 

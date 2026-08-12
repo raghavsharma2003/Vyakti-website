@@ -1,29 +1,47 @@
 "use client";
 
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useSyncExternalStore } from "react";
 import dynamic from "next/dynamic";
 
 const HeadScene = dynamic(() => import("./head-scene"), { ssr: false });
 
 export type Progress = { current: number };
 
-/** True when the browser can actually run the scene and the user wants motion. */
-export function useWebglAllowed() {
-  const [allowed, setAllowed] = useState(false);
+/** Probed once and cached; neither answer changes over the page's lifetime. */
+let webglSupport: boolean | null = null;
 
-  useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+function canRunScene() {
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return false;
+  if (webglSupport === null) {
     try {
       const probe = document.createElement("canvas");
-      const ctx = probe.getContext("webgl2") ?? probe.getContext("webgl");
-      if (!ctx) return;
+      webglSupport = Boolean(
+        probe.getContext("webgl2") ?? probe.getContext("webgl"),
+      );
     } catch {
-      return;
+      webglSupport = false;
     }
-    setAllowed(true);
-  }, []);
+  }
+  return webglSupport;
+}
 
-  return allowed;
+/**
+ * True when the browser can run the scene and the user has not asked for
+ * reduced motion. Read through useSyncExternalStore so the server renders the
+ * fallback and the client swaps in without a state update inside an effect.
+ */
+export function useWebglAllowed() {
+  return useSyncExternalStore(
+    subscribeToMotionPreference,
+    canRunScene,
+    () => false,
+  );
+}
+
+function subscribeToMotionPreference(onChange: () => void) {
+  const query = window.matchMedia("(prefers-reduced-motion: reduce)");
+  query.addEventListener("change", onChange);
+  return () => query.removeEventListener("change", onChange);
 }
 
 /**
