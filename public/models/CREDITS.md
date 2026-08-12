@@ -9,10 +9,10 @@
   (<https://github.com/mrdoob/three.js>)
 - Licence: **CC BY 3.0** (<https://creativecommons.org/licenses/by/3.0/>)
 - Original: 9,279 vertices, 17,684 triangles, POSITION + NORMAL + TEXCOORD_0
-- **Shipped copy: 75 KB, POSITION and indices only, simplified to 35% of the
-  original triangle count.** The site renders the model as a point cloud, so it
-  never samples a material, recomputes normals on load, and ignores UVs.
-  Simplification is invisible at the scale the cloud is drawn.
+- **Shipped copy: 76 KB, 3,361 vertices, POSITION and indices only, simplified
+  to 35% of the original triangle count.** The site renders the model as a
+  point cloud, so it never samples a material, recomputes normals on load, and
+  ignores UVs. Simplification is invisible at the scale the cloud is drawn.
 
 ### Required attribution
 
@@ -35,14 +35,18 @@ git history.
 
 ## Regenerating the shipped build
 
-Starting from the original `LeePerrySmith.glb`:
+`scripts/build-head-model.mjs` derives the shipped file from upstream:
 
 ```bash
-npx @gltf-transform/cli weld    LeePerrySmith.glb welded.glb
-npx @gltf-transform/cli simplify welded.glb simplified.glb --ratio 0.35 --error 0.0015
-# then drop every attribute except POSITION, and prune the orphaned accessors
+npm run model     # force a rebuild
 ```
 
-The last step is a short @gltf-transform/functions script: set each primitive's
-non-POSITION semantics and material to null, then run `dedup()` and `prune()`.
-Keeping NORMAL and TEXCOORD_0 costs roughly 30 KB and buys nothing here.
+It fetches the source from a pinned three.js tag (r180), verifies its SHA-256,
+welds, simplifies to 35%, drops every attribute except POSITION, then prunes
+the orphaned accessors. Keeping NORMAL and TEXCOORD_0 costs roughly 30 KB and
+buys nothing here.
+
+The script also runs as `prebuild`, where it is a no-op if the committed file is
+already present. That matters for deployments that ship source without the
+binary: the asset is reconstructed from its documented source rather than being
+absent.
