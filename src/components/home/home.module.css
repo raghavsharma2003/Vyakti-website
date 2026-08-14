@@ -1,0 +1,779 @@
+.story {
+  position: relative;
+  background: var(--color-ink);
+}
+
+.storyRunway {
+  position: relative;
+  height: 590svh;
+}
+
+.storyStage {
+  position: sticky;
+  top: 0;
+  min-height: 100svh;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 73% 43%, rgb(211 63 44 / 8%), transparent 30%),
+    var(--color-ink);
+}
+
+.storyVisual {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.loadingPortrait {
+  position: absolute;
+  inset: 11% 2% 2% 38%;
+  opacity: 0.8;
+  -webkit-mask-image: radial-gradient(
+    ellipse 66% 78% at 50% 47%,
+    #000 38%,
+    rgb(0 0 0 / 88%) 57%,
+    transparent 80%
+  );
+  mask-image: radial-gradient(
+    ellipse 66% 78% at 50% 47%,
+    #000 38%,
+    rgb(0 0 0 / 88%) 57%,
+    transparent 80%
+  );
+}
+
+.loadingPortrait img {
+  object-fit: contain;
+  mix-blend-mode: multiply;
+}
+
+.leftReadingMask,
+.rightReadingMask {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.leftReadingMask {
+  background: linear-gradient(
+    90deg,
+    var(--color-ink) 0%,
+    rgb(247 247 244 / 98%) 29%,
+    rgb(247 247 244 / 76%) 43%,
+    transparent 67%
+  );
+}
+
+.rightReadingMask {
+  opacity: 0;
+  background: linear-gradient(
+    270deg,
+    var(--color-ink) 0%,
+    rgb(247 247 244 / 98%) 29%,
+    rgb(247 247 244 / 76%) 43%,
+    transparent 67%
+  );
+}
+
+.chapterLayer {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  min-height: 100svh;
+  max-width: 1480px;
+  margin-inline: auto;
+  padding-inline: clamp(1.25rem, 4vw, 4.5rem);
+}
+
+.chapter {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: min(47rem, 50vw);
+  transform: translate3d(0, 0, 0);
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+.chapterLeft {
+  left: clamp(1.25rem, 4vw, 4.5rem);
+}
+
+.chapterRight {
+  right: clamp(1.25rem, 4vw, 4.5rem);
+}
+
+.chapterLabel {
+  max-width: 34rem;
+  margin-bottom: 1.4rem;
+  color: var(--color-slate);
+  font-size: clamp(0.83rem, 0.8rem + 0.12vw, 0.95rem);
+  font-weight: 540;
+  letter-spacing: -0.01em;
+}
+
+.chapter h1,
+.chapter h2 {
+  max-width: 12ch;
+  color: var(--color-bone);
+  font-size: clamp(2.8rem, 4.7vw, 5.8rem);
+  font-weight: 540;
+  line-height: 0.94;
+  letter-spacing: -0.058em;
+}
+
+.heroChapter {
+  width: min(68rem, 66vw);
+}
+
+.heroChapter h1 {
+  max-width: none;
+  font-size: clamp(3.35rem, 6.3vw, 7.7rem);
+  line-height: 0.9;
+  letter-spacing: -0.068em;
+}
+
+.heroChapter h1 span {
+  display: block;
+  white-space: nowrap;
+}
+
+.signalText {
+  color: var(--color-ember);
+}
+
+.chapterBody {
+  max-width: 42ch;
+  margin-top: 1.65rem;
+  color: var(--color-ash);
+  font-size: clamp(1rem, 0.92rem + 0.4vw, 1.32rem);
+  line-height: 1.48;
+  letter-spacing: -0.015em;
+}
+
+.heroChapter .chapterBody {
+  max-width: 50ch;
+}
+
+.chapterActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  margin-top: 1.9rem;
+}
+
+.staticPortraits {
+  display: none;
+}
+
+.storyFallback .storyRunway {
+  height: auto;
+}
+
+.storyFallback .storyStage {
+  position: relative;
+  min-height: auto;
+  overflow: visible;
+  background: var(--color-ink);
+}
+
+.storyFallback .storyVisual,
+.storyFallback .leftReadingMask,
+.storyFallback .rightReadingMask {
+  display: none;
+}
+
+.storyFallback .chapterLayer {
+  min-height: auto;
+  padding-top: 7.5rem;
+  padding-bottom: 5rem;
+}
+
+.storyFallback .chapter {
+  position: relative;
+  top: auto;
+  right: auto;
+  bottom: auto;
+  left: auto;
+  display: block;
+  width: min(64rem, 100%);
+  min-height: auto;
+  padding-block: clamp(3.25rem, 8vw, 7rem);
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: none !important;
+  pointer-events: auto !important;
+  will-change: auto;
+}
+
+.storyFallback .chapterRight {
+  margin-left: auto;
+}
+
+.storyFallback .staticPortraits {
+  display: grid;
+  max-width: 1480px;
+  margin-inline: auto;
+  padding: 0 clamp(1.25rem, 4vw, 4.5rem) 6rem;
+  gap: 1rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.staticPortraits figure {
+  position: relative;
+  aspect-ratio: 1;
+  overflow: hidden;
+  background: var(--color-void);
+}
+
+.staticPortraits img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  mix-blend-mode: multiply;
+}
+
+.meeraPosterCrop img {
+  width: 400%;
+  max-width: none;
+  height: 200%;
+  transform: translate3d(-1.8%, -7.5%, 0);
+  object-fit: fill;
+}
+
+.thesisSection,
+.researchSection,
+.evidenceSection,
+.principlesSection {
+  position: relative;
+  border-top: 1px solid var(--color-hairline);
+}
+
+.thesisSection {
+  padding-block: clamp(7rem, 14vw, 13rem);
+  background: var(--color-void);
+}
+
+.sectionLead {
+  max-width: 19ch;
+  color: var(--color-bone);
+  font-size: clamp(2.7rem, 5.4vw, 6.7rem);
+  font-weight: 540;
+  line-height: 0.94;
+  letter-spacing: -0.06em;
+}
+
+.sectionCopy {
+  max-width: 48ch;
+  margin-top: 2rem;
+  color: var(--color-ash);
+  font-size: clamp(1.05rem, 0.95rem + 0.48vw, 1.42rem);
+  line-height: 1.55;
+  letter-spacing: -0.018em;
+}
+
+.continuityMap {
+  display: grid;
+  margin-top: clamp(4.5rem, 9vw, 8rem);
+  border-top: 1px solid var(--color-bone);
+  border-bottom: 1px solid var(--color-bone);
+  grid-template-columns: minmax(0, 0.82fr) 3rem minmax(0, 1.2fr) 3rem minmax(0, 0.72fr);
+  align-items: stretch;
+}
+
+.continuityNode {
+  min-height: 25rem;
+  padding: clamp(1.5rem, 3vw, 3rem);
+}
+
+.continuityNode small {
+  display: block;
+  color: var(--color-slate);
+  font-size: 0.78rem;
+}
+
+.continuityNode h3 {
+  max-width: 10ch;
+  margin-top: 1.5rem;
+  font-size: clamp(2rem, 3vw, 4rem);
+  line-height: 0.98;
+}
+
+.continuityNode ul {
+  margin-top: 3rem;
+  color: var(--color-ash);
+  font-size: clamp(0.95rem, 0.9rem + 0.18vw, 1.08rem);
+  line-height: 1.85;
+}
+
+.continuityCore {
+  background: var(--color-ember);
+  color: var(--color-on-ember);
+}
+
+.continuityCore small,
+.continuityCore ul {
+  color: color-mix(in oklab, var(--color-on-ember) 72%, transparent);
+}
+
+.continuityArrow {
+  display: grid;
+  min-width: 3rem;
+  place-items: center;
+  color: var(--color-ember);
+  font-size: 1.6rem;
+}
+
+.continuityOutput {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.continuityOutput strong {
+  color: var(--color-bone);
+  font-size: clamp(2.4rem, 4vw, 5rem);
+  font-weight: 560;
+  line-height: 0.9;
+  letter-spacing: -0.065em;
+}
+
+.continuityMap figcaption {
+  grid-column: 1 / -1;
+  padding: 1rem 0;
+  color: var(--color-slate);
+  font-size: 0.78rem;
+}
+
+.researchSection {
+  padding-block: clamp(7rem, 13vw, 12rem);
+  background: var(--color-ink);
+}
+
+.researchHeader {
+  max-width: 64rem;
+}
+
+.researchGrid {
+  display: grid;
+  margin-top: clamp(4rem, 8vw, 7rem);
+  border-top: 1px solid var(--color-bone);
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+}
+
+.researchItem {
+  min-height: 22rem;
+  padding: clamp(1.6rem, 3.5vw, 3.6rem);
+  border-bottom: 1px solid var(--color-hairline);
+}
+
+.researchItem:nth-child(1) {
+  grid-column: span 7;
+  border-right: 1px solid var(--color-hairline);
+}
+
+.researchItem:nth-child(2) {
+  grid-column: span 5;
+}
+
+.researchItem:nth-child(3) {
+  grid-column: span 5;
+  border-right: 1px solid var(--color-hairline);
+}
+
+.researchItem:nth-child(4) {
+  grid-column: span 7;
+  background: var(--color-void);
+}
+
+.researchItem h3 {
+  max-width: 12ch;
+  font-size: clamp(2rem, 3.2vw, 4.2rem);
+  line-height: 0.98;
+}
+
+.researchItem p {
+  max-width: 38ch;
+  margin-top: 1.3rem;
+  color: var(--color-ash);
+  font-size: clamp(0.98rem, 0.93rem + 0.2vw, 1.12rem);
+  line-height: 1.58;
+}
+
+.researchLink {
+  display: inline-flex;
+  margin-top: 2.8rem;
+  border-bottom: 1px solid currentColor;
+  color: var(--color-bone);
+  font-size: 0.9rem;
+  font-weight: 560;
+  transition:
+    color var(--duration-fast) var(--ease-out-quint),
+    border-color var(--duration-fast) var(--ease-out-quint);
+}
+
+.evidenceSection {
+  padding-block: clamp(7rem, 13vw, 12rem);
+  background: var(--color-void);
+}
+
+.evidenceIntro {
+  max-width: 70rem;
+}
+
+.timeHorizon {
+  position: relative;
+  display: grid;
+  margin-top: clamp(4.5rem, 8vw, 7rem);
+  padding-top: 2.2rem;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.timeHorizon::before {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 2px;
+  content: "";
+  background: linear-gradient(90deg, var(--color-bone), var(--color-ember));
+}
+
+.timePoint {
+  position: relative;
+  padding-right: 2rem;
+}
+
+.timePoint::before {
+  position: absolute;
+  top: -2.62rem;
+  left: 0;
+  width: 0.85rem;
+  height: 0.85rem;
+  border: 2px solid var(--color-ink);
+  border-radius: 50%;
+  content: "";
+  background: var(--color-ember);
+}
+
+.timePoint strong {
+  display: block;
+  font-size: clamp(1.4rem, 2.3vw, 2.8rem);
+  font-weight: 540;
+  letter-spacing: -0.04em;
+}
+
+.timePoint span {
+  display: block;
+  max-width: 27ch;
+  margin-top: 0.7rem;
+  color: var(--color-ash);
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
+.evaluationQuestions {
+  display: grid;
+  margin-top: clamp(5rem, 9vw, 8rem);
+  gap: clamp(2.5rem, 6vw, 6rem);
+  grid-template-columns: 1.2fr 0.8fr;
+}
+
+.evaluationQuestions p {
+  max-width: 18ch;
+  color: var(--color-bone);
+  font-size: clamp(2rem, 3.6vw, 4.6rem);
+  line-height: 1;
+  letter-spacing: -0.05em;
+}
+
+.evaluationQuestions p:nth-child(2) {
+  margin-top: clamp(4rem, 9vw, 9rem);
+}
+
+.principlesSection {
+  scroll-margin-top: 5rem;
+  padding-block: clamp(7rem, 13vw, 12rem);
+  background: var(--color-ink);
+}
+
+.principlesHeader {
+  max-width: 76rem;
+}
+
+.principlesList {
+  margin-top: clamp(4rem, 8vw, 7rem);
+  border-top: 1px solid var(--color-bone);
+}
+
+.principle {
+  display: grid;
+  padding-block: 1.8rem;
+  border-bottom: 1px solid var(--color-hairline);
+  gap: 1.5rem;
+  grid-template-columns: minmax(12rem, 0.7fr) minmax(0, 1.3fr);
+}
+
+.principle h3 {
+  font-size: clamp(1.35rem, 1.1rem + 0.8vw, 2rem);
+}
+
+.principle p {
+  max-width: 56ch;
+  color: var(--color-ash);
+  line-height: 1.62;
+}
+
+.finalInvite {
+  display: grid;
+  margin-top: clamp(6rem, 11vw, 10rem);
+  padding-top: clamp(3rem, 6vw, 5rem);
+  border-top: 1px solid var(--color-bone);
+  gap: 2rem;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+}
+
+.finalInvite h2 {
+  max-width: 16ch;
+  font-size: clamp(2.7rem, 5vw, 6.2rem);
+  line-height: 0.95;
+}
+
+@media (max-width: 980px) {
+  .storyRunway {
+    height: 520svh;
+  }
+
+  .storyStage {
+    background:
+      radial-gradient(circle at 50% 28%, rgb(211 63 44 / 8%), transparent 28%),
+      var(--color-ink);
+  }
+
+  .storyVisual {
+    right: -8%;
+    bottom: 34%;
+    left: -8%;
+    height: 67%;
+  }
+
+  .leftReadingMask,
+  .rightReadingMask {
+    background: linear-gradient(
+      0deg,
+      var(--color-ink) 0%,
+      rgb(247 247 244 / 96%) 23%,
+      rgb(247 247 244 / 68%) 37%,
+      transparent 59%
+    );
+  }
+
+  .chapter {
+    top: auto;
+    right: clamp(1.25rem, 4vw, 4.5rem);
+    bottom: max(2.2rem, env(safe-area-inset-bottom));
+    left: clamp(1.25rem, 4vw, 4.5rem);
+    width: auto;
+    display: block;
+    transform: none;
+  }
+
+  .chapter h1,
+  .chapter h2 {
+    max-width: 16ch;
+    font-size: clamp(2.35rem, 8.8vw, 4.5rem);
+    line-height: 0.97;
+  }
+
+  .heroChapter,
+  .heroChapter h1 {
+    width: auto;
+    max-width: none;
+  }
+
+  .heroChapter h1 span {
+    white-space: normal;
+  }
+
+  .chapterBody {
+    max-width: 38ch;
+    margin-top: 1rem;
+    font-size: 0.98rem;
+  }
+
+  .chapterActions {
+    margin-top: 1.2rem;
+  }
+
+  .continuityMap {
+    grid-template-columns: 1fr;
+  }
+
+  .continuityNode {
+    min-height: auto;
+    padding-block: 2.5rem;
+  }
+
+  .continuityArrow {
+    min-height: 3.5rem;
+    transform: rotate(90deg);
+  }
+
+  .researchItem:nth-child(n) {
+    grid-column: span 6;
+  }
+
+  .researchItem:nth-child(odd) {
+    border-right: 1px solid var(--color-hairline);
+  }
+}
+
+@media (max-width: 680px) {
+  .storyRunway {
+    height: 500svh;
+  }
+
+  .chapterLabel {
+    margin-bottom: 0.8rem;
+    font-size: 0.76rem;
+  }
+
+  .chapter h1,
+  .chapter h2 {
+    font-size: clamp(2.08rem, 9.6vw, 3.2rem);
+    letter-spacing: -0.052em;
+  }
+
+  .heroChapter h1 {
+    font-size: clamp(2.5rem, 11.3vw, 3.75rem);
+  }
+
+  .chapterActions {
+    gap: 0.5rem;
+  }
+
+  .storyFallback .chapterLayer {
+    padding-top: 5rem;
+  }
+
+  .staticPortraits {
+    grid-template-columns: 1fr;
+  }
+
+  .sectionLead {
+    font-size: clamp(2.5rem, 12vw, 4.4rem);
+  }
+
+  .researchGrid {
+    display: block;
+  }
+
+  .researchItem:nth-child(n) {
+    min-height: auto;
+    padding-block: 3rem;
+    border-right: 0;
+  }
+
+  .timeHorizon {
+    gap: 2.6rem;
+    grid-template-columns: 1fr;
+  }
+
+  .timeHorizon::before {
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 2px;
+    height: auto;
+    background: linear-gradient(180deg, var(--color-bone), var(--color-ember));
+  }
+
+  .timePoint {
+    padding-left: 2rem;
+  }
+
+  .timePoint::before {
+    top: 0.3rem;
+    left: -0.34rem;
+  }
+
+  .evaluationQuestions {
+    grid-template-columns: 1fr;
+  }
+
+  .evaluationQuestions p:nth-child(2) {
+    margin-top: 0;
+    margin-left: 12%;
+  }
+
+  .principle,
+  .finalInvite {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .storyRunway {
+    height: auto;
+  }
+
+  .storyStage {
+    position: relative;
+    min-height: auto;
+    overflow: visible;
+    background: var(--color-ink);
+  }
+
+  .storyVisual,
+  .leftReadingMask,
+  .rightReadingMask {
+    display: none;
+  }
+
+  .chapterLayer {
+    min-height: auto;
+    padding-top: 7.5rem;
+    padding-bottom: 4rem;
+  }
+
+  .chapter {
+    position: relative;
+    top: auto;
+    right: auto;
+    bottom: auto;
+    left: auto;
+    display: block;
+    width: min(64rem, 100%);
+    padding-block: 3.5rem;
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+    pointer-events: auto !important;
+    will-change: auto;
+  }
+
+  .chapterRight {
+    margin-left: auto;
+  }
+
+  .staticPortraits {
+    display: grid;
+    max-width: 1480px;
+    margin-inline: auto;
+    padding: 0 clamp(1.25rem, 4vw, 4.5rem) 5rem;
+    gap: 1rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .leftReadingMask,
+  .rightReadingMask {
+    background: var(--color-ink);
+  }
+}

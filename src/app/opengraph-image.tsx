@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 
 export const alt =
-  "Vyakti, an AI research lab building machines you cannot tell from people";
+  "Vyakti, a relational intelligence lab";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -15,7 +15,7 @@ export default function OpengraphImage() {
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
-          backgroundColor: "#12110E",
+          backgroundColor: "#F8F8F5",
           padding: "72px 80px",
           fontFamily: "sans-serif",
         }}
@@ -30,22 +30,26 @@ export default function OpengraphImage() {
             height: 720,
             borderRadius: 9999,
             background:
-              "radial-gradient(circle, rgba(240,101,58,0.30) 0%, rgba(240,101,58,0.06) 45%, rgba(18,17,14,0) 70%)",
+              "radial-gradient(circle, rgba(200,63,45,0.18) 0%, rgba(200,63,45,0.04) 45%, rgba(248,248,245,0) 70%)",
           }}
         />
 
-        <div style={{ display: "flex", alignItems: "baseline", gap: 14 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
+          <svg width="48" height="48" viewBox="0 0 32 32" fill="none">
+            <path d="M5 7H27" stroke="#0C0E0D" strokeWidth="2" strokeLinecap="round" />
+            <path d="M8.5 10C9.2 16.6 11.5 22.4 16 26.2C20.5 22.4 22.8 16.6 23.5 10" stroke="#0C0E0D" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            <circle cx="16" cy="14" r="2.1" fill="#C83F2D" />
+          </svg>
           <div
             style={{
               fontSize: 34,
               fontWeight: 600,
-              color: "#F4F1EA",
+              color: "#0C0E0D",
               letterSpacing: "-0.03em",
             }}
           >
-            Vyakti
+            vyakti
           </div>
-          <div style={{ fontSize: 20, color: "#7A746A" }}>व्यक्ति</div>
         </div>
 
         <div style={{ display: "flex", flexDirection: "column" }}>
@@ -57,11 +61,11 @@ export default function OpengraphImage() {
               lineHeight: 1.08,
               fontWeight: 500,
               letterSpacing: "-0.038em",
-              color: "#F4F1EA",
+              color: "#0C0E0D",
               maxWidth: 960,
             }}
           >
-            We are building AI that is
+            Intelligence is becoming abundant.
           </div>
           <div
             style={{
@@ -69,21 +73,21 @@ export default function OpengraphImage() {
               lineHeight: 1.08,
               fontWeight: 500,
               letterSpacing: "-0.038em",
-              color: "#F0653A",
+              color: "#C83F2D",
               maxWidth: 960,
             }}
           >
-            indistinguishable from a person.
+            Continuity is not.
           </div>
           <div
             style={{
               marginTop: 30,
               fontSize: 27,
-              color: "#A49D91",
+              color: "#55564F",
               letterSpacing: "-0.01em",
             }}
           >
-            An AI research lab. Turn-taking, affect, persona, culture.
+            A relational intelligence lab. Meera is our first product in development.
           </div>
         </div>
       </div>

@@ -5,34 +5,34 @@ import { SITE } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Company",
   description:
-    "Vyakti is a small AI research lab working on human indistinguishability in conversation. What we believe, how we work, and the roles we are hiring for.",
+    "Vyakti is an independent relational intelligence lab building persistent AI identities and Meera, its first consumer product in development.",
   alternates: { canonical: "/company" },
   openGraph: {
     title: "Company",
     description:
-      "A small research lab working on what makes a conversation feel like a person.",
+      "An independent relational intelligence lab researching identity continuity, shared history and multimodal expression.",
     url: "/company",
   },
 };
 
 const ROLES = [
   {
-    title: "Research Engineer, Speech",
+    title: "Speech and voice",
     detail:
       "Speech-to-speech modelling, prosody and expressive synthesis. You have shipped audio models and care about how they sound to a person, not only how they score.",
   },
   {
-    title: "Research Engineer, Conversation",
+    title: "Conversation systems",
     detail:
       "Turn-taking, endpointing and full-duplex dialogue. Comfortable with real-time constraints and with linguistics literature that predates deep learning.",
   },
   {
-    title: "Research Scientist, Evaluation",
+    title: "Long-horizon evaluation",
     detail:
       "Designing the studies that tell us whether any of this is working. Experimental design, human subjects, and a healthy suspicion of your own results.",
   },
   {
-    title: "Design Engineer",
+    title: "Design engineering",
     detail:
       "The surfaces people meet these systems through. Interface, motion and sound, built to the standard the research is held to.",
   },
@@ -49,8 +49,8 @@ export default function CompanyPage() {
           <p className="measure mt-8 text-lead text-ash">
             Vyakti takes its name from the Sanskrit word for a person: the
             individual, that which is made manifest. The question is whether a
-            machine can be one in the only sense that matters to the person
-            talking to it.
+            machine can sustain identity, history and presence without pretending
+            to be human.
           </p>
         </div>
       </section>
@@ -72,11 +72,11 @@ export default function CompanyPage() {
               },
               {
                 t: "Say what does not work",
-                d: "Every system has a range where it is convincing and a range where it is not. Publishing only the first is how this field lost credibility.",
+                d: "Every system has a range where it works reliably and a range where it does not. Reporting only the first obscures the work still required.",
               },
               {
-                t: "One product, in the open",
-                d: "Research that never reaches a person who did not ask for it stays theoretical. Meera is where the work has to survive contact.",
+                t: "Research through one product",
+                d: "Research that never reaches real use stays theoretical. Meera is where the work has to survive contact with time, context and shared history.",
               },
               {
                 t: "Culture is not a setting",
@@ -100,11 +100,11 @@ export default function CompanyPage() {
         <div className="shell">
           <p className="eyebrow">Careers</p>
           <h2 className="mt-4 max-w-[20ch] text-bone" data-reveal="0">
-            Roles we are hiring for.
+            People we hope to meet.
           </h2>
           <p className="measure mt-6 text-lead text-ash" data-reveal="1">
-            We hire slowly and in person. If none of these is quite you but the
-            problem is, write anyway and say what you would work on.
+            If your work overlaps with these areas, write and tell us which part
+            of the problem you would take on.
           </p>
 
           <ul className="mt-14 divide-y divide-hairline border-t border-b border-hairline">
@@ -126,7 +126,7 @@ export default function CompanyPage() {
 
           <div className="mt-10">
             <Cta href={`mailto:${SITE.careers}?subject=Application`}>
-              Write to us
+              Introduce yourself
             </Cta>
           </div>
         </div>

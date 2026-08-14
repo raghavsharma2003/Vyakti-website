@@ -1,15 +1,18 @@
 "use client";
 
 import { useEffect } from "react";
+import { usePathname } from "next/navigation";
 
 /**
  * One IntersectionObserver for every `[data-reveal]` on the page.
  *
- * Elements reveal once and stay revealed — re-animating on scroll-back is the
+ * Elements reveal once and stay revealed. Re-animating on scroll-back is the
  * single most reliable tell of a template. Stagger comes from `data-reveal`
  * carrying a numeric index, which becomes a delay.
  */
 export function Reveal() {
+  const pathname = usePathname();
+
   useEffect(() => {
     const nodes = document.querySelectorAll<HTMLElement>("[data-reveal]");
     if (!nodes.length) return;
@@ -38,7 +41,7 @@ export function Reveal() {
 
     nodes.forEach((n) => observer.observe(n));
     return () => observer.disconnect();
-  }, []);
+  }, [pathname]);
 
   return null;
 }

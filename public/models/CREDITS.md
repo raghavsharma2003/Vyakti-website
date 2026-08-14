@@ -1,5 +1,26 @@
 # 3D asset credits
 
+## meera-head.glb, face-lab/*.glb, and ink-lab/*.glb (shipped, used by Meera)
+
+**GNM Head v3.0** by Google, generated from the open GNM parametric human
+head model.
+
+- Source: <https://github.com/google/GNM>
+- Licence: **Apache License 2.0**
+  (<https://www.apache.org/licenses/LICENSE-2.0>)
+- The source system provides disentangled identity and expression controls,
+  plus explicit skin, eye, lip and mouth regions.
+- The files contain no texture or identifiable scan. The site applies its own
+  materials, eyes, procedural hair and animation at runtime.
+- Every identity is a deterministic synthetic sample from GNM's semantic
+  priors. The face lab uses the female prior; the ink lab deliberately spans
+  female, male, and blended semantic weights. These are authored digital
+  characters, not scans or likenesses of real people.
+
+The GNM project is permissively licensed for commercial use. Attribution is
+still rendered in the site footer because provenance should be visible for a
+research-led product.
+
 ## head-geo.glb (shipped, used by the hero)
 
 **"Infinite" 3D Head Scan** by Lee Perry-Smith, Infinite-Realities.

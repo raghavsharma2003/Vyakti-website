@@ -1,0 +1,143 @@
+.noor-study-root {
+  --noor-accent: #b63825;
+  min-height: 100dvh;
+  overflow: clip;
+  background: #f4f5f3;
+  color: #101110;
+}
+
+.noor-study-nav {
+  position: absolute;
+  z-index: 5;
+  top: 0;
+  left: 0;
+  display: grid;
+  width: 100%;
+  height: 68px;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  padding-inline: clamp(1.25rem, 4vw, 4.5rem);
+  font-size: 0.78rem;
+}
+.noor-study-nav > a { display: inline-flex; width: fit-content; align-items: center; gap: 0.55rem; }
+.noor-study-nav > p { justify-self: center; color: #626663; }
+.noor-study-nav > span { justify-self: end; color: var(--noor-accent); }
+
+.noor-study-intro {
+  display: grid;
+  min-height: 100svh;
+  grid-template-columns: minmax(0, 1fr) minmax(15rem, 0.4fr);
+  align-items: end;
+  gap: 4rem;
+  padding: 6rem clamp(1.25rem, 6.4vw, 6.8rem) 8vh;
+}
+.noor-study-kicker {
+  margin-bottom: 1.3rem;
+  color: var(--noor-accent);
+  font-size: 0.73rem;
+  font-weight: 650;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.noor-study-intro h1 {
+  max-width: 9ch;
+  font-size: clamp(4rem, 8.5vw, 8.8rem);
+  line-height: 0.88;
+  letter-spacing: -0.075em;
+}
+.noor-study-intro > div > p:last-child {
+  max-width: 33rem;
+  margin-top: 2rem;
+  color: #5e625f;
+  font-size: clamp(1rem, 1.4vw, 1.22rem);
+  line-height: 1.55;
+}
+.noor-study-intro nav { display: grid; margin-bottom: 0.25rem; border-top: 1px solid #d6d9d6; }
+.noor-study-intro button {
+  min-height: 48px;
+  border-bottom: 1px solid #d6d9d6;
+  color: #4d514e;
+  cursor: pointer;
+  text-align: left;
+  transition: color 180ms cubic-bezier(0.23, 1, 0.32, 1), transform 140ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+.noor-study-intro button:active { transform: translateY(1px); }
+.noor-study-intro button:focus-visible { outline: 2px solid var(--noor-accent); outline-offset: 3px; }
+
+.noor-study-runway { position: relative; min-height: 100svh; }
+.noor-study-stage { position: relative; height: 100svh; overflow: hidden; }
+.noor-study-canvas { position: absolute; inset: 0 0 0 28%; }
+.noor-study-beats {
+  position: absolute;
+  inset: 0 auto 0 clamp(1.25rem, 6vw, 6.5rem);
+  display: grid;
+  width: min(30rem, 34vw);
+  align-items: center;
+}
+.noor-study-beats article { grid-area: 1 / 1; opacity: 0; will-change: transform, opacity; }
+.noor-study-beats article:first-child { opacity: 1; }
+.noor-study-beats h2 {
+  font-size: clamp(3rem, 5.4vw, 6.4rem);
+  line-height: 0.9;
+  letter-spacing: -0.065em;
+}
+.noor-study-beats p { max-width: 26rem; margin-top: 1.35rem; color: #626663; font-size: 1.02rem; line-height: 1.58; }
+.noor-study-mobile-runway { display: none; }
+.noor-study-loading { width: 100%; height: 100%; background: #f4f5f3; }
+
+.noor-study-static { display: grid; min-height: 100svh; align-content: center; padding: 7rem clamp(1.25rem, 6vw, 6.5rem); }
+.noor-study-static img {
+  width: min(100%, 68rem);
+  height: auto;
+  justify-self: center;
+  image-rendering: auto;
+}
+.noor-study-static > div { margin-top: 2rem; }
+.noor-study-static h2 { font-size: clamp(3rem, 7vw, 7rem); line-height: 0.9; letter-spacing: -0.065em; }
+.noor-study-static p { margin-top: 1rem; color: #626663; }
+
+.noor-study-footer {
+  display: flex;
+  min-height: 64svh;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 3rem;
+  padding: 6rem clamp(1.25rem, 6vw, 6.5rem);
+  border-top: 1px solid #d6d9d6;
+}
+.noor-study-footer h2 { max-width: 14ch; font-size: clamp(2.6rem, 5.5vw, 5.8rem); line-height: 0.94; letter-spacing: -0.06em; }
+.noor-study-footer p { max-width: 31rem; margin-top: 1.2rem; color: #626663; line-height: 1.55; }
+.noor-study-footer a { display: inline-flex; flex: 0 0 auto; align-items: center; gap: 0.55rem; padding-bottom: 0.2rem; border-bottom: 1px solid currentColor; }
+
+@media (hover: hover) and (pointer: fine) {
+  .noor-study-intro button:hover { color: var(--noor-accent); }
+}
+
+@media (max-width: 899px) {
+  .noor-study-nav { grid-template-columns: 1fr auto; }
+  .noor-study-nav > p { display: none; }
+  .noor-study-intro { min-height: 94svh; grid-template-columns: 1fr; gap: 2rem; padding-bottom: 6vh; }
+  .noor-study-intro h1 { font-size: clamp(3.65rem, 17vw, 6.2rem); }
+  .noor-study-intro nav { grid-template-columns: repeat(5, max-content); overflow-x: auto; }
+  .noor-study-intro button { padding-inline: 0.85rem; white-space: nowrap; }
+  .noor-study-stage { position: sticky; top: 0; height: 100dvh; }
+  .noor-study-canvas { inset: 0 0 auto; height: 58dvh; }
+  .noor-study-beats { inset: 58dvh 1.25rem 2rem; width: auto; align-items: start; }
+  .noor-study-beats article { padding-top: 0.8rem; }
+  .noor-study-beats h2 { font-size: clamp(2.6rem, 13vw, 4.2rem); }
+  .noor-study-beats p { margin-top: 0.7rem; font-size: 0.92rem; }
+  .noor-study-mobile-runway { display: block; margin-top: -100dvh; }
+  .noor-study-mobile-runway > div { height: 110dvh; }
+  .noor-study-footer { min-height: 72svh; flex-direction: column; align-items: flex-start; justify-content: flex-end; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .noor-study-intro button { transition: color 180ms ease; }
+  .noor-study-static { min-height: auto; }
+}
+
+@media (prefers-contrast: more) {
+  .noor-study-intro > div > p:last-child,
+  .noor-study-beats p,
+  .noor-study-footer p { color: #303230; }
+}

@@ -6,12 +6,12 @@ import { PILLARS } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Research",
   description:
-    "The four tracks Vyakti works on: turn-taking, affect, persona and culture. How we define human indistinguishability in conversation, and how we measure it.",
+    "Vyakti researches identity continuity, relational memory, multimodal expression and user-controlled agency for persistent AI identities.",
   alternates: { canonical: "/research" },
   openGraph: {
     title: "Research at Vyakti",
     description:
-      "Turn-taking, affect, persona and culture. The four problems between a language model and a person.",
+      "Identity continuity, relational memory and multimodal expression. The architecture beneath persistent AI identities.",
     url: "/research",
   },
 };
@@ -22,17 +22,17 @@ export default function ResearchPage() {
       <section className="border-b border-hairline bg-ink pt-32 pb-20 md:pt-40 md:pb-28">
         <div className="shell">
           <h1 className="max-w-[18ch] text-bone">
-            The gap is not intelligence. It is behaviour.
+            Personality is not a system prompt.
           </h1>
           <p className="measure mt-8 text-lead text-ash">
-            A large model can already reason, recall and write better than most
-            people it talks to. It still does not feel like one, and the reasons
-            are specific enough to work on separately.
+            It is the continuity between memory, perception, expression and
+            action. We study the systems that let a character hold together
+            across situations and over time.
           </p>
         </div>
       </section>
 
-      {/* The four tracks, in depth. */}
+      {/* The five tracks, in depth. */}
       <section className="bg-ink">
         {PILLARS.map((pillar, i) => (
           <article
@@ -68,7 +68,7 @@ export default function ResearchPage() {
                   {pillar.detail}
                 </p>
 
-                {pillar.id === "turn-taking" ? (
+                {pillar.id === "expression" ? (
                   <div className="mt-10" data-reveal="2">
                     <TurnDiagram />
                   </div>
@@ -94,28 +94,28 @@ export default function ResearchPage() {
 
           <div className="mt-8 md:col-span-7 md:col-start-6 md:mt-0">
             <p className="measure text-lead text-ash" data-reveal="0">
-              Standard speech metrics measure fidelity. They ask whether the
-              audio is clean and whether the words came out right. Both can be
-              excellent while the experience remains obviously synthetic.
+              Most model evaluations measure a single response. Relational
+              intelligence has to be evaluated across conversations, changing
+              contexts and the systems underneath them.
             </p>
 
             <dl className="mt-10 divide-y divide-hairline border-t border-hairline">
               {[
                 {
                   t: "Held conversation, not single turns",
-                  d: "Most failures need time to appear. Identity drifts, memory contradicts itself, and the same three sentence rhythms start repeating. A one minute demo hides all of it.",
+                  d: "Most failures need time to appear. Identity drifts, memory contradicts itself and familiar response patterns begin to repeat. A one-minute demo hides all of it.",
                 },
                 {
-                  t: "Judgement by the person in the conversation",
-                  d: "Not a rater scoring a clip afterwards. The question is whether the participant could tell, and at which moment they became sure.",
+                  t: "Continuity over shared history",
+                  d: "We look for whether preferences, boundaries and prior moments shape later conversations coherently, without turning the relationship into a retrieved transcript.",
                 },
                 {
-                  t: "Failure located, not just counted",
-                  d: "A score that says sixty per cent is not useful. We want the timestamp where it broke and the reason, because those are the only things you can fix.",
+                  t: "Memory that remains legible",
+                  d: "Useful recall is only part of the test. People also need to understand what was remembered, correct it and decide what should be forgotten.",
                 },
                 {
-                  t: "Adversarial partners",
-                  d: "People who are trying to catch it out behave differently from people having a chat. Both matter, and the first is harder.",
+                  t: "Identity through model change",
+                  d: "A stronger underlying model should make an identity more capable without quietly replacing its voice, history or point of view.",
                 },
               ].map((row, i) => (
                 <div key={row.t} className="py-6" data-reveal={i}>
@@ -136,11 +136,11 @@ export default function ResearchPage() {
             Work on this with us.
           </h2>
           <p className="mx-auto mt-5 max-w-[46ch] text-body text-ash" data-reveal="1">
-            We are looking for people in speech, conversation analysis and
-            real-time systems.
+            If your work spans speech, conversation analysis or long-horizon
+            systems, we would like to hear from you.
           </p>
           <div className="mt-8 flex justify-center" data-reveal="2">
-            <Cta href="/company#careers">Open roles</Cta>
+            <Cta href="/company#careers">Work with us</Cta>
           </div>
         </div>
       </section>

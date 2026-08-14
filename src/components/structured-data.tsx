@@ -17,13 +17,12 @@ export function StructuredData() {
         email: SITE.email,
         description: SITE.description,
         slogan: SITE.tagline,
-        foundingDate: "2026",
         knowsAbout: [
-          "Conversational artificial intelligence",
-          "Speech synthesis",
-          "Turn-taking in dialogue",
-          "Affective computing",
-          "Human computer interaction",
+          "Relational artificial intelligence",
+          "Identity continuity",
+          "Long-term memory systems",
+          "Multimodal interaction",
+          "Conversational turn-taking",
         ],
       },
       {
@@ -41,7 +40,7 @@ export function StructuredData() {
         name: "Meera",
         applicationCategory: "Conversational AI",
         description:
-          "A conversational system built to be indistinguishable from a person, with predicted turn ends, instant yielding and persistent identity.",
+          "Vyakti's first product in development: a text and voice AI companion designed around stable identity, selective memory and user-controlled shared context.",
         url: `${SITE.url}/meera`,
         publisher: { "@id": `${SITE.url}/#organization` },
       },

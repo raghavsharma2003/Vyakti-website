@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useSyncExternalStore } from "react";
+import { Suspense, useEffect, useRef, useState, useSyncExternalStore } from "react";
 import dynamic from "next/dynamic";
 
 const HeadScene = dynamic(() => import("./head-scene"), { ssr: false });
@@ -57,10 +57,23 @@ export function VyaktiHead({
   className?: string;
 }) {
   const allowed = useWebglAllowed();
+  const root = useRef<HTMLDivElement>(null);
+  const [nearViewport, setNearViewport] = useState(true);
+
+  useEffect(() => {
+    const node = root.current;
+    if (!node) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setNearViewport(entry.isIntersecting),
+      { rootMargin: "50% 0px" },
+    );
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
 
   return (
-    <div className={className} aria-hidden>
-      {allowed ? (
+    <div ref={root} className={className} aria-hidden>
+      {allowed && nearViewport ? (
         <Suspense fallback={<HeadFallback />}>
           <HeadScene progress={progress} />
         </Suspense>
@@ -77,12 +90,11 @@ export function VyaktiHead({
  */
 export function HeadFallback() {
   return (
-    <div
-      className="h-full w-full"
-      style={{
-        background:
-          "radial-gradient(46% 42% at 52% 45%, color-mix(in oklab, var(--color-ember) 18%, transparent) 0%, color-mix(in oklab, var(--color-ember) 5%, transparent) 45%, transparent 72%)",
-      }}
-    />
+    <div className="relative h-full w-full overflow-hidden">
+      <div className="absolute top-1/2 left-1/2 aspect-[0.72] h-[58%] -translate-x-1/2 -translate-y-1/2 rounded-[48%_52%_46%_54%/42%_43%_57%_58%] border border-bone/30 bg-[radial-gradient(circle_at_55%_40%,transparent_0_34%,color-mix(in_oklab,var(--color-ember)_10%,transparent)_72%)]" />
+      <div className="absolute top-[44%] left-[43%] h-1.5 w-1.5 rounded-full bg-bone/50" />
+      <div className="absolute top-[44%] left-[56%] h-1.5 w-1.5 rounded-full bg-bone/50" />
+      <div className="absolute top-[57%] left-1/2 h-px w-10 -translate-x-1/2 bg-bone/30" />
+    </div>
   );
 }

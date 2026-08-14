@@ -9,7 +9,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/company", priority: 0.7, changeFrequency: "monthly" as const },
   ];
 
-  const lastModified = new Date();
+  const lastModified = new Date("2026-08-14T00:00:00.000Z");
 
   return routes.map(({ path, priority, changeFrequency }) => ({
     url: `${SITE.url}${path}`,

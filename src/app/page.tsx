@@ -1,205 +1,192 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRightIcon } from "@phosphor-icons/react/dist/ssr";
-import { HeroStage } from "@/components/hero-stage";
-import { TurnDiagram } from "@/components/turn-diagram";
+import { RelationalStory } from "@/components/home/relational-story";
+import styles from "@/components/home/home.module.css";
 import { Cta } from "@/components/ui/cta";
-import { PILLARS, SITE } from "@/lib/site";
+import { SITE } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: `${SITE.name}, an AI research lab for human indistinguishability`,
+  title: `${SITE.name} | ${SITE.tagline}`,
   description: SITE.description,
   alternates: { canonical: "/" },
 };
 
+const RESEARCH = [
+  {
+    title: "Identity continuity",
+    body: "How can values, boundaries, temperament, and recognizable behavior hold across conversations and model changes?",
+  },
+  {
+    title: "Relational memory",
+    body: "How should an AI remember what mattered, preserve uncertainty, accept correction, and forget deliberately?",
+  },
+  {
+    title: "Social presence",
+    body: "How can voice, interruption, timing, gaze, and reaction feel like expressions of one coherent state?",
+  },
+  {
+    title: "Cultural intelligence",
+    body: "How can an AI understand code-switching, intimacy, hierarchy, humor, and family context beyond literal translation?",
+  },
+] as const;
+
+const PRINCIPLES = [
+  {
+    title: "Always AI",
+    body: "Meera should never impersonate a person or hide what she is. Presence does not require deception.",
+  },
+  {
+    title: "Memory you control",
+    body: "What is remembered should be inspectable, correctable, exportable, and erasable by the user.",
+  },
+  {
+    title: "Connection without capture",
+    body: "No guilt, coercion, or dependence mechanics designed to monopolize attention.",
+  },
+  {
+    title: "Honest uncertainty",
+    body: "When the system does not know, cannot remember, or may be wrong, it should say so plainly.",
+  },
+] as const;
+
 export default function HomePage() {
   return (
     <>
-      <HeroStage />
+      <RelationalStory />
 
-      {/* Thesis. Full-width editorial statement. */}
-      <section className="border-t border-hairline bg-ink py-24 md:py-36">
+      <section className={styles.thesisSection}>
         <div className="shell">
-          <h2 className="max-w-[20ch] text-bone" data-reveal="0">
-            Everything in a conversation that is not the words.
+          <h2 className={styles.sectionLead}>
+            A prompt shapes one reply. A relationship shapes what comes next.
           </h2>
-          <div className="mt-10 grid gap-8 md:grid-cols-[1fr_1fr] md:gap-16">
-            <p className="measure text-lead text-ash" data-reveal="1">
-              A transcript is the smallest part of what passes between two
-              people. The rest is timing. How long you waited before answering.
-              Whether you let them finish. What your voice did on the word
-              &ldquo;fine&rdquo;.
-            </p>
-            <p className="measure text-lead text-ash" data-reveal="2">
-              Models have become very good at the words. Almost nothing has been
-              built for the rest, which is the part people actually respond to,
-              and the reason talking to software still feels like talking to
-              software.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Research tracks. Sticky heading beside stacked entries. */}
-      <section
-        id="research"
-        className="border-t border-hairline bg-void py-24 md:py-32"
-      >
-        <div className="shell grid gap-12 md:grid-cols-[minmax(0,23rem)_minmax(0,1fr)] md:gap-16">
-          <div className="md:sticky md:top-28 md:self-start">
-            <p className="eyebrow">Research</p>
-            <h2 className="mt-4 text-bone" data-reveal="0">
-              Four things people do that machines do not.
-            </h2>
-            <p className="measure mt-6 text-body text-ash" data-reveal="1">
-              These are the tracks the lab is organised around. Each one is a
-              separate problem, and a system is only convincing when all four
-              hold at once.
-            </p>
-            <Link
-              href="/research"
-              className="mt-8 inline-flex items-center gap-2 text-small text-ember underline decoration-transparent underline-offset-4 transition-[text-decoration-color] duration-[var(--duration-fast)] hover:decoration-ember"
-            >
-              How we work on them
-              <ArrowRightIcon size={14} weight="bold" aria-hidden />
-            </Link>
-          </div>
-
-          <ul className="divide-y divide-hairline border-t border-hairline">
-            {PILLARS.map((pillar, i) => (
-              <li key={pillar.id} className="py-8 first:pt-8" data-reveal={i}>
-                <h3 className="text-bone">{pillar.title}</h3>
-                <p className="measure mt-3 text-body text-ash">
-                  {pillar.summary}
-                </p>
-                <ul className="mt-5 flex flex-wrap gap-x-2 gap-y-2">
-                  {pillar.terms.map((term) => (
-                    <li
-                      key={term}
-                      className="rounded-full border border-hairline px-3 py-1 font-mono text-micro text-slate"
-                    >
-                      {term}
-                    </li>
-                  ))}
-                </ul>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
-
-      {/* Turn-taking, shown rather than described. Asymmetric split. */}
-      <section className="border-t border-hairline bg-ink py-24 md:py-32">
-        <div className="shell grid items-center gap-12 md:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] md:gap-16">
-          <div data-reveal="0">
-            <h2 className="text-bone">The seams are the whole problem.</h2>
-            <p className="measure mt-6 text-lead text-ash">
-              A voice system that waits for silence will always be a beat late,
-              because silence arrives after the turn has already ended. People
-              predict the ending from pitch and grammar and start moving before
-              it lands.
-            </p>
-            <p className="measure mt-5 text-body text-ash">
-              We treat the boundary between turns as the object of study: when
-              to come in, when to hold back, when overlapping is warmth and when
-              it is rudeness.
-            </p>
-          </div>
-          <div data-reveal="1">
-            <TurnDiagram />
-          </div>
-        </div>
-      </section>
-
-      {/* Meera. Full-bleed panel, two-column capability list. */}
-      <section className="border-t border-hairline bg-void py-24 md:py-32">
-        <div className="shell">
-          <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-            <h2 className="max-w-[16ch] text-bone" data-reveal="0">
-              Meera is the first thing we have built.
-            </h2>
-            <Cta href="/meera" variant="secondary">
-              About Meera
-            </Cta>
-          </div>
-
-          <p className="measure mt-8 text-lead text-ash" data-reveal="1">
-            A conversational system you talk to out loud. It is where the four
-            research tracks stop being separate papers and have to work
-            together, in real time, with someone who did not read them.
+          <p className={styles.sectionCopy}>
+            Vyakti studies the layer between raw intelligence and a continuous
+            identity: the state that gives memory meaning and change a history.
           </p>
 
-          <div className="mt-14 grid gap-x-16 gap-y-10 border-t border-hairline pt-10 sm:grid-cols-2">
-            {[
-              {
-                h: "It hears the end coming",
-                p: "Turn boundaries are predicted from prosody and syntax rather than detected by a silence timer.",
-              },
-              {
-                h: "It yields immediately",
-                p: "Speak over it and it stops, keeps what it had left to say, and decides whether that still matters.",
-              },
-              {
-                h: "It stays the same person",
-                p: "A fixed history and set of opinions that hold across a conversation and across weeks of them.",
-              },
-              {
-                h: "It remembers in the ordinary way",
-                p: "What you told it last month shapes how it answers today, without being recited back at you.",
-              },
-            ].map((item, i) => (
-              <div key={item.h} data-reveal={i}>
-                <h3 className="text-body font-medium text-bone">{item.h}</h3>
-                <p className="measure mt-2 text-small leading-relaxed text-ash">
-                  {item.p}
-                </p>
-              </div>
+          <figure className={styles.continuityMap} aria-labelledby="continuity-caption">
+            <div className={styles.continuityNode}>
+              <small>Replaceable intelligence</small>
+              <h3>Models get better.</h3>
+              <ul aria-label="Replaceable capabilities">
+                <li>Reasoning</li>
+                <li>Voice and vision</li>
+                <li>Tools and actions</li>
+                <li>Future models</li>
+              </ul>
+            </div>
+            <div className={styles.continuityArrow} aria-hidden="true">→</div>
+            <div className={`${styles.continuityNode} ${styles.continuityCore}`}>
+              <small>Vyakti relational core</small>
+              <h3>Identity accumulates.</h3>
+              <ul aria-label="Relational systems">
+                <li>Identity state</li>
+                <li>Relationship state</li>
+                <li>Relational memory</li>
+                <li>Consent and boundaries</li>
+              </ul>
+            </div>
+            <div className={styles.continuityArrow} aria-hidden="true">→</div>
+            <div className={`${styles.continuityNode} ${styles.continuityOutput}`}>
+              <small>One continuous identity</small>
+              <strong>Meera</strong>
+              <p>More capable over time. Still recognizably herself.</p>
+            </div>
+            <figcaption id="continuity-caption">
+              Our research asks whether the engine can change without breaking the identity above it.
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section className={styles.researchSection}>
+        <div className="shell">
+          <div className={styles.researchHeader}>
+            <h2 className={styles.sectionLead}>
+              The parts only matter if they hold together.
+            </h2>
+            <p className={styles.sectionCopy}>
+              Identity, memory, culture, and expression are not separate product
+              features. They are one system viewed from different moments.
+            </p>
+          </div>
+
+          <div className={styles.researchGrid}>
+            {RESEARCH.map((item) => (
+              <article key={item.title} className={styles.researchItem}>
+                <h3>{item.title}</h3>
+                <p>{item.body}</p>
+              </article>
             ))}
           </div>
+
+          <Link href="/research" className={styles.researchLink}>
+            Explore the research
+          </Link>
         </div>
       </section>
 
-      {/* Evaluation. Offset column with a lead statement. */}
-      <section className="border-t border-hairline bg-ink py-24 md:py-32">
-        <div className="shell md:grid md:grid-cols-12">
-          <div className="md:col-span-7 md:col-start-4">
-            <h2 className="text-bone" data-reveal="0">
-              A system is convincing or it is not. That has to be measured.
-            </h2>
-            <p className="measure mt-6 text-lead text-ash" data-reveal="1">
-              Speech quality scores tell you a voice sounds clean. They tell you
-              nothing about whether a person felt heard, and a system can score
-              well on every one of them while remaining obviously a machine.
+      <section className={styles.evidenceSection}>
+        <div className="shell">
+          <div className={styles.evidenceIntro}>
+            <h2 className={styles.sectionLead}>Feeling human is not a metric.</h2>
+            <p className={styles.sectionCopy}>
+              The difficult failures appear across time. We intend to evaluate
+              continuity where a one-minute demo cannot hide the seams.
             </p>
-            <p className="measure mt-5 text-body text-ash" data-reveal="2">
-              We evaluate the way the question is actually asked: put a person
-              in a real conversation, at length, and find out whether they can
-              tell. Then look at where it broke, which is almost always a seam,
-              a flattened emotion, or a moment the system forgot who it was.
-            </p>
+          </div>
+
+          <div className={styles.timeHorizon} aria-label="Evaluation across time">
+            <div className={styles.timePoint}>
+              <strong>One turn</strong>
+              <span>Did the timing, tone, and response fit the moment?</span>
+            </div>
+            <div className={styles.timePoint}>
+              <strong>One month</strong>
+              <span>Did memory preserve meaning without inventing a past?</span>
+            </div>
+            <div className={styles.timePoint}>
+              <strong>Model change</strong>
+              <span>Did greater capability arrive without a different identity?</span>
+            </div>
+          </div>
+
+          <div className={styles.evaluationQuestions}>
+            <p>Where did the identity drift?</p>
+            <p>What did the relationship change?</p>
           </div>
         </div>
       </section>
 
-      {/* Closing. */}
-      <section className="border-t border-hairline bg-void py-24 md:py-32">
-        <div className="shell-narrow text-center">
-          <h2 className="text-bone" data-reveal="0">
-            We are early, and we are hiring.
-          </h2>
-          <p className="mx-auto mt-6 max-w-[48ch] text-lead text-ash" data-reveal="1">
-            The lab is small. If you work on speech, conversation, or the
-            uncomfortable question of what makes something feel like a person,
-            we would like to hear from you.
-          </p>
-          <div
-            className="mt-9 flex flex-wrap items-center justify-center gap-3"
-            data-reveal="2"
-          >
-            <Cta href="/meera#access">Request access</Cta>
-            <Cta href="/company#careers" variant="secondary">
-              Open roles
-            </Cta>
+      <section id="principles" className={styles.principlesSection}>
+        <div className="shell">
+          <div className={styles.principlesHeader}>
+            <h2 className={styles.sectionLead}>
+              Human presence demands clearer boundaries, not weaker ones.
+            </h2>
+            <p className={styles.sectionCopy}>
+              Trust is part of the architecture. The system should make its
+              identity, memory, uncertainty, and permissions legible.
+            </p>
+          </div>
+
+          <div className={styles.principlesList}>
+            {PRINCIPLES.map((principle) => (
+              <article key={principle.title} className={styles.principle}>
+                <h3>{principle.title}</h3>
+                <p>{principle.body}</p>
+              </article>
+            ))}
+          </div>
+
+          <div className={styles.finalInvite}>
+            <div>
+              <h2>Meera is where the research meets a real relationship.</h2>
+              <p className={styles.sectionCopy}>
+                One AI person in development. Text and voice first. Continuity by design.
+              </p>
+            </div>
+            <Cta href="/meera#access">Request early access</Cta>
           </div>
         </div>
       </section>

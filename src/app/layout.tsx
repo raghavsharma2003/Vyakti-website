@@ -1,11 +1,12 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Noto_Sans_Devanagari } from "next/font/google";
 import { SITE } from "@/lib/site";
 import { SmoothScroll } from "@/components/smooth-scroll";
 import { Reveal } from "@/components/reveal";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { StructuredData } from "@/components/structured-data";
+import { SiteChrome } from "@/components/site-chrome";
 import "./globals.css";
 
 const geist = Geist({
@@ -20,6 +21,13 @@ const geistMono = Geist_Mono({
   display: "swap",
 });
 
+const devanagari = Noto_Sans_Devanagari({
+  variable: "--font-devanagari",
+  subsets: ["devanagari"],
+  weight: ["500", "600"],
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
   title: {
@@ -30,15 +38,14 @@ export const metadata: Metadata = {
   applicationName: SITE.name,
   keywords: [
     "AI research lab",
-    "human-like AI",
-    "conversational AI",
+    "relational intelligence",
+    "AI identity continuity",
+    "relational memory",
+    "multimodal AI",
     "voice AI",
-    "speech-to-speech",
     "full-duplex conversation",
-    "turn-taking",
-    "emotional AI",
-    "empathic voice",
-    "digital humans",
+    "cultural intelligence",
+    "AI companion",
     "Meera",
     "Vyakti",
   ],
@@ -76,11 +83,8 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: dark)", color: "#12110E" },
-    { media: "(prefers-color-scheme: light)", color: "#F6F6F4" },
-  ],
-  colorScheme: "dark light",
+  themeColor: "#F8F8F5",
+  colorScheme: "light",
   width: "device-width",
   initialScale: 1,
 };
@@ -89,7 +93,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${geist.variable} ${geistMono.variable} no-js`}
+      className={`${geist.variable} ${geistMono.variable} ${devanagari.variable} no-js`}
       suppressHydrationWarning
     >
       <head>
@@ -110,9 +114,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         </a>
         <SmoothScroll />
         <Reveal />
-        <SiteHeader />
+        <SiteChrome>
+          <SiteHeader />
+        </SiteChrome>
         <main id="main">{children}</main>
-        <SiteFooter />
+        <SiteChrome>
+          <SiteFooter />
+        </SiteChrome>
       </body>
     </html>
   );

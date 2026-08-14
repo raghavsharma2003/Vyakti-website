@@ -1,4 +1,4 @@
-// Ashima simplex noise (MIT) — trimmed to the 3D case we actually use.
+// Ashima simplex noise (MIT), trimmed to the 3D case we actually use.
 const SIMPLEX = /* glsl */ `
 vec3 mod289(vec3 x){return x-floor(x*(1.0/289.0))*289.0;}
 vec4 mod289(vec4 x){return x-floor(x*(1.0/289.0))*289.0;}
@@ -51,17 +51,18 @@ float snoise(vec3 v){
 
 /**
  * The face is drawn as a point cloud so it reads as *sampled* rather than
- * modelled — a person reconstructed from measurements, which is literally
+ * modelled: a person reconstructed from measurements, which is literally
  * what the lab does.
  *
- * uDisperse blows the samples apart along their own normals; uSpeak drives a
- * ring travelling outward from the mouth; uListen tightens everything back
- * onto the surface and cools the palette.
+ * uDisperse blows the samples apart along their own normals. Mouth aperture
+ * and speech energy are deliberately separate so syllables can close while a
+ * softer expression wave continues through the face.
  */
 export const HEAD_VERTEX = /* glsl */ `
   uniform float uTime;
   uniform float uDisperse;
-  uniform float uSpeak;
+  uniform float uMouthOpen;
+  uniform float uSpeechEnergy;
   uniform float uSize;
   uniform float uPixelRatio;
   uniform float uNear;
@@ -75,19 +76,61 @@ export const HEAD_VERTEX = /* glsl */ `
   varying float vDepth;
   varying float vEnergy;
   varying float vRandom;
+  varying float vFacing;
 
   void main() {
-    vec3 pos = position;
+    vec3 base = position;
+    vec3 pos = base;
 
     // Idle life: a slow, low-amplitude field so the face never sits perfectly
     // still. Stillness is the thing that reads as dead.
     float breathe = snoise(pos * 2.2 + vec3(0.0, 0.0, uTime * 0.16));
     pos += normal * breathe * 0.012;
 
-    // Speech ripple radiating from the mouth.
-    float dMouth = distance(pos, uMouth);
-    float wave = sin(dMouth * 22.0 - uTime * 6.5) * exp(-dMouth * 3.2);
-    float speakAmt = wave * uSpeak * 0.05;
+    // Speech motion. The scan has no blendshapes, so we rotate a restrained
+    // lower-jaw region around a physical hinge and then articulate the lips.
+    // Masks are evaluated from the undeformed surface to avoid feedback.
+    vec3 mouthDelta = base - uMouth;
+    float lipMask = exp(-(
+      mouthDelta.x * mouthDelta.x * 45.0 +
+      mouthDelta.y * mouthDelta.y * 650.0 +
+      mouthDelta.z * mouthDelta.z * 140.0
+    )) * smoothstep(0.40, 0.49, base.z);
+
+    float jawMask =
+      (1.0 - smoothstep(0.095, 0.14, base.y)) *
+      smoothstep(-0.25, -0.15, base.y) *
+      smoothstep(-0.08, 0.18, base.z) *
+      (1.0 - smoothstep(0.48, 0.68, abs(base.x)));
+
+    float angle = uMouthOpen * 0.105;
+    vec2 pivot = vec2(0.16, 0.08);
+    vec2 jaw = pos.yz - pivot;
+    float c = cos(angle);
+    float s = sin(angle);
+    vec2 rotatedJaw = vec2(
+      c * jaw.x - s * jaw.y,
+      s * jaw.x + c * jaw.y
+    ) + pivot;
+    pos.yz = mix(pos.yz, rotatedJaw, jawMask);
+
+    float lowerLip =
+      lipMask * (1.0 - smoothstep(-0.008, 0.014, mouthDelta.y));
+    float upperLip =
+      lipMask * smoothstep(-0.008, 0.020, mouthDelta.y);
+    pos.y -= lowerLip * uMouthOpen * 0.028;
+    pos.y += upperLip * uMouthOpen * 0.008;
+    pos.z -= lowerLip * uMouthOpen * 0.007;
+
+    float dMouth = length(vec3(
+      mouthDelta.x,
+      mouthDelta.y * 1.25,
+      mouthDelta.z
+    ));
+    float wave =
+      sin(dMouth * 28.0 - uTime * 8.0) *
+      exp(-dMouth * 5.0);
+    float speakAmt = wave * uSpeechEnergy * 0.012;
     pos += normal * speakAmt;
 
     // Dispersion: samples leave the surface along a per-point direction,
@@ -104,7 +147,15 @@ export const HEAD_VERTEX = /* glsl */ `
 
     vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
 
-    vEnergy = abs(speakAmt) * 18.0 + uDisperse * 0.8;
+    vEnergy = clamp(
+      lipMask * uMouthOpen * 0.72 + abs(speakAmt) * 11.0,
+      0.0,
+      1.0
+    );
+
+    vec3 viewNormal = normalize(normalMatrix * normal);
+    vec3 viewDirection = normalize(-mvPosition.xyz);
+    vFacing = dot(viewNormal, viewDirection);
 
     // Distance from the camera across the head's actual depth range, so the
     // near side of the face is bright and the far side falls into the ground.
@@ -113,6 +164,7 @@ export const HEAD_VERTEX = /* glsl */ `
     vRandom = aRandom;
 
     gl_PointSize = uSize * uPixelRatio * (0.55 + aRandom * 0.75);
+    gl_PointSize *= 1.0 + lipMask * uMouthOpen * 0.34;
     gl_PointSize *= 1.0 / max(dist, 0.001);
     gl_Position = projectionMatrix * mvPosition;
   }
@@ -130,6 +182,7 @@ export const HEAD_FRAGMENT = /* glsl */ `
   varying float vDepth;
   varying float vEnergy;
   varying float vRandom;
+  varying float vFacing;
 
   void main() {
     // Round, soft-edged points. Square points are the giveaway of a default
@@ -144,7 +197,11 @@ export const HEAD_FRAGMENT = /* glsl */ `
 
     // Points that have travelled furthest cool toward the background so the
     // cloud dissolves rather than clipping.
-    alpha *= uOpacity * (0.18 + vDepth * 0.82);
+    // Attenuating back-facing and deep samples prevents the neck and rear
+    // surface from accumulating through the transparent mouth area.
+    float facingAlpha = smoothstep(-0.05, 0.18, vFacing);
+    float depthAlpha = smoothstep(0.08, 0.58, vDepth);
+    alpha *= uOpacity * facingAlpha * depthAlpha;
     alpha *= 1.0 - uDisperse * 0.45 * (1.0 - vRandom * 0.5);
 
     if (alpha < 0.008) discard;

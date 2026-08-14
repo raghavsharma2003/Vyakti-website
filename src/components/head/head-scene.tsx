@@ -8,8 +8,8 @@ import { MeshSurfaceSampler } from "three/examples/jsm/math/MeshSurfaceSampler.j
 import { HEAD_FRAGMENT, HEAD_VERTEX, SIMPLEX_CHUNK } from "./shaders";
 
 const MODEL = "/models/head-geo.glb";
-const SAMPLE_COUNT = 72_000;
-const SAMPLE_COUNT_MOBILE = 26_000;
+const SAMPLE_COUNT = 52_000;
+const SAMPLE_COUNT_MOBILE = 21_000;
 
 /** Far enough back that the head sits at ~55% of frame height, with air around it. */
 const CAMERA_Z = 4.4;
@@ -123,17 +123,20 @@ function FaceCloud({ progress }: { progress: Progress }) {
     () => ({
       uTime: { value: 0 },
       uDisperse: { value: 0.32 },
-      uSpeak: { value: 0 },
+      uMouthOpen: { value: 0 },
+      uSpeechEnergy: { value: 0 },
       uSize: { value: 9 },
       uPixelRatio: { value: 1 },
       uNear: { value: CAMERA_Z - HEAD_RADIUS },
       uFar: { value: CAMERA_Z + HEAD_RADIUS },
       uPointer: { value: new THREE.Vector2(0, 0) },
-      uMouth: { value: new THREE.Vector3(0, -0.34, 0.62) },
-      uColorCore: { value: new THREE.Color("#f4f1ea") },
-      uColorEdge: { value: new THREE.Color("#4a4238") },
-      uColorHot: { value: new THREE.Color("#f0653a") },
-      uOpacity: { value: 0.92 },
+      // Calibrated from the normalised scan. The previous value sat on the
+      // throat, which made the speech ripple read as a square goatee.
+      uMouth: { value: new THREE.Vector3(0, 0.105, 0.505) },
+      uColorCore: { value: new THREE.Color("#11120f") },
+      uColorEdge: { value: new THREE.Color("#b8b6ae") },
+      uColorHot: { value: new THREE.Color("#c83f2d") },
+      uOpacity: { value: 0.88 },
     }),
     [],
   );
@@ -159,8 +162,8 @@ function FaceCloud({ progress }: { progress: Progress }) {
     const p = progress.current;
 
     u.uTime.value += dt;
-    u.uPixelRatio.value = Math.min(viewport.dpr || 1, 2);
-    u.uSize.value = isCompact ? 7.4 : 9;
+    u.uPixelRatio.value = Math.min(viewport.dpr || 1, 1.65);
+    u.uSize.value = isCompact ? 7.6 : 9.4;
 
     // --- Beat 1 (0 to .3): the cloud converges into a face.
     // --- Beat 2 (.3 to .5): it holds still and listens.
@@ -174,9 +177,29 @@ function FaceCloud({ progress }: { progress: Progress }) {
       THREE.MathUtils.smoothstep(p, 0.48, 0.58) *
       (1 - THREE.MathUtils.smoothstep(p, 0.72, 0.82));
 
+    // Closures between peaks matter more than extra oscillators: a mouth that
+    // never closes reads as shimmer, not speech. The two cadences overlap like
+    // short and long syllables while still returning to a visible rest state.
+    const syllable = Math.min(
+      1,
+      Math.max(0, Math.sin(u.uTime.value * 8.8)) * 0.72 +
+        Math.max(0, Math.sin(u.uTime.value * 13.7 + 1.4)) * 0.38,
+    );
+
     u.uDisperse.value = damp(u.uDisperse.value, targetDisperse, 5, dt);
-    u.uSpeak.value = damp(u.uSpeak.value, speakWindow, 4, dt);
-    u.uOpacity.value = damp(u.uOpacity.value, 0.92 - dissolve * 0.55, 4, dt);
+    u.uMouthOpen.value = damp(
+      u.uMouthOpen.value,
+      speakWindow * syllable,
+      14,
+      dt,
+    );
+    u.uSpeechEnergy.value = damp(
+      u.uSpeechEnergy.value,
+      speakWindow,
+      7,
+      dt,
+    );
+    u.uOpacity.value = damp(u.uOpacity.value, 0.88 - dissolve * 0.5, 4, dt);
 
     pointer.current.x = damp(pointer.current.x, pointer.current.tx, 3, dt);
     pointer.current.y = damp(pointer.current.y, pointer.current.ty, 3, dt);
@@ -184,7 +207,7 @@ function FaceCloud({ progress }: { progress: Progress }) {
 
     if (points.current) {
       // Turns from three-quarter profile, through full face, and away again.
-      const scrollYaw = lerp(-0.62, 0.52, p);
+      const scrollYaw = lerp(-0.54, 0.5, p);
       points.current.rotation.y = damp(
         points.current.rotation.y,
         scrollYaw + pointer.current.x * 0.22,
@@ -223,8 +246,8 @@ export default function HeadScene({ progress }: { progress: Progress }) {
   return (
     <Canvas
       camera={{ position: [0, 0, CAMERA_Z], fov: 42, near: 0.1, far: 20 }}
-      dpr={[1, 2]}
-      gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
+      dpr={[1, 1.65]}
+      gl={{ antialias: false, alpha: true, powerPreference: "high-performance" }}
       style={{ pointerEvents: "none" }}
     >
       <FaceCloud progress={progress} />

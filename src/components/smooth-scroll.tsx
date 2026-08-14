@@ -2,47 +2,59 @@
 
 import { useEffect } from "react";
 import Lenis from "lenis";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 /**
- * Lenis smooth scroll, wired to a single rAF loop.
- *
- * Also publishes the page scroll progress onto <html> as `--scroll-progress`
- * (0 → 1) so CSS and the WebGL scene can read one shared source of truth
- * instead of each registering their own scroll listener.
+ * Desktop wheel smoothing shares GSAP's ticker with ScrollTrigger. Touch uses
+ * native scrolling, and a live reduced-motion change tears the smoother down.
  */
 export function SmoothScroll() {
   useEffect(() => {
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduced) return;
-
-    const lenis = new Lenis({
-      duration: 1.05,
-      // Gentle exponential ease-out. Anything springier reads as a gimmick.
-      easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      smoothWheel: true,
-      touchMultiplier: 1.6,
-      wheelMultiplier: 1,
-    });
-
+    const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)");
     const root = document.documentElement;
-    lenis.on("scroll", ({ scroll, limit }: { scroll: number; limit: number }) => {
-      root.style.setProperty(
-        "--scroll-progress",
-        String(limit > 0 ? scroll / limit : 0),
-      );
-      root.dataset.scrolled = scroll > 24 ? "true" : "false";
-    });
+    let lenis: Lenis | null = null;
+    let tick: ((time: number) => void) | null = null;
 
-    let raf = 0;
-    const loop = (time: number) => {
-      lenis.raf(time);
-      raf = requestAnimationFrame(loop);
+    const stop = () => {
+      if (tick) gsap.ticker.remove(tick);
+      lenis?.destroy();
+      lenis = null;
+      tick = null;
     };
-    raf = requestAnimationFrame(loop);
 
+    const start = () => {
+      stop();
+      if (motion.matches || !finePointer.matches) return;
+      lenis = new Lenis({
+        duration: 1.05,
+        easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        smoothWheel: true,
+        wheelMultiplier: 1,
+      });
+      lenis.on("scroll", ({ scroll, limit }) => {
+        root.style.setProperty(
+          "--scroll-progress",
+          String(limit > 0 ? scroll / limit : 0),
+        );
+        root.dataset.scrolled = scroll > 24 ? "true" : "false";
+        ScrollTrigger.update();
+      });
+      tick = (time: number) => lenis?.raf(time * 1000);
+      gsap.ticker.add(tick);
+      gsap.ticker.lagSmoothing(0);
+    };
+
+    start();
+    motion.addEventListener("change", start);
+    finePointer.addEventListener("change", start);
     return () => {
-      cancelAnimationFrame(raf);
-      lenis.destroy();
+      motion.removeEventListener("change", start);
+      finePointer.removeEventListener("change", start);
+      stop();
     };
   }, []);
 

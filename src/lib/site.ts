@@ -2,10 +2,9 @@ export const SITE = {
   name: "Vyakti",
   domain: "vyakti.ai",
   url: "https://vyakti.ai",
-  // व्यक्ति (Sanskrit): a person; the individual; that which is made manifest.
-  tagline: "An AI research lab building machines you cannot tell from people",
+  tagline: "A relational intelligence lab.",
   description:
-    "Vyakti is an AI research lab working on human indistinguishability across voice, text and video: real turn-taking, emotion that is felt rather than labelled, memory that accrues, and culture that shapes how a system speaks. Makers of Meera.",
+    "Vyakti researches AI identities that build shared context over time and remain recognizable as the models beneath them change. Meera is our first product in development.",
   locale: "en_US",
   twitter: "@vyakti_ai",
   email: "hello@vyakti.ai",
@@ -15,78 +14,85 @@ export const SITE = {
 export const NAV = [
   { label: "Research", href: "/research" },
   { label: "Meera", href: "/meera" },
+  { label: "Principles", href: "/#principles" },
   { label: "Company", href: "/company" },
 ] as const;
 
 export const FOOTER_GROUPS = [
   {
-    title: "Research",
+    title: "Explore",
     links: [
-      { label: "Overview", href: "/research" },
-      { label: "Turn-taking", href: "/research#turn-taking" },
-      { label: "Affect", href: "/research#affect" },
-      { label: "Persona", href: "/research#persona" },
-      { label: "Culture", href: "/research#culture" },
-      { label: "Evaluation", href: "/research#evaluation" },
-    ],
-  },
-  {
-    title: "Product",
-    links: [
+      { label: "Research", href: "/research" },
       { label: "Meera", href: "/meera" },
-      { label: "What it does", href: "/meera#capabilities" },
-      { label: "Request access", href: "/meera#access" },
+      { label: "Principles", href: "/#principles" },
     ],
   },
   {
-    title: "Company",
+    title: "Lab",
     links: [
-      { label: "About", href: "/company" },
+      { label: "Company", href: "/company" },
       { label: "Careers", href: "/company#careers" },
       { label: "Contact", href: "/company#contact" },
     ],
   },
+  {
+    title: "Connect",
+    links: [
+      { label: "Request access", href: "/meera#access" },
+      { label: "Email the lab", href: "mailto:hello@vyakti.ai" },
+    ],
+  },
 ] as const;
 
-/**
- * The four things a person does in conversation that machines still do not.
- * These are the lab's research tracks and they order every page on the site.
- */
 export const PILLARS = [
   {
-    id: "turn-taking",
-    title: "Turn-taking",
+    id: "identity",
+    title: "Identity",
+    short: "Character that holds.",
     summary:
-      "People do not wait for silence. They read breath, pitch and syntax to know a turn is ending, and they start speaking into the gap.",
+      "Preferences are easy. A coherent identity is harder: a voice, point of view, values and contradictions that remain recognisable without preventing growth.",
     detail:
-      "Most voice systems detect silence and then respond, which is why they interrupt when you pause to think and stall when you have clearly finished. We model the end of a turn as something predicted from prosody and syntax rather than something measured with a timer, and we let the system yield the floor the instant you take it back.",
-    terms: ["Full-duplex", "Endpointing", "Barge-in", "Backchannel"],
+      "We research architectures that preserve character across topics, situations and model upgrades. The goal is not a rigid script, but a stable centre: opinions that can be defended, boundaries that mean something, and change that has a reason.",
+    terms: ["Persona consistency", "Social reasoning", "Value stability"],
   },
   {
-    id: "affect",
-    title: "Affect",
+    id: "memory",
+    title: "Memory",
+    short: "History with meaning.",
     summary:
-      "Emotion in speech is carried by timing, pitch contour and breath, not by an adjective the model picks from a list.",
+      "Memory should do more than retrieve facts. It should recognise what mattered, to whom and why, so a relationship can continue instead of restart.",
     detail:
-      "Labelling a sentence happy and rendering it with a happy voice preset is not emotion, it is costume. We work on affect as a continuous state that persists across a conversation, moves for a reason, and shows up in how a line is timed and stressed rather than in what it says about itself.",
-    terms: ["Prosody", "Paralinguistics", "Disfluency", "Expressive synthesis"],
+      "We work on long-horizon memory that consolidates experience into reflection, distinguishes a passing detail from a meaningful moment, and forgets deliberately. Recall should appear as familiarity, not as a database result read aloud.",
+    terms: ["Long-horizon memory", "Salience", "Reflection", "Forgetting"],
   },
   {
-    id: "persona",
-    title: "Persona",
+    id: "perception",
+    title: "Perception",
+    short: "More than the words.",
     summary:
-      "A person is the same person tomorrow. They have a history, opinions they will defend, and things they are wrong about.",
+      "Conversation also lives in tone, timing, expression, context and what goes unsaid. We build models that reason across the signals people choose to share.",
     detail:
-      "Consistency is what separates a character from a chat session. We work on stable identity under pressure: a backstory the system will not contradict, preferences that hold across weeks, memory that accrues into something like a relationship, and the willingness to disagree with you.",
-    terms: ["Identity consistency", "Long-horizon memory", "Grounding"],
+      "A pause can mean uncertainty, invitation, annoyance or nothing at all. Perception means integrating language with prosody, gaze, gesture and context, while making clear what the system can sense.",
+    terms: ["Multimodal understanding", "Prosody", "Gaze", "Context"],
   },
   {
-    id: "culture",
-    title: "Culture",
+    id: "expression",
+    title: "Expression",
+    short: "One state. Many signals.",
     summary:
-      "How close you stand, how fast you interrupt, when silence is comfortable. None of this is universal, and all of it is learned.",
+      "Language, voice, gaze, facial motion and reaction should feel like expressions of the same underlying moment, not separate models performing beside one another.",
     detail:
-      "Conversational norms are local. Overlap that reads as warm engagement in one place reads as rudeness in another, and the register you use with a colleague is not the one you use with your mother. We work on systems that carry a specific cultural register rather than an averaged one, and that code-switch the way bilingual people actually do.",
-    terms: ["Register", "Code-switching", "Politeness strategy", "Idiom"],
+      "We work on full-duplex speech, affective voice and embodied response. The seams matter: when to enter, when to yield, how silence feels, and whether the face says the same thing as the voice.",
+    terms: ["Full-duplex voice", "Affect", "Facial motion", "Timing"],
+  },
+  {
+    id: "agency",
+    title: "Agency",
+    short: "Initiative within boundaries.",
+    summary:
+      "A companion should be capable of curiosity, reflection and initiative without becoming controlling. Agency must remain legible and interruptible.",
+    detail:
+      "We explore systems that can act on their own train of thought while keeping the user in control. Initiative is useful only when its reasons, permissions and limits are understandable.",
+    terms: ["Planning", "Initiative", "User control", "Alignment"],
   },
 ] as const;
