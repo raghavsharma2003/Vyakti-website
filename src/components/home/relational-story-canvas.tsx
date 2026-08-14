@@ -322,7 +322,7 @@ function StoryScene({
   const pointMaterial = useRef<THREE.ShaderMaterial>(null);
   const featureMaterials = useRef<THREE.ShaderMaterial[]>([]);
   const { gl, invalidate, size } = useThree();
-  const compact = size.width < 900;
+  const compact = size.height < window.innerHeight * 0.8;
 
   const face = useMemo(() => (noor ? prepareFace(noor.face, rig) : null), [noor, rig]);
   const features = noor?.features ?? [];
@@ -414,8 +414,8 @@ function StoryScene({
     root.current.rotation.y = noorYaw + runtime.pointerX * pointerWindow * 0.045;
     root.current.rotation.x = runtime.pointerY * pointerWindow * -0.028;
     root.current.position.x = compact ? 0 : 0.72;
-    root.current.position.y = compact ? 0.17 : -0.02;
-    root.current.scale.setScalar(compact ? 0.92 : 1.08);
+    root.current.position.y = compact ? -0.02 : -0.065;
+    root.current.scale.setScalar(compact ? 0.9 : 1.04);
 
     if (featureRoot.current) {
       featureRoot.current.visible = cohesion > 0.25;

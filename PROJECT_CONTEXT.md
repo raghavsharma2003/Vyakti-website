@@ -222,6 +222,8 @@ The main page is deliberately white-first and editorial. It uses black plus one 
 
 Desktop uses a sticky long-form story. Mobile uses native scrolling with a compact sticky visual and protected reading band. Reduced-motion and WebGL failure modes become a linear editorial layout with static portraits rather than a blank canvas. Noor's canvas renders on demand and caps DPR. Meera remains a lightweight responsive image.
 
+Normal first load never renders a solid Noor poster. Server output starts with a lightweight dots-only signal field, which hands directly to the real particle canvas after WebGL and the semantic rig are ready. Meera's square source portrait is contained without zoom or crop and begins below the fixed header on both desktop and mobile.
+
 ## Current repository state
 
 Core public routes:

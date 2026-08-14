@@ -15,6 +15,7 @@ import styles from "./home.module.css";
 
 const StoryCanvas = dynamic(() => import("./relational-story-canvas"), {
   ssr: false,
+  loading: () => <InitialSignalField />,
 });
 
 if (typeof window !== "undefined") gsap.registerPlugin(useGSAP, ScrollTrigger);
@@ -133,7 +134,6 @@ export function RelationalStory() {
   const paperBridge = useRef<HTMLDivElement>(null);
   const meeraLayer = useRef<HTMLDivElement>(null);
   const meeraFrame = useRef<HTMLDivElement>(null);
-  const meeraMedia = useRef<HTMLDivElement>(null);
   const leftMask = useRef<HTMLDivElement>(null);
   const noorRuntime = useMemo(() => createStoryRuntime(), []);
   const [webgl, setWebgl] = useState<boolean | null>(null);
@@ -226,8 +226,6 @@ export function RelationalStory() {
         const paperEntry = rawPaperEntry * rawPaperEntry * (3 - 2 * rawPaperEntry);
         const rawMeeraEntry = gsap.utils.clamp(0, 1, (progress - 0.695) / 0.05);
         const meeraEntry = rawMeeraEntry * rawMeeraEntry * (3 - 2 * rawMeeraEntry);
-        const rawPhotoPan = gsap.utils.clamp(0, 1, (progress - 0.695) / 0.12);
-        const photoPan = rawPhotoPan * rawPhotoPan * (3 - 2 * rawPhotoPan);
         const mobile = window.innerWidth <= 980;
         if (noorLayer.current) {
           gsap.set(noorLayer.current, {
@@ -251,12 +249,6 @@ export function RelationalStory() {
             clipPath: mobile
               ? `inset(0 0 ${(1 - meeraEntry) * 100}% 0)`
               : `inset(0 ${(1 - meeraEntry) * 100}% 0 0)`,
-          });
-        }
-        if (meeraMedia.current) {
-          gsap.set(meeraMedia.current, {
-            xPercent: mobile ? 0 : 1.2 - photoPan * 1.8,
-            yPercent: mobile ? 0.6 - photoPan * 1.1 : 0,
           });
         }
       };
@@ -294,17 +286,9 @@ export function RelationalStory() {
                   rig={rig}
                   onContextLost={() => setWebgl(false)}
                 />
-              ) : (
-                <div className={styles.loadingPortrait}>
-                  <Image
-                    src="/models/ink-lab/noor-poster.png"
-                    alt=""
-                    fill
-                    loading="eager"
-                    sizes="(max-width: 980px) 100vw, 62vw"
-                  />
-                </div>
-              )}
+              ) : !fallback ? (
+                <InitialSignalField />
+              ) : null}
             </div>
             <div
               ref={paperBridge}
@@ -317,7 +301,7 @@ export function RelationalStory() {
               style={{ visibility: "hidden" }}
             >
               <div ref={meeraFrame} className={styles.meeraPhotoFrame}>
-                <div ref={meeraMedia} className={styles.meeraPhotoMedia}>
+                <div className={styles.meeraPhotoMedia}>
                   <Image
                     src="/images/meera-portrait-v1.webp"
                     alt=""
@@ -357,7 +341,7 @@ export function RelationalStory() {
                       {chapter.label}
                     </p>
                   ) : null}
-                  {index === 0 ? (
+                  {fallback && index === 0 ? (
                     <figure className={[styles.fallbackPortrait, styles.fallbackNoor].join(" ")}>
                       <Image
                         src="/models/ink-lab/noor-poster.png"
@@ -367,7 +351,7 @@ export function RelationalStory() {
                       />
                     </figure>
                   ) : null}
-                  {index === 5 ? (
+                  {fallback && index === 5 ? (
                     <figure className={[styles.fallbackPortrait, styles.fallbackMeera].join(" ")}>
                       <MeeraPortrait sizes="(max-width: 760px) 92vw, 42vw" />
                     </figure>
@@ -431,4 +415,8 @@ export function RelationalStory() {
 
 function THREEClamp(value: number) {
   return Math.min(0.99999, Math.max(0, value));
+}
+
+function InitialSignalField() {
+  return <div className={styles.initialSignalField} aria-hidden="true" />;
 }
