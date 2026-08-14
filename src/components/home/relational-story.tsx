@@ -17,10 +17,6 @@ const StoryCanvas = dynamic(() => import("./relational-story-canvas"), {
   ssr: false,
 });
 
-const MeeraStoryCanvas = dynamic(() => import("./meera-story-canvas"), {
-  ssr: false,
-});
-
 if (typeof window !== "undefined") gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 const CHAPTERS = [
@@ -134,11 +130,12 @@ export function RelationalStory() {
   const runway = useRef<HTMLDivElement>(null);
   const stage = useRef<HTMLDivElement>(null);
   const noorLayer = useRef<HTMLDivElement>(null);
+  const paperBridge = useRef<HTMLDivElement>(null);
   const meeraLayer = useRef<HTMLDivElement>(null);
+  const meeraFrame = useRef<HTMLDivElement>(null);
+  const meeraMedia = useRef<HTMLDivElement>(null);
   const leftMask = useRef<HTMLDivElement>(null);
-  const rightMask = useRef<HTMLDivElement>(null);
   const noorRuntime = useMemo(() => createStoryRuntime(), []);
-  const meeraRuntime = useMemo(() => createStoryRuntime(), []);
   const [webgl, setWebgl] = useState<boolean | null>(null);
   const [reduced, setReduced] = useState(false);
   const [rig, setRig] = useState<Uint8Array | null>(null);
@@ -175,22 +172,14 @@ export function RelationalStory() {
     const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)");
     const move = (event: PointerEvent) => {
       if (!finePointer.matches) return;
-      const pointerX = (event.clientX / window.innerWidth) * 2 - 1;
-      const pointerY = -((event.clientY / window.innerHeight) * 2 - 1);
-      noorRuntime.pointerX = pointerX;
-      noorRuntime.pointerY = pointerY;
-      meeraRuntime.pointerX = pointerX;
-      meeraRuntime.pointerY = pointerY;
+      noorRuntime.pointerX = (event.clientX / window.innerWidth) * 2 - 1;
+      noorRuntime.pointerY = -((event.clientY / window.innerHeight) * 2 - 1);
       noorRuntime.invalidate?.();
-      meeraRuntime.invalidate?.();
     };
     const leave = () => {
       noorRuntime.pointerX = 0;
       noorRuntime.pointerY = 0;
-      meeraRuntime.pointerX = 0;
-      meeraRuntime.pointerY = 0;
       noorRuntime.invalidate?.();
-      meeraRuntime.invalidate?.();
     };
     target.addEventListener("pointermove", move, { passive: true });
     target.addEventListener("pointerleave", leave, { passive: true });
@@ -198,7 +187,7 @@ export function RelationalStory() {
       target.removeEventListener("pointermove", move);
       target.removeEventListener("pointerleave", leave);
     };
-  }, [animated, meeraRuntime, noorRuntime]);
+  }, [animated, noorRuntime]);
 
   useGSAP(
     () => {
@@ -212,10 +201,7 @@ export function RelationalStory() {
         const velocity = self.getVelocity();
         noorRuntime.progress = progress;
         noorRuntime.scrollVelocity = velocity;
-        meeraRuntime.progress = progress;
-        meeraRuntime.scrollVelocity = velocity;
         noorRuntime.invalidate?.();
-        meeraRuntime.invalidate?.();
         chapters.forEach((chapter, index) => {
           const opacity = chapterOpacity(progress, index);
           const direction = progress < CHAPTERS[index].at ? 1 : -1;
@@ -226,30 +212,51 @@ export function RelationalStory() {
           });
           chapter.style.pointerEvents = opacity > 0.7 ? "auto" : "none";
         });
-        const visualHandoff = gsap.utils.clamp(0, 1, (progress - 0.62) / 0.1);
+        const visualHandoff = gsap.utils.clamp(0, 1, (progress - 0.62) / 0.04);
         if (leftMask.current) {
           gsap.set(leftMask.current, { opacity: 1 - visualHandoff });
         }
-        if (rightMask.current) {
-          gsap.set(rightMask.current, { opacity: visualHandoff });
-        }
 
-        // These scenes never cross-morph or overlap. Noor leaves, the field
-        // clears to paper, and Meera enters as her own complete 3D model.
+        // Noor exits completely before Meera's authored portrait enters.
+        // The clear-paper interval keeps the lab identity and product identity
+        // spatially separate instead of implying a transformation.
         const rawNoorExit = gsap.utils.clamp(0, 1, (progress - 0.642) / 0.018);
         const noorExit = rawNoorExit * rawNoorExit * (3 - 2 * rawNoorExit);
-        const rawMeeraEntry = gsap.utils.clamp(0, 1, (progress - 0.695) / 0.04);
+        const rawPaperEntry = gsap.utils.clamp(0, 1, (progress - 0.652) / 0.008);
+        const paperEntry = rawPaperEntry * rawPaperEntry * (3 - 2 * rawPaperEntry);
+        const rawMeeraEntry = gsap.utils.clamp(0, 1, (progress - 0.695) / 0.05);
         const meeraEntry = rawMeeraEntry * rawMeeraEntry * (3 - 2 * rawMeeraEntry);
+        const rawPhotoPan = gsap.utils.clamp(0, 1, (progress - 0.695) / 0.12);
+        const photoPan = rawPhotoPan * rawPhotoPan * (3 - 2 * rawPhotoPan);
+        const mobile = window.innerWidth <= 980;
         if (noorLayer.current) {
           gsap.set(noorLayer.current, {
             opacity: 1 - noorExit,
             visibility: noorExit < 0.998 ? "visible" : "hidden",
           });
         }
+        if (paperBridge.current) {
+          gsap.set(paperBridge.current, {
+            opacity: paperEntry,
+            visibility: paperEntry > 0.002 ? "visible" : "hidden",
+          });
+        }
         if (meeraLayer.current) {
           gsap.set(meeraLayer.current, {
-            opacity: meeraEntry,
-            visibility: meeraEntry > 0.002 ? "visible" : "hidden",
+            visibility: progress >= 0.695 ? "visible" : "hidden",
+          });
+        }
+        if (meeraFrame.current) {
+          gsap.set(meeraFrame.current, {
+            clipPath: mobile
+              ? `inset(0 0 ${(1 - meeraEntry) * 100}% 0)`
+              : `inset(0 ${(1 - meeraEntry) * 100}% 0 0)`,
+          });
+        }
+        if (meeraMedia.current) {
+          gsap.set(meeraMedia.current, {
+            xPercent: mobile ? 0 : 1.2 - photoPan * 1.8,
+            yPercent: mobile ? 0.6 - photoPan * 1.1 : 0,
           });
         }
       };
@@ -262,15 +269,13 @@ export function RelationalStory() {
         onUpdate: update,
         onToggle: (self) => {
           noorRuntime.active = self.isActive;
-          meeraRuntime.active = self.isActive;
           noorRuntime.invalidate?.();
-          meeraRuntime.invalidate?.();
         },
       });
       update(trigger);
       return () => trigger.kill();
     },
-    { scope: root, dependencies: [animated, meeraRuntime, noorRuntime] },
+    { scope: root, dependencies: [animated, noorRuntime] },
   );
 
   return (
@@ -302,20 +307,30 @@ export function RelationalStory() {
               )}
             </div>
             <div
-              ref={meeraLayer}
-              className={styles.meeraSceneLayer}
+              ref={paperBridge}
+              className={styles.storyPaperBridge}
               style={{ opacity: 0, visibility: "hidden" }}
+            />
+            <div
+              ref={meeraLayer}
+              className={styles.meeraPhotoLayer}
+              style={{ visibility: "hidden" }}
             >
-              {animated ? (
-                <MeeraStoryCanvas
-                  runtime={meeraRuntime}
-                  onContextLost={() => setWebgl(false)}
-                />
-              ) : null}
+              <div ref={meeraFrame} className={styles.meeraPhotoFrame}>
+                <div ref={meeraMedia} className={styles.meeraPhotoMedia}>
+                  <Image
+                    src="/images/meera-portrait-v1.webp"
+                    alt=""
+                    fill
+                    loading="eager"
+                    sizes="(min-width: 981px) 58vw, 100vw"
+                    className={styles.meeraPhotoImage}
+                  />
+                </div>
+              </div>
             </div>
           </div>
           <div ref={leftMask} className={styles.leftReadingMask} aria-hidden="true" />
-          <div ref={rightMask} className={styles.rightReadingMask} aria-hidden="true" />
 
           <div className={styles.chapterLayer}>
             {CHAPTERS.map((chapter, index) => {
@@ -341,6 +356,21 @@ export function RelationalStory() {
                     >
                       {chapter.label}
                     </p>
+                  ) : null}
+                  {index === 0 ? (
+                    <figure className={[styles.fallbackPortrait, styles.fallbackNoor].join(" ")}>
+                      <Image
+                        src="/models/ink-lab/noor-poster.png"
+                        alt=""
+                        fill
+                        sizes="(max-width: 760px) 92vw, 42vw"
+                      />
+                    </figure>
+                  ) : null}
+                  {index === 5 ? (
+                    <figure className={[styles.fallbackPortrait, styles.fallbackMeera].join(" ")}>
+                      <MeeraPortrait sizes="(max-width: 760px) 92vw, 42vw" />
+                    </figure>
                   ) : null}
                   <Heading id={index === 0 ? "home-title" : undefined}>
                     {index === 0 ? (
@@ -386,20 +416,6 @@ export function RelationalStory() {
           </div>
         </div>
 
-        <div className={styles.staticPortraits} aria-hidden="true">
-          <figure>
-            <Image
-              src="/models/ink-lab/noor-poster.png"
-              alt=""
-              width={507}
-              height={507}
-              sizes="(max-width: 760px) 92vw, 42vw"
-            />
-          </figure>
-          <figure className={styles.meeraStaticPortrait}>
-            <MeeraPortrait sizes="(max-width: 760px) 92vw, 42vw" />
-          </figure>
-        </div>
       </div>
 
       <ol className="sr-only" aria-hidden={animated ? undefined : true}>

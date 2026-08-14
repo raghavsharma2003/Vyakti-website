@@ -31,16 +31,45 @@
   will-change: opacity;
 }
 
-.meeraSceneLayer {
+.storyPaperBridge {
   position: absolute;
   inset: 0;
   z-index: 2;
-  background: radial-gradient(
-    ellipse at 32% 46%,
-    color-mix(in oklab, var(--color-meera) 8%, transparent),
-    transparent 38%
-  );
+  background: var(--color-ink);
+  pointer-events: none;
   will-change: opacity;
+}
+
+.meeraPhotoLayer {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.meeraPhotoFrame {
+  position: relative;
+  width: min(58vw, 1100px);
+  height: 100%;
+  overflow: hidden;
+  background: #ebe9e4;
+  clip-path: inset(0 100% 0 0);
+  will-change: clip-path;
+}
+
+.meeraPhotoMedia {
+  position: absolute;
+  inset: -1.5%;
+  will-change: transform;
+}
+
+.meeraPhotoImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 55% 50%;
+  transform: scale(1.03);
 }
 
 .loadingPortrait {
@@ -66,8 +95,7 @@
   mix-blend-mode: multiply;
 }
 
-.leftReadingMask,
-.rightReadingMask {
+.leftReadingMask {
   position: absolute;
   inset: 0;
   z-index: 2;
@@ -81,17 +109,6 @@
     rgb(247 247 244 / 98%) 29%,
     rgb(247 247 244 / 76%) 43%,
     transparent 67%
-  );
-}
-
-.rightReadingMask {
-  opacity: 0;
-  background: linear-gradient(
-    270deg,
-    var(--color-ink) 0%,
-    rgb(247 247 244 / 98%) 34%,
-    rgb(247 247 244 / 76%) 45%,
-    transparent 56%
   );
 }
 
@@ -124,6 +141,7 @@
 
 .chapterRight {
   right: clamp(1.25rem, 4vw, 4.5rem);
+  width: min(31vw, 29rem);
 }
 
 .chapterLabel {
@@ -192,7 +210,7 @@
   margin-top: 1.9rem;
 }
 
-.staticPortraits {
+.fallbackPortrait {
   display: none;
 }
 
@@ -208,8 +226,7 @@
 }
 
 .storyFallback .storyVisual,
-.storyFallback .leftReadingMask,
-.storyFallback .rightReadingMask {
+.storyFallback .leftReadingMask {
   display: none;
 }
 
@@ -240,34 +257,35 @@
   margin-left: auto;
 }
 
-.storyFallback .staticPortraits {
-  display: grid;
-  max-width: 1480px;
-  margin-inline: auto;
-  padding: 0 clamp(1.25rem, 4vw, 4.5rem) 6rem;
-  gap: 1rem;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-
-.staticPortraits figure {
+.storyFallback .fallbackPortrait {
   position: relative;
+  display: block;
+  width: min(42rem, 100%);
   aspect-ratio: 1;
+  margin-bottom: clamp(2rem, 5vw, 4rem);
   overflow: hidden;
-  background: var(--color-void);
 }
 
-.staticPortraits figure:first-child img {
+.fallbackPortrait img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.fallbackNoor {
+  position: relative;
+  background: var(--color-void);
+}
+
+.fallbackNoor img {
   mix-blend-mode: multiply;
 }
 
-.meeraStaticPortrait {
-  background: #ebe9e4 !important;
+.fallbackMeera {
+  background: #ebe9e4;
 }
 
-.meeraStaticPortrait > * {
+.fallbackMeera > * {
   width: 100%;
   height: 100%;
 }
@@ -589,16 +607,22 @@
     height: 67%;
   }
 
-  .meeraSceneLayer {
-    background: radial-gradient(
-      ellipse at 50% 30%,
-      color-mix(in oklab, var(--color-meera) 8%, transparent),
-      transparent 42%
-    );
+  .meeraPhotoLayer {
+    overflow: hidden;
   }
 
-  .leftReadingMask,
-  .rightReadingMask {
+  .meeraPhotoFrame {
+    width: 100%;
+    height: 52svh;
+    clip-path: inset(0 0 100% 0);
+  }
+
+  .meeraPhotoImage {
+    object-position: 55% 18%;
+    transform: scale(1.025);
+  }
+
+  .leftReadingMask {
     background: linear-gradient(
       0deg,
       var(--color-ink) 0%,
@@ -696,10 +720,6 @@
     padding-top: 5rem;
   }
 
-  .staticPortraits {
-    grid-template-columns: 1fr;
-  }
-
   .sectionLead {
     font-size: clamp(2.5rem, 12vw, 4.4rem);
   }
@@ -765,8 +785,7 @@
   }
 
   .storyVisual,
-  .leftReadingMask,
-  .rightReadingMask {
+  .leftReadingMask {
     display: none;
   }
 
@@ -796,19 +815,18 @@
     margin-left: auto;
   }
 
-  .staticPortraits {
-    display: grid;
-    max-width: 1480px;
-    margin-inline: auto;
-    padding: 0 clamp(1.25rem, 4vw, 4.5rem) 5rem;
-    gap: 1rem;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .fallbackPortrait {
+    position: relative;
+    display: block;
+    width: min(42rem, 100%);
+    aspect-ratio: 1;
+    margin-bottom: 2.5rem;
+    overflow: hidden;
   }
 }
 
 @media (prefers-reduced-transparency: reduce) {
-  .leftReadingMask,
-  .rightReadingMask {
+  .leftReadingMask {
     background: var(--color-ink);
   }
 }
