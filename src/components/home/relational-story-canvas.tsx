@@ -17,7 +17,6 @@ import {
 } from "./story-shaders";
 
 const NOOR_MODEL = "/models/ink-lab/androgynous-soft.glb?v=mouth2";
-const MEERA_MODEL = "/models/ink-lab/feminine-sculpted.glb?v=mouth2";
 
 type FeatureGeometry = {
   geometry: THREE.BufferGeometry;
@@ -126,57 +125,15 @@ function seededRandom(seed: number) {
   };
 }
 
-function attributeClone(attribute: THREE.BufferAttribute) {
-  return new THREE.BufferAttribute(
-    new Float32Array(attribute.array as ArrayLike<number>),
-    attribute.itemSize,
-    attribute.normalized,
-  );
-}
-
-function pairFace(
-  noor: THREE.BufferGeometry,
-  meera: THREE.BufferGeometry,
-  rig: Uint8Array,
-) {
+function prepareFace(noor: THREE.BufferGeometry, rig: Uint8Array) {
   const face = noor.clone();
   const count = face.getAttribute("position").count;
-  if (
-    meera.getAttribute("position").count !== count ||
-    rig.length !== count * 4
-  ) {
+  if (rig.length !== count * 4) {
     face.dispose();
     return null;
   }
-  face.setAttribute(
-    "aMeeraPosition",
-    attributeClone(meera.getAttribute("position") as THREE.BufferAttribute),
-  );
-  face.setAttribute(
-    "aMeeraNormal",
-    attributeClone(meera.getAttribute("normal") as THREE.BufferAttribute),
-  );
   face.setAttribute("aRig", new THREE.BufferAttribute(rig, 4, true));
   return face;
-}
-
-function pairFeatures(
-  noor: FeatureGeometry[],
-  meera: FeatureGeometry[],
-) {
-  return noor.flatMap((feature) => {
-    const counterpart = meera.find((candidate) => candidate.kind === feature.kind);
-    if (!counterpart) return [];
-    const geometry = feature.geometry.clone();
-    const source = geometry.getAttribute("position") as THREE.BufferAttribute;
-    const target = counterpart.geometry.getAttribute("position") as THREE.BufferAttribute;
-    if (source.count !== target.count) {
-      geometry.dispose();
-      return [];
-    }
-    geometry.setAttribute("aMeeraPosition", attributeClone(target));
-    return [{ geometry, kind: feature.kind }];
-  });
 }
 
 function triangleIndex(
@@ -238,31 +195,22 @@ function barycentricPoint(
   );
 }
 
-function makePairedPointGeometry(
-  noor: THREE.BufferGeometry,
-  meera: THREE.BufferGeometry,
-  count: number,
-) {
+function makePointGeometry(noor: THREE.BufferGeometry, count: number) {
   const random = seededRandom(0x7679_616b);
   const noorPositions = noor.getAttribute("position") as THREE.BufferAttribute;
-  const meeraPositions = meera.getAttribute("position") as THREE.BufferAttribute;
   const { cumulative, total, indices } = buildAreaTable(noor);
 
   const positions = new Float32Array(count * 3);
-  const meeraTargets = new Float32Array(count * 3);
   const origins = new Float32Array(count * 3);
-  const noorControls = new Float32Array(count * 3);
-  const meeraControls = new Float32Array(count * 3);
+  const controls = new Float32Array(count * 3);
   const arrivals = new Float32Array(count);
   const sizes = new Float32Array(count);
   const randoms = new Float32Array(count);
 
   const noorPoint = new THREE.Vector3();
-  const meeraPoint = new THREE.Vector3();
   const origin = new THREE.Vector3();
   const direction = new THREE.Vector3();
-  const noorControl = new THREE.Vector3();
-  const meeraControl = new THREE.Vector3();
+  const control = new THREE.Vector3();
   const tangent = new THREE.Vector3();
   const up = new THREE.Vector3(0, 1, 0);
 
@@ -276,7 +224,6 @@ function makePairedPointGeometry(
     const wb = squareRoot * (1 - random());
     const wc = 1 - wa - wb;
     barycentricPoint(noorPositions, ia, ib, ic, wa, wb, wc, noorPoint);
-    barycentricPoint(meeraPositions, ia, ib, ic, wa, wb, wc, meeraPoint);
 
     const angle = random() * Math.PI * 2;
     const outward = 0.58 + random() * 0.72;
@@ -287,15 +234,14 @@ function makePairedPointGeometry(
         0.34 + Math.sin(angle) * outward,
       )
       .normalize();
-    origin.copy(noorPoint).lerp(meeraPoint, 0.5);
+    origin.copy(noorPoint);
     origin.addScaledVector(direction, 0.56 + random() * 1.18);
     origin.y += (random() - 0.5) * 0.24;
 
     tangent.crossVectors(direction, up);
     if (tangent.lengthSq() < 0.0001) tangent.set(1, 0, 0);
     tangent.normalize().multiplyScalar((random() - 0.5) * 0.72);
-    noorControl.copy(origin).lerp(noorPoint, 0.47).add(tangent);
-    meeraControl.copy(origin).lerp(meeraPoint, 0.47).addScaledVector(tangent, -0.82);
+    control.copy(origin).lerp(noorPoint, 0.47).add(tangent);
 
     const eyeZone = Math.exp(
       -Math.pow((Math.abs(noorPoint.x) - 0.25) / 0.18, 2) -
@@ -319,10 +265,8 @@ function makePairedPointGeometry(
     );
 
     positions.set(noorPoint.toArray(), sample * 3);
-    meeraTargets.set(meeraPoint.toArray(), sample * 3);
     origins.set(origin.toArray(), sample * 3);
-    noorControls.set(noorControl.toArray(), sample * 3);
-    meeraControls.set(meeraControl.toArray(), sample * 3);
+    controls.set(control.toArray(), sample * 3);
     arrivals[sample] = arrival;
     sizes[sample] = random();
     randoms[sample] = random();
@@ -330,10 +274,8 @@ function makePairedPointGeometry(
 
   const geometry = new THREE.BufferGeometry();
   geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
-  geometry.setAttribute("aMeeraTarget", new THREE.BufferAttribute(meeraTargets, 3));
   geometry.setAttribute("aOrigin", new THREE.BufferAttribute(origins, 3));
-  geometry.setAttribute("aMaleControl", new THREE.BufferAttribute(noorControls, 3));
-  geometry.setAttribute("aMeeraControl", new THREE.BufferAttribute(meeraControls, 3));
+  geometry.setAttribute("aControl", new THREE.BufferAttribute(controls, 3));
   geometry.setAttribute("aArrival", new THREE.BufferAttribute(arrivals, 1));
   geometry.setAttribute("aSize", new THREE.BufferAttribute(sizes, 1));
   geometry.setAttribute("aRandom", new THREE.BufferAttribute(randoms, 1));
@@ -373,9 +315,7 @@ function StoryScene({
   onContextLost: () => void;
 }) {
   const noorGltf = useGLTF(NOOR_MODEL);
-  const meeraGltf = useGLTF(MEERA_MODEL);
   const noor = useMemo(() => extractIdentity(noorGltf.scene), [noorGltf.scene]);
-  const meera = useMemo(() => extractIdentity(meeraGltf.scene), [meeraGltf.scene]);
   const root = useRef<THREE.Group>(null);
   const featureRoot = useRef<THREE.Group>(null);
   const faceMaterial = useRef<THREE.ShaderMaterial>(null);
@@ -384,40 +324,27 @@ function StoryScene({
   const { gl, invalidate, size } = useThree();
   const compact = size.width < 900;
 
-  const face = useMemo(
-    () => (noor && meera ? pairFace(noor.face, meera.face, rig) : null),
-    [meera, noor, rig],
-  );
-  const features = useMemo(
-    () => (noor && meera ? pairFeatures(noor.features, meera.features) : []),
-    [meera, noor],
-  );
+  const face = useMemo(() => (noor ? prepareFace(noor.face, rig) : null), [noor, rig]);
+  const features = noor?.features ?? [];
   const points = useMemo(
-    () =>
-      noor && meera
-        ? makePairedPointGeometry(noor.face, meera.face, compact ? 7_000 : 14_000)
-        : null,
-    [compact, meera, noor],
+    () => (noor ? makePointGeometry(noor.face, compact ? 7_000 : 14_000) : null),
+    [compact, noor],
   );
   const faceUniforms = useMemo(
     () => ({
-      uIdentityMix: { value: 0 },
       uCohesion: { value: 0 },
       uViseme: { value: new THREE.Vector3() },
       uBlink: { value: 0 },
       uPointer: { value: new THREE.Vector2() },
       uMeshOpacity: { value: 1 },
       uPaper: { value: new THREE.Color("#f7f7f4") },
-      uMeeraPaper: { value: new THREE.Color("#f3efeb") },
       uInk: { value: new THREE.Color("#0d0f0e") },
     }),
     [],
   );
   const pointUniforms = useMemo(
     () => ({
-      uMaleCohesion: { value: 0 },
-      uMeeraCohesion: { value: 0 },
-      uIdentityMix: { value: 0 },
+      uCohesion: { value: 0 },
       uPixelRatio: { value: 1 },
       uInk: { value: new THREE.Color("#151715") },
       uSignal: { value: new THREE.Color("#d33f2c") },
@@ -443,10 +370,6 @@ function StoryScene({
   }, [gl, onContextLost]);
 
   useEffect(() => () => face?.dispose(), [face]);
-  useEffect(
-    () => () => features.forEach((feature) => feature.geometry.dispose()),
-    [features],
-  );
   useEffect(() => () => points?.dispose(), [points]);
   useEffect(
     () => () => {
@@ -455,73 +378,42 @@ function StoryScene({
     },
     [noor],
   );
-  useEffect(
-    () => () => {
-      meera?.face.dispose();
-      meera?.features.forEach((feature) => feature.geometry.dispose());
-    },
-    [meera],
-  );
-
   useFrame(() => {
     if (!root.current || !faceMaterial.current || !pointMaterial.current) {
       return;
     }
     const progress = runtime.progress;
-    const maleForm = phase(progress, 0.025, 0.255);
-    const maleRelease = phase(progress, 0.515, 0.635);
-    const maleCohesion = Math.min(maleForm, 1 - maleRelease);
-    const identityMix = phase(progress, 0.605, 0.685);
-    const meeraCohesion = phase(progress, 0.65, 0.805);
-    const cohesion = THREE.MathUtils.lerp(maleCohesion, meeraCohesion, identityMix);
+    const formation = phase(progress, 0.025, 0.255);
+    const release = phase(progress, 0.575, 0.655);
+    const cohesion = Math.min(formation, 1 - release);
 
-    const maleSpeech =
+    const speech =
       phase(progress, 0.415, 0.432) * (1 - phase(progress, 0.495, 0.515));
-    const meeraSpeech =
-      phase(progress, 0.805, 0.822) * (1 - phase(progress, 0.875, 0.9));
-    const maleSpeechProgress = remap(progress, 0.415, 0.515);
-    const meeraSpeechProgress = remap(progress, 0.805, 0.9);
-    const speech = Math.max(maleSpeech, meeraSpeech);
+    const speechProgress = remap(progress, 0.415, 0.515);
 
     const faceValues = faceMaterial.current.uniforms;
-    faceValues.uIdentityMix.value = identityMix;
     faceValues.uCohesion.value = cohesion;
-    sampleViseme(
-      meeraSpeech > maleSpeech ? meeraSpeechProgress : maleSpeechProgress,
-      faceValues.uViseme.value,
-    ).multiplyScalar(speech);
-    faceValues.uBlink.value = Math.min(
-      1,
-      pulse(progress, 0.355, 0.0075) + pulse(progress, 0.79, 0.008),
-    );
+    sampleViseme(speechProgress, faceValues.uViseme.value).multiplyScalar(speech);
+    faceValues.uBlink.value = Math.min(1, pulse(progress, 0.355, 0.0075));
 
-    const pointerWindow = Math.max(
-      phase(progress, 0.29, 0.32) * (1 - phase(progress, 0.495, 0.515)),
-      phase(progress, 0.79, 0.81) * (1 - phase(progress, 0.875, 0.895)),
-    );
+    const pointerWindow =
+      phase(progress, 0.29, 0.32) * (1 - phase(progress, 0.495, 0.515));
     faceValues.uPointer.value.set(
       runtime.pointerX * pointerWindow,
       runtime.pointerY * pointerWindow,
     );
 
     const pointValues = pointMaterial.current.uniforms;
-    pointValues.uMaleCohesion.value = maleCohesion;
-    pointValues.uMeeraCohesion.value = meeraCohesion;
-    pointValues.uIdentityMix.value = identityMix;
+    pointValues.uCohesion.value = cohesion;
     pointValues.uPixelRatio.value = Math.min(
       gl.getPixelRatio(),
       compact ? 1.25 : 1.5,
     );
 
     const noorYaw = THREE.MathUtils.lerp(-0.42, -0.025, phase(progress, 0.025, 0.3));
-    const meeraYaw = THREE.MathUtils.lerp(0.31, 0.015, phase(progress, 0.65, 0.83));
-    root.current.rotation.y =
-      THREE.MathUtils.lerp(noorYaw, meeraYaw, identityMix) +
-      runtime.pointerX * pointerWindow * 0.045;
+    root.current.rotation.y = noorYaw + runtime.pointerX * pointerWindow * 0.045;
     root.current.rotation.x = runtime.pointerY * pointerWindow * -0.028;
-    root.current.position.x = compact
-      ? 0
-      : THREE.MathUtils.lerp(0.72, -0.72, phase(progress, 0.59, 0.7));
+    root.current.position.x = compact ? 0 : 0.72;
     root.current.position.y = compact ? 0.17 : -0.02;
     root.current.scale.setScalar(compact ? 0.92 : 1.08);
 
@@ -530,7 +422,6 @@ function StoryScene({
       const featureOpacity = phase(cohesion, 0.32, 0.76);
       featureMaterials.current.forEach((material) => {
         if (!material) return;
-        material.uniforms.uIdentityMix.value = identityMix;
         material.uniforms.uOpacity.value = featureOpacity;
         material.uniforms.uViseme.value.copy(faceValues.uViseme.value);
         material.uniforms.uBlink.value = faceValues.uBlink.value;
@@ -538,7 +429,7 @@ function StoryScene({
     }
   });
 
-  if (!face || !points || !noor || !meera) return null;
+  if (!face || !points || !noor) return null;
 
   return (
     <group ref={root}>
@@ -572,7 +463,6 @@ function StoryScene({
                 uniforms={{
                   uColor: { value: new THREE.Color(featureColor(feature.kind)) },
                   uOpacity: { value: 0 },
-                  uIdentityMix: { value: 0 },
                   uViseme: { value: new THREE.Vector3() },
                   uBlink: { value: 0 },
                   uIsEye: { value: isEye(feature.kind) ? 1 : 0 },
@@ -621,4 +511,3 @@ export default function RelationalStoryCanvas({
 }
 
 useGLTF.preload(NOOR_MODEL);
-useGLTF.preload(MEERA_MODEL);

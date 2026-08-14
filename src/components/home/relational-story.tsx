@@ -17,6 +17,10 @@ const StoryCanvas = dynamic(() => import("./relational-story-canvas"), {
   ssr: false,
 });
 
+const MeeraStoryCanvas = dynamic(() => import("./meera-story-canvas"), {
+  ssr: false,
+});
+
 if (typeof window !== "undefined") gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 const CHAPTERS = [
@@ -129,11 +133,12 @@ export function RelationalStory() {
   const root = useRef<HTMLElement>(null);
   const runway = useRef<HTMLDivElement>(null);
   const stage = useRef<HTMLDivElement>(null);
-  const canvasLayer = useRef<HTMLDivElement>(null);
-  const meeraReveal = useRef<HTMLDivElement>(null);
+  const noorLayer = useRef<HTMLDivElement>(null);
+  const meeraLayer = useRef<HTMLDivElement>(null);
   const leftMask = useRef<HTMLDivElement>(null);
   const rightMask = useRef<HTMLDivElement>(null);
-  const runtime = useMemo(() => createStoryRuntime(), []);
+  const noorRuntime = useMemo(() => createStoryRuntime(), []);
+  const meeraRuntime = useMemo(() => createStoryRuntime(), []);
   const [webgl, setWebgl] = useState<boolean | null>(null);
   const [reduced, setReduced] = useState(false);
   const [rig, setRig] = useState<Uint8Array | null>(null);
@@ -170,14 +175,22 @@ export function RelationalStory() {
     const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)");
     const move = (event: PointerEvent) => {
       if (!finePointer.matches) return;
-      runtime.pointerX = (event.clientX / window.innerWidth) * 2 - 1;
-      runtime.pointerY = -((event.clientY / window.innerHeight) * 2 - 1);
-      runtime.invalidate?.();
+      const pointerX = (event.clientX / window.innerWidth) * 2 - 1;
+      const pointerY = -((event.clientY / window.innerHeight) * 2 - 1);
+      noorRuntime.pointerX = pointerX;
+      noorRuntime.pointerY = pointerY;
+      meeraRuntime.pointerX = pointerX;
+      meeraRuntime.pointerY = pointerY;
+      noorRuntime.invalidate?.();
+      meeraRuntime.invalidate?.();
     };
     const leave = () => {
-      runtime.pointerX = 0;
-      runtime.pointerY = 0;
-      runtime.invalidate?.();
+      noorRuntime.pointerX = 0;
+      noorRuntime.pointerY = 0;
+      meeraRuntime.pointerX = 0;
+      meeraRuntime.pointerY = 0;
+      noorRuntime.invalidate?.();
+      meeraRuntime.invalidate?.();
     };
     target.addEventListener("pointermove", move, { passive: true });
     target.addEventListener("pointerleave", leave, { passive: true });
@@ -185,7 +198,7 @@ export function RelationalStory() {
       target.removeEventListener("pointermove", move);
       target.removeEventListener("pointerleave", leave);
     };
-  }, [animated, runtime]);
+  }, [animated, meeraRuntime, noorRuntime]);
 
   useGSAP(
     () => {
@@ -196,9 +209,13 @@ export function RelationalStory() {
       );
       const update = (self: ScrollTrigger) => {
         const progress = THREEClamp(self.progress);
-        runtime.progress = progress;
-        runtime.scrollVelocity = self.getVelocity();
-        runtime.invalidate?.();
+        const velocity = self.getVelocity();
+        noorRuntime.progress = progress;
+        noorRuntime.scrollVelocity = velocity;
+        meeraRuntime.progress = progress;
+        meeraRuntime.scrollVelocity = velocity;
+        noorRuntime.invalidate?.();
+        meeraRuntime.invalidate?.();
         chapters.forEach((chapter, index) => {
           const opacity = chapterOpacity(progress, index);
           const direction = progress < CHAPTERS[index].at ? 1 : -1;
@@ -209,26 +226,30 @@ export function RelationalStory() {
           });
           chapter.style.pointerEvents = opacity > 0.7 ? "auto" : "none";
         });
-        const identity = gsap.utils.clamp(0, 1, (progress - 0.6) / 0.1);
-        if (leftMask.current) gsap.set(leftMask.current, { opacity: 1 - identity });
-        if (rightMask.current) gsap.set(rightMask.current, { opacity: identity });
+        const visualHandoff = gsap.utils.clamp(0, 1, (progress - 0.62) / 0.1);
+        if (leftMask.current) {
+          gsap.set(leftMask.current, { opacity: 1 - visualHandoff });
+        }
+        if (rightMask.current) {
+          gsap.set(rightMask.current, { opacity: visualHandoff });
+        }
 
-        const rawPortrait = gsap.utils.clamp(0, 1, (progress - 0.655) / 0.12);
-        const portrait = rawPortrait * rawPortrait * (3 - 2 * rawPortrait);
-        const rawCanvasFade = gsap.utils.clamp(0, 1, (progress - 0.705) / 0.115);
-        const canvasFade = rawCanvasFade * rawCanvasFade * (3 - 2 * rawCanvasFade);
-        if (meeraReveal.current) {
-          gsap.set(meeraReveal.current, {
-            opacity: portrait,
-            scale: 1.045 - portrait * 0.045,
-            clipPath: `ellipse(${18 + portrait * 68}% ${14 + portrait * 76}% at 49% 46%)`,
-            visibility: portrait > 0.002 ? "visible" : "hidden",
+        // These scenes never cross-morph or overlap. Noor leaves, the field
+        // clears to paper, and Meera enters as her own complete 3D model.
+        const rawNoorExit = gsap.utils.clamp(0, 1, (progress - 0.642) / 0.018);
+        const noorExit = rawNoorExit * rawNoorExit * (3 - 2 * rawNoorExit);
+        const rawMeeraEntry = gsap.utils.clamp(0, 1, (progress - 0.695) / 0.04);
+        const meeraEntry = rawMeeraEntry * rawMeeraEntry * (3 - 2 * rawMeeraEntry);
+        if (noorLayer.current) {
+          gsap.set(noorLayer.current, {
+            opacity: 1 - noorExit,
+            visibility: noorExit < 0.998 ? "visible" : "hidden",
           });
         }
-        if (canvasLayer.current) {
-          gsap.set(canvasLayer.current, {
-            opacity: 1 - canvasFade,
-            visibility: canvasFade < 0.998 ? "visible" : "hidden",
+        if (meeraLayer.current) {
+          gsap.set(meeraLayer.current, {
+            opacity: meeraEntry,
+            visibility: meeraEntry > 0.002 ? "visible" : "hidden",
           });
         }
       };
@@ -240,14 +261,16 @@ export function RelationalStory() {
         invalidateOnRefresh: true,
         onUpdate: update,
         onToggle: (self) => {
-          runtime.active = self.isActive;
-          runtime.invalidate?.();
+          noorRuntime.active = self.isActive;
+          meeraRuntime.active = self.isActive;
+          noorRuntime.invalidate?.();
+          meeraRuntime.invalidate?.();
         },
       });
       update(trigger);
       return () => trigger.kill();
     },
-    { scope: root, dependencies: [animated, runtime] },
+    { scope: root, dependencies: [animated, meeraRuntime, noorRuntime] },
   );
 
   return (
@@ -259,10 +282,10 @@ export function RelationalStory() {
       <div ref={runway} className={styles.storyRunway}>
         <div ref={stage} className={styles.storyStage}>
           <div className={styles.storyVisual} aria-hidden="true">
-            <div ref={canvasLayer} className={styles.storyCanvasLayer}>
+            <div ref={noorLayer} className={styles.storyCanvasLayer}>
               {animated && rig ? (
                 <StoryCanvas
-                  runtime={runtime}
+                  runtime={noorRuntime}
                   rig={rig}
                   onContextLost={() => setWebgl(false)}
                 />
@@ -279,15 +302,16 @@ export function RelationalStory() {
               )}
             </div>
             <div
-              ref={meeraReveal}
-              className={styles.meeraColorReveal}
+              ref={meeraLayer}
+              className={styles.meeraSceneLayer}
               style={{ opacity: 0, visibility: "hidden" }}
             >
-              <MeeraPortrait
-                className={styles.meeraPortraitSurface}
-                preload
-                sizes="(max-width: 980px) 112vw, 64vw"
-              />
+              {animated ? (
+                <MeeraStoryCanvas
+                  runtime={meeraRuntime}
+                  onContextLost={() => setWebgl(false)}
+                />
+              ) : null}
             </div>
           </div>
           <div ref={leftMask} className={styles.leftReadingMask} aria-hidden="true" />

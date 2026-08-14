@@ -1,18 +1,14 @@
 export const STORY_FACE_VERTEX = /* glsl */ `
-  uniform float uIdentityMix;
   uniform float uCohesion;
   uniform vec3 uViseme;
   uniform float uBlink;
   uniform vec2 uPointer;
 
-  attribute vec3 aMeeraPosition;
-  attribute vec3 aMeeraNormal;
   attribute vec4 aRig;
 
   varying vec3 vNormal;
   varying vec3 vViewPosition;
   varying vec3 vBase;
-  varying float vIdentityMix;
 
   vec3 rotateX(vec3 point, vec3 pivot, float angle) {
     float sine = sin(angle);
@@ -23,9 +19,9 @@ export const STORY_FACE_VERTEX = /* glsl */ `
   }
 
   void main() {
-    vec3 base = mix(position, aMeeraPosition, uIdentityMix);
+    vec3 base = position;
     vec3 pos = base;
-    vec3 deformedNormal = normalize(mix(normal, aMeeraNormal, uIdentityMix));
+    vec3 deformedNormal = normalize(normal);
     float upperLip = aRig.r;
     float lowerLip = aRig.g;
     float jawWeight = aRig.b;
@@ -69,7 +65,6 @@ export const STORY_FACE_VERTEX = /* glsl */ `
     vNormal = normalize(normalMatrix * deformedNormal);
     vViewPosition = viewPosition.xyz;
     vBase = base;
-    vIdentityMix = uIdentityMix;
     gl_Position = projectionMatrix * viewPosition;
   }
 `;
@@ -80,13 +75,11 @@ export const STORY_FACE_FRAGMENT = /* glsl */ `
   uniform float uCohesion;
   uniform float uMeshOpacity;
   uniform vec3 uPaper;
-  uniform vec3 uMeeraPaper;
   uniform vec3 uInk;
 
   varying vec3 vNormal;
   varying vec3 vViewPosition;
   varying vec3 vBase;
-  varying float vIdentityMix;
 
   float hash21(vec2 point) {
     return fract(sin(dot(point, vec2(127.1, 311.7))) * 43758.5453123);
@@ -95,11 +88,7 @@ export const STORY_FACE_FRAGMENT = /* glsl */ `
   void main() {
     vec3 normal = normalize(vNormal);
     vec3 viewDirection = normalize(-vViewPosition);
-    vec3 keyDirection = normalize(mix(
-      vec3(-0.46, 0.58, 0.76),
-      vec3(-0.13, 0.55, 0.98),
-      vIdentityMix
-    ));
+    vec3 keyDirection = normalize(vec3(-0.46, 0.58, 0.76));
     float diffuse = max(dot(normal, keyDirection), 0.0);
     float facing = max(dot(normal, viewDirection), 0.0);
     float rim = pow(1.0 - facing, 1.72);
@@ -110,27 +99,24 @@ export const STORY_FACE_FRAGMENT = /* glsl */ `
     );
     float grain = hash21(anchoredCell);
     float tone =
-      diffuse * mix(0.92, 1.06, vIdentityMix) -
-      rim * mix(0.27, 0.16, vIdentityMix) +
+      diffuse * 0.92 -
+      rim * 0.27 +
       0.012;
-    float resolvedThreshold = mix(0.43, 0.405, vIdentityMix);
     float threshold =
-      mix(0.57, resolvedThreshold, form) +
-      (grain - 0.5) * mix(0.26, mix(0.085, 0.07, vIdentityMix), form);
+      mix(0.57, 0.43, form) +
+      (grain - 0.5) * mix(0.26, 0.085, form);
     float inkField = 1.0 - smoothstep(threshold - 0.09, threshold + 0.09, tone);
-    float contour =
-      smoothstep(0.15, 0.72, rim) * mix(0.48, 0.34, vIdentityMix);
+    float contour = smoothstep(0.15, 0.72, rim) * 0.48;
     float mouthBand =
       exp(-abs(vBase.y + 0.0105) * 40.0) *
       exp(-abs(vBase.x) * 9.0) *
       smoothstep(0.5, 0.6, vBase.z);
     float inkAmount = clamp(
-      inkField + contour + mouthBand * mix(0.052, 0.045, vIdentityMix),
+      inkField + contour + mouthBand * 0.052,
       0.0,
       1.0
     );
-    vec3 paper = mix(uPaper, uMeeraPaper, vIdentityMix);
-    vec3 color = mix(paper, uInk, inkAmount);
+    vec3 color = mix(uPaper, uInk, inkAmount);
 
     float island = clamp(
       0.5 +
@@ -151,12 +137,10 @@ export const STORY_FACE_FRAGMENT = /* glsl */ `
 `;
 
 export const STORY_FEATURE_VERTEX = /* glsl */ `
-  uniform float uIdentityMix;
   uniform vec3 uViseme;
   uniform float uBlink;
   uniform float uIsEye;
   uniform float uIsMouth;
-  attribute vec3 aMeeraPosition;
   varying vec3 vFeatureBase;
 
   vec3 rotateX(vec3 point, vec3 pivot, float angle) {
@@ -168,7 +152,7 @@ export const STORY_FEATURE_VERTEX = /* glsl */ `
   }
 
   void main() {
-    vec3 pos = mix(position, aMeeraPosition, uIdentityMix);
+    vec3 pos = position;
     vFeatureBase = pos;
     if (uIsEye > 0.5) {
       pos.y = mix(pos.y, 0.38 + (pos.y - 0.38) * 0.12, uBlink);
@@ -232,44 +216,28 @@ export const STORY_FEATURE_FRAGMENT = /* glsl */ `
 `;
 
 export const STORY_POINTS_VERTEX = /* glsl */ `
-  uniform float uMaleCohesion;
-  uniform float uMeeraCohesion;
-  uniform float uIdentityMix;
+  uniform float uCohesion;
   uniform float uPixelRatio;
 
   attribute float aRandom;
   attribute float aArrival;
   attribute float aSize;
   attribute vec3 aOrigin;
-  attribute vec3 aMaleControl;
-  attribute vec3 aMeeraControl;
-  attribute vec3 aMeeraTarget;
+  attribute vec3 aControl;
 
   varying float vAlpha;
   varying float vRandom;
 
   void main() {
-    float maleArrival = smoothstep(
+    float arrival = smoothstep(
       aArrival,
       min(aArrival + 0.22, 1.0),
-      uMaleCohesion
-    );
-    float meeraArrival = smoothstep(
-      aArrival,
-      min(aArrival + 0.22, 1.0),
-      uMeeraCohesion
+      uCohesion
     );
 
-    vec3 maleA = mix(aOrigin, aMaleControl, maleArrival);
-    vec3 maleB = mix(aMaleControl, position, maleArrival);
-    vec3 malePath = mix(maleA, maleB, maleArrival);
-
-    vec3 meeraA = mix(aOrigin, aMeeraControl, meeraArrival);
-    vec3 meeraB = mix(aMeeraControl, aMeeraTarget, meeraArrival);
-    vec3 meeraPath = mix(meeraA, meeraB, meeraArrival);
-
-    vec3 pos = mix(malePath, meeraPath, uIdentityMix);
-    float arrival = mix(maleArrival, meeraArrival, uIdentityMix);
+    vec3 pathA = mix(aOrigin, aControl, arrival);
+    vec3 pathB = mix(aControl, position, arrival);
+    vec3 pos = mix(pathA, pathB, arrival);
     vec4 viewPosition = modelViewMatrix * vec4(pos, 1.0);
     gl_PointSize =
       (1.35 + aSize * 1.85) * uPixelRatio *

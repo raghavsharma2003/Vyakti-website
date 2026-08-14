@@ -204,21 +204,23 @@ Motion constraints:
 
 ## Current homepage implementation
 
-The public homepage now uses one shared React Three Fiber canvas to tell a reversible scroll story:
+The public homepage now uses two independent React Three Fiber scenes. They are deliberately not a shared mesh, morph target, or identity dissolve:
 
-1. a dispersed signal field begins to resolve into Noor
+1. a dispersed signal field resolves into Noor
 2. Noor consolidates as the lab identity
-3. the face holds, looks, blinks, and performs one deterministic speech phrase
-4. the complete identity releases back into the same signal field
-5. the hidden topology changes while the surface is fully diffused
-6. the field reconsolidates as Meera
-7. Meera holds, speaks once, and resolves beside the trust principles
+3. Noor holds, looks, blinks, and performs one deterministic speech phrase
+4. Noor releases into his own signal field and exits completely
+5. a short clear-paper beat separates the lab identity from the product identity
+6. Meera enters as a complete, separately authored, full-colour 3D model
+7. Meera turns under scroll, settles beside her introduction, and remains present through the trust chapter
 
-Noor currently uses `androgynous-soft.glb`. Meera currently uses `feminine-sculpted.glb`, selected for its narrower lower face, with a deterministic particle crown and long face-framing hair. Both GNM identities share topology and a semantic oral rig. Skin, mouth socket, and teeth receive coherent jaw and viseme transforms, so speech no longer depends on a hardcoded mouth-region ripple.
+Noor uses `androgynous-soft.glb` and a semantic oral rig. Skin, mouth socket, and teeth receive coherent jaw and viseme transforms, so speech does not depend on a hardcoded mouth-region ripple.
+
+Meera uses `meera-portrait-mesh-v2.glb`: a separate two-part asset made from a portrait-faithful MediaPipe facial depth mesh and a TripoSR curl/bust reconstruction. Her original synthetic portrait supplies the facial texture, so the eyes, lips, skin, and curly-hair identity remain recognisable. The model is a real 3D mesh with a restrained scroll-controlled yaw; it does not share Noor's topology and never forms out of Noor's particles. The source portrait is a fictional adult identity generated for Vyakti, not a real person.
 
 The main page is deliberately white-first and editorial. It uses black plus one signal-red accent, one face-as-research-object, asymmetric research blocks, an architecture map, and an evaluation timeline. It does not use decorative marquees, fake waveforms, invented benchmark numbers, or repeated startup-style card grids.
 
-Desktop uses a sticky long-form story. Mobile uses native scrolling with a compact sticky visual and protected reading band. Reduced-motion and WebGL failure modes become a linear editorial layout with static portraits rather than a blank canvas. The canvas renders on demand, caps particle count and DPR, and uses one WebGL context.
+Desktop uses a sticky long-form story. Mobile uses native scrolling with a compact sticky visual and protected reading band. Reduced-motion and WebGL failure modes become a linear editorial layout with static portraits rather than a blank canvas. Both 3D scenes render on demand, cap DPR, and are only invalidated by scroll or restrained pointer input.
 
 ## Current repository state
 
@@ -241,7 +243,7 @@ Notable assets and systems already in the repository:
 - eight generated GNM identities
 - selected Noor identity with a semantic oral rig
 - deterministic Noor formation, consolidation, listening, speech, reaction, and release study
-- a separate female Meera head asset and scene
+- a separate full-colour Meera 3D portrait mesh, source portrait, licensed reconstruction notes, and dedicated scene
 - GSAP ScrollTrigger, React Three Fiber, Three.js, Lenis, and Motion
 
 The exploration routes are internal studies. They should not enter the primary navigation or appear indexed as public product claims without a deliberate decision.
@@ -271,7 +273,7 @@ These are planning hypotheses from the strategy discussion, not public commitmen
 - Final legal company name and typography of "Vyakti" versus "vyakti.ai."
 - Final signal accent hue.
 - Whether Noor remains only a lab identity or becomes a named public character.
-- Production Meera identity beyond the current feminine-sculpted prototype, and whether a blendshape-capable asset eventually replaces the semantic rig.
+- Whether the production Meera model should eventually be artist-retopologised with expression blendshapes while preserving the current synthetic portrait identity.
 - Private beta mechanics and form destination.
 - Which research artifacts can be published with real data.
 - Final age policy after legal review.
@@ -292,3 +294,8 @@ These are planning hypotheses from the strategy discussion, not public commitmen
 - Replaced overlapping chapter crossfades with reversible fade-through handoffs.
 - Aligned `/research`, `/meera`, `/company`, metadata, structured data, and footer copy with truthful relational-intelligence positioning.
 - Verified the new site at desktop and 390-by-844 mobile sizes; lint, TypeScript, and the Next.js production build pass.
+- Rejected the procedural particle-hair Meera prototype because it read as a wig rather than authored curly hair.
+- Rejected a Noor-to-Meera topology morph; Noor and Meera are now completely separate scenes with a clear-paper beat between them.
+- Established the generated curly-haired portrait as Meera's current canonical synthetic visual identity.
+- Built and visually gated a separate full-colour 3D Meera asset using MIT-licensed TripoSR geometry and Apache-2.0 MediaPipe face topology.
+- Limited Meera's scroll turn to the angle range where the single-image reconstruction remains coherent, while keeping the motion fully reversible.

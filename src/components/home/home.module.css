@@ -31,34 +31,16 @@
   will-change: opacity;
 }
 
-.meeraColorReveal {
+.meeraSceneLayer {
   position: absolute;
-  top: 1.5%;
-  bottom: -1.5%;
-  left: 0;
+  inset: 0;
   z-index: 2;
-  width: min(64vw, 940px);
-  overflow: hidden;
-  transform-origin: 49% 46%;
-  will-change: clip-path, opacity, transform;
-}
-
-.meeraColorReveal::before {
-  position: absolute;
-  inset: 9% 2% 4% 2%;
-  z-index: -1;
-  content: "";
   background: radial-gradient(
-    ellipse at 49% 48%,
-    color-mix(in oklab, var(--color-meera) 12%, transparent),
-    transparent 67%
+    ellipse at 32% 46%,
+    color-mix(in oklab, var(--color-meera) 8%, transparent),
+    transparent 38%
   );
-}
-
-.meeraPortraitSurface {
-  width: 100%;
-  height: 100%;
-  background: #ebe9e4;
+  will-change: opacity;
 }
 
 .loadingPortrait {
@@ -107,9 +89,9 @@
   background: linear-gradient(
     270deg,
     var(--color-ink) 0%,
-    rgb(247 247 244 / 98%) 29%,
-    rgb(247 247 244 / 76%) 43%,
-    transparent 67%
+    rgb(247 247 244 / 98%) 34%,
+    rgb(247 247 244 / 76%) 45%,
+    transparent 56%
   );
 }
 
@@ -607,14 +589,12 @@
     height: 67%;
   }
 
-  .meeraColorReveal {
-    inset: -7% 2% -4%;
-    width: auto;
-  }
-
-  .meeraPortraitSurface {
-    width: 100%;
-    height: 100%;
+  .meeraSceneLayer {
+    background: radial-gradient(
+      ellipse at 50% 30%,
+      color-mix(in oklab, var(--color-meera) 8%, transparent),
+      transparent 42%
+    );
   }
 
   .leftReadingMask,
@@ -710,10 +690,6 @@
 
   .chapterActions {
     gap: 0.5rem;
-  }
-
-  .meeraColorReveal {
-    inset: -3% -2% -7%;
   }
 
   .storyFallback .chapterLayer {
