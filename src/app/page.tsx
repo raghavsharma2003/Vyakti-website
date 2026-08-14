@@ -89,7 +89,7 @@ export default function HomePage() {
             <div className={styles.continuityArrow} aria-hidden="true">→</div>
             <div className={`${styles.continuityNode} ${styles.continuityOutput}`}>
               <small>One continuous identity</small>
-              <strong>Meera</strong>
+              <strong className={styles.meeraWord}>Meera</strong>
               <p>More capable over time. Still recognizably herself.</p>
             </div>
             <figcaption id="continuity-caption">
@@ -181,7 +181,10 @@ export default function HomePage() {
 
           <div className={styles.finalInvite}>
             <div>
-              <h2>Meera is where the research meets a real relationship.</h2>
+              <h2>
+                <span className={styles.meeraWord}>Meera</span> is where the
+                research meets a real relationship.
+              </h2>
               <p className={styles.sectionCopy}>
                 One AI person in development. Text and voice first. Continuity by design.
               </p>

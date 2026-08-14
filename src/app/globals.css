@@ -10,6 +10,7 @@
   --color-ash: var(--c-ash);
   --color-slate: var(--c-slate);
   --color-ember: var(--c-ember);
+  --color-meera: var(--c-meera);
   --color-sage: var(--c-sage);
   --color-on-ember: var(--c-on-ember);
 
@@ -43,6 +44,7 @@
   --c-ash: #50524f;
   --c-slate: #666862;
   --c-ember: #c83f2d;
+  --c-meera: #6f2342;
   --c-sage: #1f6b54;
   --c-on-ember: #ffffff;
   --shadow-lift: 0 1px 2px rgb(17 18 15 / 4%), 0 24px 70px rgb(17 18 15 / 8%);

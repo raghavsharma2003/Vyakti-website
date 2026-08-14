@@ -50,8 +50,10 @@ export default function MeeraPage() {
       <section className="relative border-b border-hairline bg-ink pt-28 pb-16 md:pt-32 md:pb-24">
         <div className="shell grid items-center gap-10 md:grid-cols-[minmax(0,1fr)_minmax(0,0.9fr)] md:gap-12">
           <div className="relative z-20">
-            <p className="eyebrow">Our first product</p>
-            <h1 className="mt-6 text-bone">Meet Meera.</h1>
+            <p className="eyebrow text-meera">Our first product</p>
+            <h1 className="mt-6 text-bone">
+              Meet <span className="text-meera">Meera</span>.
+            </h1>
             <p className="measure mt-6 text-lead text-ash">
               An AI companion designed to be known, and to know you over time.
               The first consumer expression of our relational intelligence research.
@@ -65,7 +67,11 @@ export default function MeeraPage() {
           </div>
 
           <div className="relative h-[46vh] min-h-[280px] md:h-[62vh]">
-            <MeeraPortrait className="absolute inset-0" />
+            <MeeraPortrait
+              className="h-full w-full"
+              preload
+              sizes="(max-width: 767px) 100vw, 46vw"
+            />
           </div>
         </div>
       </section>

@@ -12,8 +12,6 @@ import {
   STORY_FACE_VERTEX,
   STORY_FEATURE_FRAGMENT,
   STORY_FEATURE_VERTEX,
-  STORY_HAIR_FRAGMENT,
-  STORY_HAIR_VERTEX,
   STORY_POINTS_FRAGMENT,
   STORY_POINTS_VERTEX,
 } from "./story-shaders";
@@ -343,147 +341,6 @@ function makePairedPointGeometry(
   return geometry;
 }
 
-function makeHairGeometry(compact: boolean) {
-  const random = seededRandom(0x6d65_6572);
-  const capCount = compact ? 2_400 : 4_300;
-  const strandsPerSide = compact ? 44 : 78;
-  const pointsPerStrand = compact ? 36 : 50;
-  const total = capCount + strandsPerSide * 2 * pointsPerStrand;
-  const positions = new Float32Array(total * 3);
-  const origins = new Float32Array(total * 3);
-  const controls = new Float32Array(total * 3);
-  const arrivals = new Float32Array(total);
-  const sizes = new Float32Array(total);
-  const randoms = new Float32Array(total);
-  const point = new THREE.Vector3();
-  const origin = new THREE.Vector3();
-  const control = new THREE.Vector3();
-
-  let cursor = 0;
-  const writePoint = (target: THREE.Vector3, delay: number) => {
-    const index = cursor * 3;
-    positions.set(target.toArray(), index);
-    const angle = random() * Math.PI * 2;
-    origin.set(
-      Math.cos(angle) * (0.84 + random() * 0.62),
-      target.y + (random() - 0.5) * 0.62,
-      0.22 + Math.sin(angle) * (0.72 + random() * 0.42),
-    );
-    control.copy(origin).lerp(target, 0.5);
-    control.x += (random() - 0.5) * 0.34;
-    control.y += Math.sin(angle) * 0.18;
-    origins.set(origin.toArray(), index);
-    controls.set(control.toArray(), index);
-    arrivals[cursor] = THREE.MathUtils.clamp(delay + random() * 0.28, 0.04, 0.72);
-    sizes[cursor] = random();
-    randoms[cursor] = random();
-    cursor += 1;
-  };
-
-  let attempts = 0;
-  while (cursor < capCount && attempts < capCount * 10) {
-    attempts += 1;
-    const polar = Math.pow(random(), 0.72) * 1.48;
-    const azimuth = random() * Math.PI * 2;
-    const sine = Math.sin(polar);
-    point.set(
-      Math.cos(azimuth) * sine * 0.52,
-      0.5 + Math.cos(polar) * 0.57,
-      -0.055 + Math.sin(azimuth) * sine * 0.68,
-    );
-
-    const front = THREE.MathUtils.smoothstep(point.z, 0.18, 0.64);
-    const normalizedX = Math.min(1, Math.abs(point.x) / 0.52);
-    const hairline = 0.59 + (1 - normalizedX * normalizedX) * 0.14;
-    if (front > 0.2 && point.y < hairline) continue;
-
-    point.x += (random() - 0.5) * 0.018;
-    point.y += (random() - 0.5) * 0.018;
-    point.z += (random() - 0.5) * 0.014;
-    writePoint(point, 0.035 + (1 - front) * 0.055);
-  }
-
-  for (const side of [-1, 1]) {
-    for (let strand = 0; strand < strandsPerSide; strand += 1) {
-      const band = (strand + random() * 0.72) / strandsPerSide;
-      const frontBias = 0.35 + random() * 0.65;
-      const start = new THREE.Vector3(
-        side * (0.018 + band * 0.36),
-        1.015 - band * 0.32,
-        -0.045 + band * 0.47,
-      );
-      const firstControl = new THREE.Vector3(
-        side * (0.38 + band * 0.19),
-        0.73 - band * 0.15,
-        0.22 + frontBias * 0.22,
-      );
-      const secondControl = new THREE.Vector3(
-        side * (0.51 + band * 0.2),
-        0.06 - band * 0.06,
-        0.04 + frontBias * 0.31,
-      );
-      const end = new THREE.Vector3(
-        side * (0.5 + band * 0.24),
-        -0.76 + band * 0.25 + (random() - 0.5) * 0.13,
-        -0.08 + frontBias * 0.31,
-      );
-      for (let step = 0; step < pointsPerStrand; step += 1) {
-        const t = Math.min(
-          1,
-          (step + random() * 0.78) / Math.max(pointsPerStrand - 1, 1),
-        );
-        const inverse = 1 - t;
-        point.set(
-          inverse * inverse * inverse * start.x +
-            3 * inverse * inverse * t * firstControl.x +
-            3 * inverse * t * t * secondControl.x +
-            t * t * t * end.x,
-          inverse * inverse * inverse * start.y +
-            3 * inverse * inverse * t * firstControl.y +
-            3 * inverse * t * t * secondControl.y +
-            t * t * t * end.y,
-          inverse * inverse * inverse * start.z +
-            3 * inverse * inverse * t * firstControl.z +
-            3 * inverse * t * t * secondControl.z +
-            t * t * t * end.z,
-        );
-        point.x += (random() - 0.5) * 0.012;
-        point.y += (random() - 0.5) * 0.018;
-        point.z += (random() - 0.5) * 0.012;
-        writePoint(point, 0.12 + band * 0.13 + t * 0.19);
-      }
-    }
-  }
-
-  const geometry = new THREE.BufferGeometry();
-  geometry.setAttribute(
-    "position",
-    new THREE.BufferAttribute(positions.slice(0, cursor * 3), 3),
-  );
-  geometry.setAttribute(
-    "aOrigin",
-    new THREE.BufferAttribute(origins.slice(0, cursor * 3), 3),
-  );
-  geometry.setAttribute(
-    "aControl",
-    new THREE.BufferAttribute(controls.slice(0, cursor * 3), 3),
-  );
-  geometry.setAttribute(
-    "aArrival",
-    new THREE.BufferAttribute(arrivals.slice(0, cursor), 1),
-  );
-  geometry.setAttribute(
-    "aSize",
-    new THREE.BufferAttribute(sizes.slice(0, cursor), 1),
-  );
-  geometry.setAttribute(
-    "aRandom",
-    new THREE.BufferAttribute(randoms.slice(0, cursor), 1),
-  );
-  geometry.computeBoundingSphere();
-  return geometry;
-}
-
 function featureColor(kind: string) {
   if (kind.includes("sclera")) return "#eff0ed";
   if (kind.includes("iris")) return "#363732";
@@ -523,7 +380,6 @@ function StoryScene({
   const featureRoot = useRef<THREE.Group>(null);
   const faceMaterial = useRef<THREE.ShaderMaterial>(null);
   const pointMaterial = useRef<THREE.ShaderMaterial>(null);
-  const hairMaterial = useRef<THREE.ShaderMaterial>(null);
   const featureMaterials = useRef<THREE.ShaderMaterial[]>([]);
   const { gl, invalidate, size } = useThree();
   const compact = size.width < 900;
@@ -543,11 +399,6 @@ function StoryScene({
         : null,
     [compact, meera, noor],
   );
-  const hair = useMemo(
-    () => (meera ? makeHairGeometry(compact) : null),
-    [compact, meera],
-  );
-
   const faceUniforms = useMemo(
     () => ({
       uIdentityMix: { value: 0 },
@@ -573,17 +424,6 @@ function StoryScene({
     }),
     [],
   );
-  const hairUniforms = useMemo(
-    () => ({
-      uReveal: { value: 0 },
-      uPixelRatio: { value: 1 },
-      uHair: { value: new THREE.Color("#1f211f") },
-      uHairLight: { value: new THREE.Color("#77766f") },
-      uSignal: { value: new THREE.Color("#d33f2c") },
-    }),
-    [],
-  );
-
   useEffect(() => {
     runtime.invalidate = invalidate;
     invalidate();
@@ -608,7 +448,6 @@ function StoryScene({
     [features],
   );
   useEffect(() => () => points?.dispose(), [points]);
-  useEffect(() => () => hair?.dispose(), [hair]);
   useEffect(
     () => () => {
       noor?.face.dispose();
@@ -625,12 +464,7 @@ function StoryScene({
   );
 
   useFrame(() => {
-    if (
-      !root.current ||
-      !faceMaterial.current ||
-      !pointMaterial.current ||
-      !hairMaterial.current
-    ) {
+    if (!root.current || !faceMaterial.current || !pointMaterial.current) {
       return;
     }
     const progress = runtime.progress;
@@ -640,7 +474,6 @@ function StoryScene({
     const identityMix = phase(progress, 0.605, 0.685);
     const meeraCohesion = phase(progress, 0.65, 0.805);
     const cohesion = THREE.MathUtils.lerp(maleCohesion, meeraCohesion, identityMix);
-    const hairReveal = phase(progress, 0.665, 0.785);
 
     const maleSpeech =
       phase(progress, 0.415, 0.432) * (1 - phase(progress, 0.495, 0.515));
@@ -680,10 +513,6 @@ function StoryScene({
       compact ? 1.25 : 1.5,
     );
 
-    const hairValues = hairMaterial.current.uniforms;
-    hairValues.uReveal.value = hairReveal;
-    hairValues.uPixelRatio.value = pointValues.uPixelRatio.value;
-
     const noorYaw = THREE.MathUtils.lerp(-0.42, -0.025, phase(progress, 0.025, 0.3));
     const meeraYaw = THREE.MathUtils.lerp(0.31, 0.015, phase(progress, 0.65, 0.83));
     root.current.rotation.y =
@@ -709,7 +538,7 @@ function StoryScene({
     }
   });
 
-  if (!face || !points || !hair || !noor || !meera) return null;
+  if (!face || !points || !noor || !meera) return null;
 
   return (
     <group ref={root}>
@@ -728,16 +557,6 @@ function StoryScene({
           uniforms={pointUniforms}
           vertexShader={STORY_POINTS_VERTEX}
           fragmentShader={STORY_POINTS_FRAGMENT}
-          transparent
-          depthWrite={false}
-        />
-      </points>
-      <points geometry={hair} frustumCulled={false} renderOrder={3}>
-        <shaderMaterial
-          ref={hairMaterial}
-          uniforms={hairUniforms}
-          vertexShader={STORY_HAIR_VERTEX}
-          fragmentShader={STORY_HAIR_FRAGMENT}
           transparent
           depthWrite={false}
         />

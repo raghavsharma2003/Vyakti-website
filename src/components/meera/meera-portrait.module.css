@@ -1,0 +1,39 @@
+.root {
+  --portrait-x: 0%;
+  --portrait-y: 0%;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: #ebe9e4;
+}
+
+.image {
+  object-fit: cover;
+  object-position: 50% 44%;
+  filter: saturate(0.96) contrast(1.015);
+  transform: translate3d(var(--portrait-x), var(--portrait-y), 0) scale(1.035);
+  transition: transform 420ms var(--ease-out-quint);
+  will-change: transform;
+}
+
+.colorSignature {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in oklab, var(--color-meera) 72%, transparent) 50%,
+    transparent
+  );
+  opacity: 0.58;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .image {
+    transform: scale(1.02);
+    transition: none;
+  }
+}

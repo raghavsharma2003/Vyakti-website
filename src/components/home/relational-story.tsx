@@ -8,6 +8,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { MeeraPortrait } from "@/components/meera";
 import { Cta } from "@/components/ui/cta";
 import { createStoryRuntime } from "./story-runtime";
 import styles from "./home.module.css";
@@ -128,6 +129,8 @@ export function RelationalStory() {
   const root = useRef<HTMLElement>(null);
   const runway = useRef<HTMLDivElement>(null);
   const stage = useRef<HTMLDivElement>(null);
+  const canvasLayer = useRef<HTMLDivElement>(null);
+  const meeraReveal = useRef<HTMLDivElement>(null);
   const leftMask = useRef<HTMLDivElement>(null);
   const rightMask = useRef<HTMLDivElement>(null);
   const runtime = useMemo(() => createStoryRuntime(), []);
@@ -209,6 +212,25 @@ export function RelationalStory() {
         const identity = gsap.utils.clamp(0, 1, (progress - 0.6) / 0.1);
         if (leftMask.current) gsap.set(leftMask.current, { opacity: 1 - identity });
         if (rightMask.current) gsap.set(rightMask.current, { opacity: identity });
+
+        const rawPortrait = gsap.utils.clamp(0, 1, (progress - 0.655) / 0.12);
+        const portrait = rawPortrait * rawPortrait * (3 - 2 * rawPortrait);
+        const rawCanvasFade = gsap.utils.clamp(0, 1, (progress - 0.705) / 0.115);
+        const canvasFade = rawCanvasFade * rawCanvasFade * (3 - 2 * rawCanvasFade);
+        if (meeraReveal.current) {
+          gsap.set(meeraReveal.current, {
+            opacity: portrait,
+            scale: 1.045 - portrait * 0.045,
+            clipPath: `ellipse(${18 + portrait * 68}% ${14 + portrait * 76}% at 49% 46%)`,
+            visibility: portrait > 0.002 ? "visible" : "hidden",
+          });
+        }
+        if (canvasLayer.current) {
+          gsap.set(canvasLayer.current, {
+            opacity: 1 - canvasFade,
+            visibility: canvasFade < 0.998 ? "visible" : "hidden",
+          });
+        }
       };
       const trigger = ScrollTrigger.create({
         trigger: runway.current,
@@ -237,23 +259,36 @@ export function RelationalStory() {
       <div ref={runway} className={styles.storyRunway}>
         <div ref={stage} className={styles.storyStage}>
           <div className={styles.storyVisual} aria-hidden="true">
-            {animated && rig ? (
-              <StoryCanvas
-                runtime={runtime}
-                rig={rig}
-                onContextLost={() => setWebgl(false)}
-              />
-            ) : (
-              <div className={styles.loadingPortrait}>
-                <Image
-                  src="/models/ink-lab/noor-poster.png"
-                  alt=""
-                  fill
-                  loading="eager"
-                  sizes="(max-width: 980px) 100vw, 62vw"
+            <div ref={canvasLayer} className={styles.storyCanvasLayer}>
+              {animated && rig ? (
+                <StoryCanvas
+                  runtime={runtime}
+                  rig={rig}
+                  onContextLost={() => setWebgl(false)}
                 />
-              </div>
-            )}
+              ) : (
+                <div className={styles.loadingPortrait}>
+                  <Image
+                    src="/models/ink-lab/noor-poster.png"
+                    alt=""
+                    fill
+                    loading="eager"
+                    sizes="(max-width: 980px) 100vw, 62vw"
+                  />
+                </div>
+              )}
+            </div>
+            <div
+              ref={meeraReveal}
+              className={styles.meeraColorReveal}
+              style={{ opacity: 0, visibility: "hidden" }}
+            >
+              <MeeraPortrait
+                className={styles.meeraPortraitSurface}
+                preload
+                sizes="(max-width: 980px) 112vw, 64vw"
+              />
+            </div>
           </div>
           <div ref={leftMask} className={styles.leftReadingMask} aria-hidden="true" />
           <div ref={rightMask} className={styles.rightReadingMask} aria-hidden="true" />
@@ -274,7 +309,14 @@ export function RelationalStory() {
                   style={{ opacity: index === 0 ? 1 : 0 }}
                 >
                   {"label" in chapter && chapter.label ? (
-                    <p className={styles.chapterLabel}>{chapter.label}</p>
+                    <p
+                      className={[
+                        styles.chapterLabel,
+                        index === 5 ? styles.meeraLabel : "",
+                      ].join(" ")}
+                    >
+                      {chapter.label}
+                    </p>
                   ) : null}
                   <Heading id={index === 0 ? "home-title" : undefined}>
                     {index === 0 ? (
@@ -282,11 +324,25 @@ export function RelationalStory() {
                         <span>Intelligence is becoming abundant.</span>
                         <span className={styles.signalText}>Continuity is not.</span>
                       </>
+                    ) : index === 5 ? (
+                      <>
+                        You do not configure <span className={styles.meeraWord}>Meera</span>.
+                        You meet her.
+                      </>
                     ) : (
                       chapter.title
                     )}
                   </Heading>
-                  <p className={styles.chapterBody}>{chapter.body}</p>
+                  <p className={styles.chapterBody}>
+                    {index === 4 ? (
+                      <>
+                        Better models should make <span className={styles.meeraWord}>Meera</span>{" "}
+                        more capable, not make her someone else.
+                      </>
+                    ) : (
+                      chapter.body
+                    )}
+                  </p>
                   {index === 0 ? (
                     <div className={styles.chapterActions}>
                       <Cta href="/meera">Meet Meera</Cta>
@@ -316,14 +372,8 @@ export function RelationalStory() {
               sizes="(max-width: 760px) 92vw, 42vw"
             />
           </figure>
-          <figure className={styles.meeraPosterCrop}>
-            <Image
-              src="/models/ink-lab/contact-sheet.png"
-              alt=""
-              width={2048}
-              height={1024}
-              sizes="(max-width: 760px) 92vw, 42vw"
-            />
+          <figure className={styles.meeraStaticPortrait}>
+            <MeeraPortrait sizes="(max-width: 760px) 92vw, 42vw" />
           </figure>
         </div>
       </div>
