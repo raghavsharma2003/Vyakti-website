@@ -24,6 +24,9 @@ export function SmoothScroll() {
       lenis?.destroy();
       lenis = null;
       tick = null;
+      // Anchor navigation asks for the live instance; absent means native
+      // scrolling is in charge and already correct.
+      delete window.__lenis;
     };
 
     const start = () => {
@@ -43,6 +46,7 @@ export function SmoothScroll() {
         root.dataset.scrolled = scroll > 24 ? "true" : "false";
         ScrollTrigger.update();
       });
+      window.__lenis = lenis;
       tick = (time: number) => lenis?.raf(time * 1000);
       gsap.ticker.add(tick);
       gsap.ticker.lagSmoothing(0);

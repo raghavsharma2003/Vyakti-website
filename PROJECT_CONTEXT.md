@@ -282,6 +282,24 @@ These are planning hypotheses from the strategy discussion, not public commitmen
 
 ## Decision log
 
+### 2026-08-21
+
+- Recovered the exact production source that added the public research index,
+  two paper pages, and release page from Vercel's uploaded source archive. The
+  deployment had been created by CLI and was not represented by a Git commit.
+- Restored the production research implementation to `Vyakti-website` so this
+  repository is again the canonical editable form of what is live.
+- Established the cross-repo source-of-truth boundary: this repository owns
+  the public lab site; `html-portfolio` owns the active Meera product,
+  relational engine, internal evidence, and research history.
+- Recorded the current product and research standing in
+  `docs/PRODUCT_AND_RESEARCH_STANDING.md`. Future website agents must fetch the
+  product repo before changing research or capability claims.
+- Corrected the strategic interpretation: identity continuity across arbitrary
+  base models is an unsolved research question and internal gate, not a shipped
+  product promise. The durable product is the relational-state layer; Meera is
+  instance one, and the shared-memory group friend is the active wedge.
+
 ### 2026-08-14
 
 - Adopted "relational intelligence lab" as the primary category.

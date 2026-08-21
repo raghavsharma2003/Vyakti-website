@@ -1,4 +1,5 @@
 import { Fragment } from "react";
+import { SeamNote } from "@/components/research/seam-note";
 
 /**
  * A conversation annotated the way a conversation analyst would annotate it:
@@ -22,14 +23,9 @@ export function TurnDiagram() {
           <Fragment key={i}>
             {"seam" in row ? (
               <div className="py-2.5 pl-0 sm:pl-[5.5rem]">
-                <span
-                  className={[
-                    "block border-l-2 py-1 pl-3 font-mono text-micro leading-relaxed tracking-[0.04em] text-slate",
-                    row.seam === "overlap" ? "border-ember" : "border-hairline",
-                  ].join(" ")}
-                >
+                <SeamNote tone={row.seam === "overlap" ? "ember" : "hairline"}>
                   {row.note}
-                </span>
+                </SeamNote>
               </div>
             ) : (
               <div className="flex flex-col gap-1 py-1.5 sm:flex-row sm:gap-6">

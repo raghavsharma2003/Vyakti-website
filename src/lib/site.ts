@@ -23,6 +23,8 @@ export const FOOTER_GROUPS = [
     title: "Explore",
     links: [
       { label: "Research", href: "/research" },
+      { label: "Papers", href: "/research#papers" },
+      { label: "Release", href: "/research/releases/vyakti-judge-qual" },
       { label: "Meera", href: "/meera" },
       { label: "Principles", href: "/#principles" },
     ],
