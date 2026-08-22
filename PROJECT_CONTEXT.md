@@ -295,6 +295,7 @@ These are planning hypotheses from the strategy discussion, not public commitmen
 - Corrected research-state claims: one web preprint, one research note in progress, and an artifact package pending publication. Removed the false submitted/benchmark-release implications from metadata and citation output.
 - Added mobile paper contents navigation, reduced scholarly title scale, stacked narrow metadata rows, suppressed duplicate limitation/artifact sections, and avoided scholarly-publication schema for incomplete work.
 - Reduced generic reveal motion on desktop and disabled it on touch, preserving a fast, stable research reading experience.
+- Removed the decorative "Always AI" eyebrow from the final Meera chapter. The headline already establishes the boundary principle, and the extra label crowded the fixed header on short desktop viewports.
 
 ### 2026-08-21
 

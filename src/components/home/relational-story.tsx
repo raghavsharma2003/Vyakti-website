@@ -60,7 +60,6 @@ const CHAPTERS = [
   {
     at: 0.925,
     side: "right",
-    label: "Always AI",
     title: "The more human AI feels, the clearer its boundaries must be.",
     body: "Presence without impersonation. Connection without capture.",
   },
