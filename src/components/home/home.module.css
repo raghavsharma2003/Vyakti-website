@@ -5,12 +5,13 @@
 
 .storyRunway {
   position: relative;
-  height: 590svh;
+  height: 640svh;
 }
 
 .storyStage {
   position: sticky;
   top: 0;
+  height: 100svh;
   min-height: 100svh;
   overflow: hidden;
   background:
@@ -29,6 +30,32 @@
   inset: 0;
   z-index: 1;
   will-change: opacity;
+}
+
+.signalLoader,
+.liveCanvas {
+  position: absolute;
+  inset: 0;
+}
+
+.signalLoader {
+  z-index: 1;
+  opacity: 1;
+  transition: opacity 160ms var(--ease-out-quint);
+}
+
+.signalLoaderHidden {
+  opacity: 0;
+}
+
+.liveCanvas {
+  z-index: 2;
+  opacity: 0;
+  transition: opacity 160ms var(--ease-out-quint);
+}
+
+.liveCanvasReady {
+  opacity: 1;
 }
 
 .initialSignalField {
@@ -89,13 +116,15 @@
   height: calc(100% - 4.25rem);
   overflow: hidden;
   background: #ebe9e4;
-  clip-path: inset(0 100% 0 0);
-  will-change: clip-path;
+  transform: translate3d(-101%, 0, 0);
+  will-change: transform;
 }
 
 .meeraPhotoMedia {
   position: absolute;
   inset: 0;
+  transform: translate3d(101%, 0, 0);
+  will-change: transform;
 }
 
 .meeraPhotoImage {
@@ -601,7 +630,7 @@
 
 @media (max-width: 980px) {
   .storyRunway {
-    height: 520svh;
+    height: 820svh;
   }
 
   .storyStage {
@@ -611,10 +640,11 @@
   }
 
   .storyVisual {
+    top: 0;
     right: 0;
-    bottom: 34%;
+    bottom: auto;
     left: 0;
-    height: 67%;
+    height: 60%;
   }
 
   .meeraPhotoLayer {
@@ -623,9 +653,15 @@
 
   .meeraPhotoFrame {
     top: 4.25rem;
-    width: 100%;
-    height: min(52svh, calc(100% - 4.25rem));
-    clip-path: inset(0 0 100% 0);
+    width: min(100%, calc(60svh - 4.25rem));
+    height: auto;
+    margin-inline: auto;
+    aspect-ratio: 1;
+    transform: translate3d(0, -101%, 0);
+  }
+
+  .meeraPhotoMedia {
+    transform: translate3d(0, 101%, 0);
   }
 
   .meeraPhotoImage {
@@ -708,9 +744,66 @@
   }
 }
 
+@media (min-width: 681px) and (max-width: 980px) and (orientation: portrait) {
+  .chapter {
+    bottom: clamp(6rem, 14svh, 9rem);
+  }
+}
+
+@media (max-width: 980px) and (orientation: landscape) and (max-height: 700px) {
+  .storyRunway {
+    height: 620svh;
+  }
+
+  .storyVisual {
+    top: 0;
+    right: auto;
+    bottom: 0;
+    left: 0;
+    width: 52%;
+    height: 100%;
+  }
+
+  .meeraPhotoFrame {
+    top: 4.25rem;
+    width: min(100%, calc(100svh - 4.25rem));
+  }
+
+  .leftReadingMask {
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      transparent 44%,
+      rgb(247 247 244 / 80%) 53%,
+      var(--color-ink) 62%
+    );
+  }
+
+  .chapter {
+    top: 4.25rem;
+    right: 3vw;
+    bottom: 0;
+    left: 57%;
+    display: flex;
+    width: auto;
+    justify-content: center;
+  }
+
+  .chapter h1,
+  .chapter h2,
+  .heroChapter h1 {
+    font-size: clamp(2rem, 5.7vw, 3.25rem);
+  }
+
+  .chapterBody {
+    max-width: 34ch;
+    font-size: 0.9rem;
+  }
+}
+
 @media (max-width: 680px) {
   .storyRunway {
-    height: 500svh;
+    height: 860svh;
   }
 
   .chapterLabel {

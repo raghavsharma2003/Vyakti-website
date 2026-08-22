@@ -220,7 +220,7 @@ Meera uses `meera-portrait-v1.webp`, her canonical synthetic portrait. It is pre
 
 The main page is deliberately white-first and editorial. It uses black plus one signal-red accent, one face-as-research-object, asymmetric research blocks, an architecture map, and an evaluation timeline. It does not use decorative marquees, fake waveforms, invented benchmark numbers, or repeated startup-style card grids.
 
-Desktop uses a sticky long-form story. Mobile uses native scrolling with a compact sticky visual and protected reading band. Reduced-motion and WebGL failure modes become a linear editorial layout with static portraits rather than a blank canvas. Noor's canvas renders on demand and caps DPR. Meera remains a lightweight responsive image.
+Desktop uses a sticky long-form story. Mobile uses native scrolling with a compact sticky visual and protected reading band. Reduced motion becomes a linear editorial layout with static portraits rather than a blank canvas. A late WebGL failure preserves the sticky runway and current scroll position while replacing only Noor's canvas, so the document never collapses underneath the reader. Noor's canvas renders on demand and caps DPR. Meera remains a lightweight responsive image.
 
 Normal first load never renders a solid Noor poster. Server output starts with a lightweight dots-only signal field, which hands directly to the real particle canvas after WebGL and the semantic rig are ready. Meera's square source portrait is contained without zoom or crop and begins below the fixed header on both desktop and mobile.
 
@@ -281,6 +281,20 @@ These are planning hypotheses from the strategy discussion, not public commitmen
 - Final age policy after legal review.
 
 ## Decision log
+
+### 2026-08-22
+
+- Rebuilt the homepage story clock around one GSAP progress proxy. Touch devices use a restrained scrub buffer while desktop remains synchronized with Lenis, preventing fast mobile flicks from skipping the face formation, diffusion, and Meera handoff.
+- Lengthened the mobile story runway and the identity handoff phases. Noor now exits completely, a paper beat separates identities, and Meera enters independently rather than appearing as a morph or dissolve target.
+- Made Noor speech time-based inside a scroll-gated chapter so pausing a swipe cannot leave the mouth frozen mid-viseme. Removed the artificial mouth-band shading that caused a dark lip artifact.
+- Added a dots-only first-paint layer and a first-valid-frame canvas handoff. Normal server rendering never flashes a solid face poster before the particle system is ready.
+- Made WebGL context loss geometry-stable: late failure swaps the visual layer without changing the runway height, active chapter, or scroll position.
+- Standardized Meera around square editorial framing with dedicated portrait, tablet, and short-landscape compositions. Her full hair silhouette remains visible across 390x844, 430x932, 768x1024, 844x390, 1280x720, and 1440x900 layouts.
+- Replaced the repainted scroll-scrubbed image clip with compositor transforms and reserved burgundy for Meera's literal identity highlight.
+- Reorganized `/research` around current publications first, followed by the agenda, measured findings, methods, retractions, and artifact status. The finished paper and work-in-progress note now have visibly different editorial treatments.
+- Corrected research-state claims: one web preprint, one research note in progress, and an artifact package pending publication. Removed the false submitted/benchmark-release implications from metadata and citation output.
+- Added mobile paper contents navigation, reduced scholarly title scale, stacked narrow metadata rows, suppressed duplicate limitation/artifact sections, and avoided scholarly-publication schema for incomplete work.
+- Reduced generic reveal motion on desktop and disabled it on touch, preserving a fast, stable research reading experience.
 
 ### 2026-08-21
 

@@ -107,12 +107,8 @@ export const STORY_FACE_FRAGMENT = /* glsl */ `
       (grain - 0.5) * mix(0.26, 0.085, form);
     float inkField = 1.0 - smoothstep(threshold - 0.09, threshold + 0.09, tone);
     float contour = smoothstep(0.15, 0.72, rim) * 0.48;
-    float mouthBand =
-      exp(-abs(vBase.y + 0.0105) * 40.0) *
-      exp(-abs(vBase.x) * 9.0) *
-      smoothstep(0.5, 0.6, vBase.z);
     float inkAmount = clamp(
-      inkField + contour + mouthBand * 0.052,
+      inkField + contour,
       0.0,
       1.0
     );

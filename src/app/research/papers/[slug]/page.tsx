@@ -67,6 +67,15 @@ export default async function PaperPage({
   const abstract = sectionById(sections, paper.abstractTechnicalSection);
   const body = sections.filter((section) => section.id !== abstract?.id);
   const release = RELEASES.find((entry) => entry.paperSlug === paper.slug);
+  const isResearchNote = paper.status === "in_preparation";
+  const hasLimitations = body.some(
+    (section) =>
+      section.id === "s6" || section.title.toLowerCase().includes("limitation"),
+  );
+  const hasArtifacts = body.some(
+    (section) =>
+      section.id === "s7" || section.title.toLowerCase().includes("artifact"),
+  );
 
   const toc: TocEntry[] = [
     { id: "abstract", number: null, title: "Abstract" },
@@ -76,14 +85,18 @@ export default async function PaperPage({
       title: section.title,
       children: section.subsections,
     })),
-    { id: "limitations", number: null, title: "What this does not show" },
-    { id: "artifacts", number: null, title: "Artifacts" },
-    { id: "cite", number: null, title: "Cite" },
+    ...(!hasLimitations
+      ? [{ id: "limitations", number: null, title: "What this does not show" }]
+      : []),
+    ...(!isResearchNote && !hasArtifacts
+      ? [{ id: "artifacts", number: null, title: "Artifacts" }]
+      : []),
+    ...(!isResearchNote ? [{ id: "cite", number: null, title: "Cite" }] : []),
   ];
 
   const jsonLd = {
     "@context": "https://schema.org",
-    "@type": "ScholarlyArticle",
+    "@type": isResearchNote ? "Article" : "ScholarlyArticle",
     headline: paper.title,
     author: paper.authors.map((name) => ({ "@type": "Person", name })),
     creativeWorkStatus: STATUS_LABEL[paper.status],
@@ -139,7 +152,7 @@ export default async function PaperPage({
             </p>
           </div>
 
-          <h1 className="mt-8 max-w-[26ch] text-h2 text-balance text-bone">
+          <h1 className="mt-8 max-w-[30ch] text-[clamp(2.1rem,5vw,4.25rem)] leading-[1.01] tracking-[-0.048em] text-balance text-bone">
             {paper.title}
           </h1>
 
@@ -169,6 +182,14 @@ export default async function PaperPage({
           </div>
 
           <div className="min-w-0">
+            <details className="mb-10 border-y border-hairline py-4 lg:hidden">
+              <summary className="cursor-pointer font-mono text-small text-bone">
+                Paper contents
+              </summary>
+              <div className="mt-5 max-h-[55dvh] overflow-y-auto pr-2">
+                <PaperToc entries={toc} />
+              </div>
+            </details>
             <div id="abstract" className="scroll-mt-28">
               <h2 className="text-h3 text-bone">Abstract</h2>
               <div className="mt-6">
@@ -210,7 +231,7 @@ export default async function PaperPage({
                   {COMPLETION_RAIL.rows.map((row) => (
                     <div
                       key={row.label}
-                      className="grid grid-cols-[minmax(0,11rem)_minmax(0,1fr)_auto] gap-4 py-3"
+                      className="grid gap-2 py-3 sm:grid-cols-[minmax(0,11rem)_minmax(0,1fr)_auto] sm:gap-4"
                     >
                       <dt className="text-slate">{row.label}</dt>
                       <dd className="text-ash">
@@ -275,20 +296,23 @@ export default async function PaperPage({
               </section>
             ))}
 
-            <section
-              id="limitations"
-              className="mt-20 scroll-mt-28 border-t border-hairline pt-10"
-            >
-              <h2 className="text-h3 text-bone">What this does not show</h2>
-              <p className="measure mt-6 text-body leading-[1.75] text-ash">
-                {paper.limitations}
-              </p>
-            </section>
+            {!hasLimitations ? (
+              <section
+                id="limitations"
+                className="mt-20 scroll-mt-28 border-t border-hairline pt-10"
+              >
+                <h2 className="text-h3 text-bone">What this does not show</h2>
+                <p className="measure mt-6 text-body leading-[1.75] text-ash">
+                  {paper.limitations}
+                </p>
+              </section>
+            ) : null}
 
-            <section
-              id="artifacts"
-              className="mt-20 scroll-mt-28 border-t border-hairline pt-10"
-            >
+            {!isResearchNote && !hasArtifacts ? (
+              <section
+                id="artifacts"
+                className="mt-20 scroll-mt-28 border-t border-hairline pt-10"
+              >
               <h2 className="text-h3 text-bone">Artifacts</h2>
               <p className="measure mt-6 text-body text-ash">
                 Every slot renders whether or not it is filled, because what
@@ -339,12 +363,14 @@ export default async function PaperPage({
                   .
                 </p>
               ) : null}
-            </section>
+              </section>
+            ) : null}
 
-            <section
-              id="cite"
-              className="mt-20 scroll-mt-28 border-t border-hairline pt-10"
-            >
+            {!isResearchNote ? (
+              <section
+                id="cite"
+                className="mt-20 scroll-mt-28 border-t border-hairline pt-10"
+              >
               <h2 className="text-h3 text-bone">Cite</h2>
               <div className="mt-6 max-w-[46rem]">
                 {paper.bibtex ? (
@@ -356,7 +382,8 @@ export default async function PaperPage({
                   </p>
                 )}
               </div>
-            </section>
+              </section>
+            ) : null}
 
             <div className="mt-16 flex flex-wrap items-baseline justify-between gap-4 border-t border-hairline pt-8">
               <Link

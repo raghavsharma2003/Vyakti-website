@@ -285,7 +285,7 @@ export const PAPERS: Paper[] = [
       },
     ],
     bibtex:
-      "@misc{sharma2026notcodeswitching,\n  title        = {It's Not the Code-Switching: Six Frontier LLM Judges Fail a Pre-Registered Qualification Bar --- and the Bar Was Above Its Own Ground Truth's Ceiling},\n  author       = {Sharma, Raghav and Sharma, Gaurav and Tiwari, Aryan},\n  year         = {2026},\n  howpublished = {Submitted to JUDGe 2026 (NeurIPS Workshop, non-archival)},\n  note         = {Preprint; arXiv identifier pending at time of writing},\n  institution  = {Vyakti.ai}\n}",
+      "@misc{sharma2026notcodeswitching,\n  title        = {It's Not the Code-Switching: Six Frontier LLM Judges Fail a Pre-Registered Qualification Bar --- and the Bar Was Above Its Own Ground Truth's Ceiling},\n  author       = {Sharma, Raghav and Sharma, Gaurav and Tiwari, Aryan},\n  year         = {2026},\n  howpublished = {Web preprint},\n  note         = {Submission to JUDGe 2026 planned; not submitted at time of writing; arXiv identifier pending},\n  institution  = {Vyakti.ai}\n}",
     pillars: ["evaluation"],
     rail: {
       state: "measured",
@@ -805,10 +805,12 @@ const count = (n: number) => WORDS[n] ?? String(n);
  * percentages, no growth, no adjective.
  */
 export const HERO_COUNTS = [
-  `${count(PAPERS.length)} papers`,
-  `${count(RESULTS.length)} standalone results`,
+  `${count(PAPERS.filter((paper) => paper.status !== "in_preparation").length)} web preprint`,
+  `${count(PAPERS.filter((paper) => paper.status === "in_preparation").length)} research note in progress`,
+  `${count(RESULTS.length - 1)} empirical findings`,
+  `${count(1)} systems measurement`,
   `${count(RETRACTIONS.length)} retractions`,
-  `${count(RELEASES.length)} released benchmark`,
+  `${count(RELEASES.length)} artifact package pending publication`,
 ].join(". ");
 
 export function paperBySlug(slug: string): Paper | undefined {

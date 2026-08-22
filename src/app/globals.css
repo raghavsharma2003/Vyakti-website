@@ -30,7 +30,7 @@
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --duration-fast: 140ms;
   --duration-base: 260ms;
-  --duration-reveal: 760ms;
+  --duration-reveal: 320ms;
 }
 
 :root {
@@ -43,7 +43,7 @@
   --c-bone: #0c0e0d;
   --c-ash: #50524f;
   --c-slate: #666862;
-  --c-ember: #c83f2d;
+  --c-ember: #b93627;
   --c-meera: #6f2342;
   --c-sage: #1f6b54;
   --c-on-ember: #ffffff;
@@ -150,7 +150,7 @@
 @layer components {
   [data-reveal] {
     opacity: 0;
-    transform: translate3d(0, 22px, 0);
+    transform: translate3d(0, 10px, 0);
     transition:
       opacity var(--duration-reveal) var(--ease-out-quint),
       transform var(--duration-reveal) var(--ease-out-quint);
@@ -175,4 +175,13 @@
   html { scroll-behavior: auto !important; }
   .marquee-track { animation: none !important; }
   [data-reveal] { opacity: 1 !important; transform: none !important; }
+  .site-header, .site-header * { transition-duration: 0ms !important; }
+}
+
+@media (hover: none), (pointer: coarse) {
+  [data-reveal] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
 }

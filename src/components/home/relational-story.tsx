@@ -1,10 +1,8 @@
 "use client";
 
-/* eslint-disable react-hooks/immutability -- Scroll progress is intentionally written into a stable R3F runtime. */
-
 import dynamic from "next/dynamic";
 import Image from "next/image";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -134,11 +132,13 @@ export function RelationalStory() {
   const paperBridge = useRef<HTMLDivElement>(null);
   const meeraLayer = useRef<HTMLDivElement>(null);
   const meeraFrame = useRef<HTMLDivElement>(null);
+  const meeraMedia = useRef<HTMLDivElement>(null);
   const leftMask = useRef<HTMLDivElement>(null);
-  const noorRuntime = useMemo(() => createStoryRuntime(), []);
+  const noorRuntime = useRef(createStoryRuntime());
   const [webgl, setWebgl] = useState<boolean | null>(null);
   const [reduced, setReduced] = useState(false);
   const [rig, setRig] = useState<Uint8Array | null>(null);
+  const [canvasReady, setCanvasReady] = useState(false);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -163,23 +163,26 @@ export function RelationalStory() {
     };
   }, []);
 
-  const animated = webgl === true && Boolean(rig) && !reduced;
-  const fallback = webgl === false || reduced;
+  const noor3d = webgl === true && Boolean(rig) && !reduced;
+  const motionEnabled = !reduced;
+  const fallback = reduced;
 
   useEffect(() => {
     const target = stage.current;
-    if (!target || !animated) return;
+    if (!target || !noor3d) return;
     const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)");
     const move = (event: PointerEvent) => {
       if (!finePointer.matches) return;
-      noorRuntime.pointerX = (event.clientX / window.innerWidth) * 2 - 1;
-      noorRuntime.pointerY = -((event.clientY / window.innerHeight) * 2 - 1);
-      noorRuntime.invalidate?.();
+      noorRuntime.current.pointerX =
+        (event.clientX / window.innerWidth) * 2 - 1;
+      noorRuntime.current.pointerY =
+        -((event.clientY / window.innerHeight) * 2 - 1);
+      noorRuntime.current.invalidate?.();
     };
     const leave = () => {
-      noorRuntime.pointerX = 0;
-      noorRuntime.pointerY = 0;
-      noorRuntime.invalidate?.();
+      noorRuntime.current.pointerX = 0;
+      noorRuntime.current.pointerY = 0;
+      noorRuntime.current.invalidate?.();
     };
     target.addEventListener("pointermove", move, { passive: true });
     target.addEventListener("pointerleave", leave, { passive: true });
@@ -187,21 +190,20 @@ export function RelationalStory() {
       target.removeEventListener("pointermove", move);
       target.removeEventListener("pointerleave", leave);
     };
-  }, [animated, noorRuntime]);
+  }, [noor3d]);
 
   useGSAP(
     () => {
-      if (!animated || !runway.current || !stage.current) return;
+      if (!motionEnabled || !runway.current || !stage.current) return;
       const chapters = gsap.utils.toArray<HTMLElement>(
         "[data-story-chapter]",
         root.current,
       );
-      const update = (self: ScrollTrigger) => {
-        const progress = THREEClamp(self.progress);
-        const velocity = self.getVelocity();
-        noorRuntime.progress = progress;
-        noorRuntime.scrollVelocity = velocity;
-        noorRuntime.invalidate?.();
+      const update = (progressValue: number, velocity: number) => {
+        const progress = THREEClamp(progressValue);
+        noorRuntime.current.progress = progress;
+        noorRuntime.current.scrollVelocity = velocity;
+        noorRuntime.current.invalidate?.();
         chapters.forEach((chapter, index) => {
           const opacity = chapterOpacity(progress, index);
           const direction = progress < CHAPTERS[index].at ? 1 : -1;
@@ -220,11 +222,11 @@ export function RelationalStory() {
         // Noor exits completely before Meera's authored portrait enters.
         // The clear-paper interval keeps the lab identity and product identity
         // spatially separate instead of implying a transformation.
-        const rawNoorExit = gsap.utils.clamp(0, 1, (progress - 0.642) / 0.018);
+        const rawNoorExit = gsap.utils.clamp(0, 1, (progress - 0.625) / 0.04);
         const noorExit = rawNoorExit * rawNoorExit * (3 - 2 * rawNoorExit);
-        const rawPaperEntry = gsap.utils.clamp(0, 1, (progress - 0.652) / 0.008);
+        const rawPaperEntry = gsap.utils.clamp(0, 1, (progress - 0.638) / 0.027);
         const paperEntry = rawPaperEntry * rawPaperEntry * (3 - 2 * rawPaperEntry);
-        const rawMeeraEntry = gsap.utils.clamp(0, 1, (progress - 0.695) / 0.05);
+        const rawMeeraEntry = gsap.utils.clamp(0, 1, (progress - 0.705) / 0.085);
         const meeraEntry = rawMeeraEntry * rawMeeraEntry * (3 - 2 * rawMeeraEntry);
         const mobile = window.innerWidth <= 980;
         if (noorLayer.current) {
@@ -241,33 +243,58 @@ export function RelationalStory() {
         }
         if (meeraLayer.current) {
           gsap.set(meeraLayer.current, {
-            visibility: progress >= 0.695 ? "visible" : "hidden",
+            visibility: progress >= 0.705 ? "visible" : "hidden",
           });
         }
         if (meeraFrame.current) {
           gsap.set(meeraFrame.current, {
-            clipPath: mobile
-              ? `inset(0 0 ${(1 - meeraEntry) * 100}% 0)`
-              : `inset(0 ${(1 - meeraEntry) * 100}% 0 0)`,
+            transform: mobile
+              ? `translate3d(0, ${-(1 - meeraEntry) * 101}%, 0)`
+              : `translate3d(${-(1 - meeraEntry) * 101}%, 0, 0)`,
+          });
+        }
+        if (meeraMedia.current) {
+          gsap.set(meeraMedia.current, {
+            transform: mobile
+              ? `translate3d(0, ${(1 - meeraEntry) * 101}%, 0)`
+              : `translate3d(${(1 - meeraEntry) * 101}%, 0, 0)`,
           });
         }
       };
-      const trigger = ScrollTrigger.create({
+      const touchLayout = window.matchMedia(
+        "(max-width: 980px), (hover: none), (pointer: coarse)",
+      ).matches;
+      const progress = { value: 0 };
+      let trigger: ScrollTrigger | null = null;
+      const tween = gsap.to(progress, {
+        value: 0.99999,
+        ease: "none",
+        onUpdate: () => update(progress.value, trigger?.getVelocity() ?? 0),
+      });
+
+      trigger = ScrollTrigger.create({
         trigger: runway.current,
         start: "top top",
         end: "bottom bottom",
-        scrub: true,
+        animation: tween,
+        // Touch scrolling advances in larger bursts than a wheel. A short,
+        // interruptible catch-up keeps the visual sequence continuous.
+        // Desktop already receives smoothing from Lenis, so it stays 1:1.
+        scrub: touchLayout ? 0.24 : true,
         invalidateOnRefresh: true,
-        onUpdate: update,
         onToggle: (self) => {
-          noorRuntime.active = self.isActive;
-          noorRuntime.invalidate?.();
+          noorRuntime.current.active = self.isActive;
+          noorRuntime.current.invalidate?.();
         },
       });
-      update(trigger);
-      return () => trigger.kill();
+
+      update(trigger.progress, 0);
+      return () => {
+        trigger?.kill();
+        tween.kill();
+      };
     },
-    { scope: root, dependencies: [animated, noorRuntime] },
+    { scope: root, dependencies: [motionEnabled] },
   );
 
   return (
@@ -280,14 +307,33 @@ export function RelationalStory() {
         <div ref={stage} className={styles.storyStage}>
           <div className={styles.storyVisual} aria-hidden="true">
             <div ref={noorLayer} className={styles.storyCanvasLayer}>
-              {animated && rig ? (
-                <StoryCanvas
-                  runtime={noorRuntime}
-                  rig={rig}
-                  onContextLost={() => setWebgl(false)}
-                />
-              ) : !fallback ? (
-                <InitialSignalField />
+              {!fallback ? (
+                <div
+                  className={[
+                    styles.signalLoader,
+                    canvasReady ? styles.signalLoaderHidden : "",
+                  ].join(" ")}
+                >
+                  <InitialSignalField />
+                </div>
+              ) : null}
+              {noor3d && rig ? (
+                <div
+                  className={[
+                    styles.liveCanvas,
+                    canvasReady ? styles.liveCanvasReady : "",
+                  ].join(" ")}
+                >
+                  <StoryCanvas
+                    runtime={noorRuntime}
+                    rig={rig}
+                    onReady={() => setCanvasReady(true)}
+                    onContextLost={() => {
+                      setCanvasReady(false);
+                      setWebgl(false);
+                    }}
+                  />
+                </div>
               ) : null}
             </div>
             <div
@@ -301,12 +347,12 @@ export function RelationalStory() {
               style={{ visibility: "hidden" }}
             >
               <div ref={meeraFrame} className={styles.meeraPhotoFrame}>
-                <div className={styles.meeraPhotoMedia}>
+                <div ref={meeraMedia} className={styles.meeraPhotoMedia}>
                   <Image
                     src="/images/meera-portrait-v1.webp"
                     alt=""
                     fill
-                    loading="eager"
+                    loading="lazy"
                     sizes="(min-width: 981px) 58vw, 100vw"
                     className={styles.meeraPhotoImage}
                   />
@@ -323,7 +369,7 @@ export function RelationalStory() {
                 <article
                   key={chapter.title}
                   data-story-chapter={index}
-                  aria-hidden={animated && index > 0 ? true : undefined}
+                  aria-hidden={motionEnabled && index > 0 ? true : undefined}
                   className={[
                     styles.chapter,
                     chapter.side === "right" ? styles.chapterRight : styles.chapterLeft,
@@ -402,7 +448,7 @@ export function RelationalStory() {
 
       </div>
 
-      <ol className="sr-only" aria-hidden={animated ? undefined : true}>
+      <ol className="sr-only" aria-hidden={motionEnabled ? undefined : true}>
         {CHAPTERS.slice(1).map((chapter) => (
           <li key={chapter.title}>
             {chapter.title} {chapter.body}

@@ -6,6 +6,7 @@ import { useEffect, useMemo, useRef } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { useGLTF } from "@react-three/drei";
 import * as THREE from "three";
+import type { RefObject } from "react";
 import type { StoryRuntime } from "./story-runtime";
 import {
   STORY_FACE_FRAGMENT,
@@ -308,10 +309,12 @@ function isMouth(kind: string) {
 function StoryScene({
   runtime,
   rig,
+  onReady,
   onContextLost,
 }: {
-  runtime: StoryRuntime;
+  runtime: RefObject<StoryRuntime>;
   rig: Uint8Array;
+  onReady: () => void;
   onContextLost: () => void;
 }) {
   const noorGltf = useGLTF(NOOR_MODEL);
@@ -321,8 +324,10 @@ function StoryScene({
   const faceMaterial = useRef<THREE.ShaderMaterial>(null);
   const pointMaterial = useRef<THREE.ShaderMaterial>(null);
   const featureMaterials = useRef<THREE.ShaderMaterial[]>([]);
+  const reportedReady = useRef(false);
+  const speechClock = useRef({ active: false, elapsed: 0 });
   const { gl, invalidate, size } = useThree();
-  const compact = size.height < window.innerHeight * 0.8;
+  const compact = size.width <= 980 || size.height < window.innerHeight * 0.8;
 
   const face = useMemo(() => (noor ? prepareFace(noor.face, rig) : null), [noor, rig]);
   const features = noor?.features ?? [];
@@ -352,10 +357,11 @@ function StoryScene({
     [],
   );
   useEffect(() => {
-    runtime.invalidate = invalidate;
+    const storyRuntime = runtime.current;
+    storyRuntime.invalidate = invalidate;
     invalidate();
     return () => {
-      runtime.invalidate = null;
+      storyRuntime.invalidate = null;
     };
   }, [invalidate, runtime]);
 
@@ -378,18 +384,34 @@ function StoryScene({
     },
     [noor],
   );
-  useFrame(() => {
+  useFrame((_, delta) => {
     if (!root.current || !faceMaterial.current || !pointMaterial.current) {
       return;
     }
-    const progress = runtime.progress;
+    if (!reportedReady.current) {
+      reportedReady.current = true;
+      onReady();
+    }
+    const progress = runtime.current.progress;
     const formation = phase(progress, 0.025, 0.255);
     const release = phase(progress, 0.575, 0.655);
     const cohesion = Math.min(formation, 1 - release);
 
     const speech =
-      phase(progress, 0.415, 0.432) * (1 - phase(progress, 0.495, 0.515));
-    const speechProgress = remap(progress, 0.415, 0.515);
+      phase(progress, 0.405, 0.425) * (1 - phase(progress, 0.515, 0.535));
+    const insideSpeechChapter = progress >= 0.405 && progress <= 0.535;
+    if (insideSpeechChapter && !speechClock.current.active) {
+      speechClock.current.active = true;
+      speechClock.current.elapsed = 0;
+    } else if (!insideSpeechChapter) {
+      speechClock.current.active = false;
+      speechClock.current.elapsed = 0;
+    }
+    if (insideSpeechChapter && speechClock.current.elapsed < 1.55) {
+      speechClock.current.elapsed += Math.min(delta, 0.05);
+      invalidate();
+    }
+    const speechProgress = Math.min(1, speechClock.current.elapsed / 1.42);
 
     const faceValues = faceMaterial.current.uniforms;
     faceValues.uCohesion.value = cohesion;
@@ -399,8 +421,8 @@ function StoryScene({
     const pointerWindow =
       phase(progress, 0.29, 0.32) * (1 - phase(progress, 0.495, 0.515));
     faceValues.uPointer.value.set(
-      runtime.pointerX * pointerWindow,
-      runtime.pointerY * pointerWindow,
+      runtime.current.pointerX * pointerWindow,
+      runtime.current.pointerY * pointerWindow,
     );
 
     const pointValues = pointMaterial.current.uniforms;
@@ -411,8 +433,10 @@ function StoryScene({
     );
 
     const noorYaw = THREE.MathUtils.lerp(-0.42, -0.025, phase(progress, 0.025, 0.3));
-    root.current.rotation.y = noorYaw + runtime.pointerX * pointerWindow * 0.045;
-    root.current.rotation.x = runtime.pointerY * pointerWindow * -0.028;
+    root.current.rotation.y =
+      noorYaw + runtime.current.pointerX * pointerWindow * 0.045;
+    root.current.rotation.x =
+      runtime.current.pointerY * pointerWindow * -0.028;
     root.current.position.x = compact ? 0 : 0.72;
     root.current.position.y = compact ? -0.02 : -0.065;
     root.current.scale.setScalar(compact ? 0.9 : 1.04);
@@ -486,10 +510,12 @@ function StoryScene({
 export default function RelationalStoryCanvas({
   runtime,
   rig,
+  onReady,
   onContextLost,
 }: {
-  runtime: StoryRuntime;
+  runtime: RefObject<StoryRuntime>;
   rig: Uint8Array;
+  onReady: () => void;
   onContextLost: () => void;
 }) {
   return (
@@ -500,12 +526,17 @@ export default function RelationalStoryCanvas({
       gl={{ antialias: false, alpha: true, powerPreference: "high-performance" }}
       style={{ pointerEvents: "none" }}
       onCreated={({ gl, camera, invalidate, scene }) => {
-        runtime.invalidate = invalidate;
+        runtime.current.invalidate = invalidate;
         gl.compile(scene, camera);
         invalidate();
       }}
     >
-      <StoryScene runtime={runtime} rig={rig} onContextLost={onContextLost} />
+      <StoryScene
+        runtime={runtime}
+        rig={rig}
+        onReady={onReady}
+        onContextLost={onContextLost}
+      />
     </Canvas>
   );
 }

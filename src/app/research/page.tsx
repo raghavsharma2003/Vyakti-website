@@ -1,339 +1,313 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Cta } from "@/components/ui/cta";
-import { TurnDiagram } from "@/components/turn-diagram";
-import { EvidenceRail } from "@/components/research/evidence-rail";
-import { HashAnchors } from "@/components/research/hash-anchors";
-import { Measure } from "@/components/research/measure";
-import { MethodModule } from "@/components/research/method-module";
-import { PaperCard } from "@/components/research/paper-card";
 import { ResearchFigure } from "@/components/research/figures";
+import { HashAnchors } from "@/components/research/hash-anchors";
 import { PILLARS } from "@/lib/site";
-import { HERO_COUNTS, LAB, PAPERS, RELEASES, RESULTS } from "@/lib/research";
+import {
+  LAB,
+  PAPERS,
+  RELEASES,
+  RESULTS,
+  RETRACTIONS,
+  STATUS_LABEL,
+} from "@/lib/research";
+import styles from "./research.module.css";
 
 export const metadata: Metadata = {
   title: "Research",
   description:
-    "Vyakti researches identity continuity, relational memory, multimodal expression and user-controlled agency for persistent AI identities. Two papers, four standalone results, two retractions and one released benchmark.",
+    "Vyakti researches identity continuity, relational memory, multimodal expression and evaluation for persistent AI identities. Read our preprint, active research note, measured findings and artifact status.",
   alternates: { canonical: "/research" },
   openGraph: {
     title: "Research at Vyakti",
     description:
-      "Identity continuity, relational memory and multimodal expression. The architecture beneath persistent AI identities, with the measurements under it.",
+      "Research on the systems that let an AI identity remain coherent across time, context and model change.",
     url: "/research",
   },
 };
 
 const release = RELEASES[0];
 
+const INVENTORY = [
+  ["01", "web preprint", "#publications"],
+  ["01", "research note in progress", "#publications"],
+  ["03", "empirical findings", "#findings"],
+  ["01", "systems measurement", "#findings"],
+  ["02", "documented retractions", "#method"],
+] as const;
+
+const RESULT_SUMMARIES: Record<string, string> = {
+  "gate0-structural-privacy":
+    "A retrieval-time database predicate produced zero leaks across 31,122 checks. The same privacy rule expressed only as a prompt instruction leaked in most tested scenarios.",
+  "vision-gate-engagement":
+    "A matched-arm study found that more proactive screen commentary roughly doubled engagement, with no statistically detected rise in fabrication in the powered follow-up.",
+  "ground-truth-ceiling-standalone":
+    "A trusted AI judge reproduced only 74 of its own 96 prior verdicts. The measured ceiling sat below the qualification bar fixed before the run.",
+  "cache-economics":
+    "On measured production calls, prompt caching reduced the cost of an otherwise identical turn by roughly nine times.",
+};
+
 export default function ResearchPage() {
   return (
     <>
       <HashAnchors />
 
-      <section className="border-b border-hairline bg-ink pt-32 pb-20 md:pt-40 md:pb-28">
+      <section className={styles.hero}>
         <div className="shell">
-          <h1 className="max-w-[18ch] text-bone">
-            Personality is not a system prompt.
-          </h1>
-          <p className="measure mt-8 text-lead text-ash">
-            It is the continuity between memory, perception, expression and
-            action. We study the systems that let a character hold together
-            across situations and over time.
+          <p className={styles.kicker}>Vyakti Research</p>
+          <h1>Researching what lets an AI remain itself.</h1>
+          <p className={styles.heroCopy}>
+            Intelligence can be replaced. A relationship cannot. We study the
+            state, memory, perception and evaluation systems that make
+            continuity testable.
           </p>
-          {/* Four counts, all derived from the content module, all a count of
-              a thing you can click. */}
-          <p className="mt-10 font-mono text-micro tracking-[0.06em] text-slate">
-            {HERO_COUNTS}
-          </p>
+
+          <div className={styles.inventory} aria-label="Research inventory">
+            {INVENTORY.map(([value, label, href]) => (
+              <Link href={href} key={label} className={styles.inventoryItem}>
+                <strong>{value}</strong>
+                <span>{label}</span>
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* The five tracks, in depth, each carrying what we have measured on it. */}
-      <section className="bg-ink">
-        {PILLARS.map((pillar, i) => (
-          <article
-            key={pillar.id}
-            id={pillar.id}
-            className={[
-              "scroll-mt-24 border-b border-hairline py-20 md:py-28",
-              i % 2 === 1 ? "bg-void" : "bg-ink",
-            ].join(" ")}
-          >
-            <div className="shell grid gap-10 md:grid-cols-[minmax(0,22rem)_minmax(0,1fr)] md:gap-20">
-              <div>
-                <h2 className="text-bone" data-reveal="0">
-                  {pillar.title}
-                </h2>
-                <ul className="mt-6 flex flex-wrap gap-2" data-reveal="1">
-                  {pillar.terms.map((term) => (
-                    <li
-                      key={term}
-                      className="rounded-full border border-hairline px-3 py-1 font-mono text-micro text-slate"
-                    >
-                      {term}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div>
-                <p className="measure text-lead text-bone" data-reveal="0">
-                  {pillar.summary}
-                </p>
-                <p className="measure mt-6 text-body text-ash" data-reveal="1">
-                  {pillar.detail}
-                </p>
-
-                {pillar.id === "expression" ? (
-                  <div className="mt-10" data-reveal="2">
-                    <TurnDiagram />
-                  </div>
-                ) : null}
-
-                <EvidenceRail pillar={pillar.id} />
-              </div>
-            </div>
-          </article>
-        ))}
-      </section>
-
-      {/* Papers. Two cards that state their own status. */}
-      <section
-        id="papers"
-        className="scroll-mt-24 border-b border-hairline bg-ink py-24 md:py-32"
-      >
+      <nav className={styles.localNav} aria-label="Research sections">
         <div className="shell">
-          <p className="eyebrow">Papers</p>
-          <h2 className="mt-4 max-w-[24ch] text-bone" data-reveal="0">
-            Two papers. One of them is not finished, and it says so on its own
-            page.
-          </h2>
-          <p className="measure mt-6 text-lead text-ash" data-reveal="1">
-            {LAB.standfirst}
-          </p>
+          <div className={styles.localNavTrack}>
+            <Link href="#publications">Publications</Link>
+            <Link href="#agenda">Agenda</Link>
+            <Link href="#findings">Findings</Link>
+            <Link href="#method">Method</Link>
+            <Link href="#artifacts">Artifacts</Link>
+          </div>
+        </div>
+      </nav>
 
-          <div className="mt-14 grid gap-6 md:grid-cols-2">
-            {PAPERS.map((paper, i) => (
-              <div key={paper.id} data-reveal={i} className="h-full">
-                <PaperCard paper={paper} />
-              </div>
+      <section id="publications" className={styles.publications}>
+        <div className="shell">
+          <div className={styles.sectionIntro}>
+            <h2>Current work</h2>
+            <p>
+              One completed web preprint and one research note still collecting
+              its primary comparison. Their status is part of the result.
+            </p>
+          </div>
+
+          <div className={styles.paperList}>
+            {PAPERS.map((paper, index) => (
+              <article key={paper.id} className={styles.paper}>
+                <div className={styles.paperMeta}>
+                  <span>{STATUS_LABEL[paper.status]}</span>
+                  <time>{paper.statusAsOf}</time>
+                </div>
+                <div className={styles.paperBody}>
+                  <p className={styles.paperType}>
+                    {index === 0 ? "Web preprint" : "Research note in progress"}
+                  </p>
+                  <h3>
+                    <Link href={`/research/papers/${paper.slug}`}>
+                      {paper.title}
+                    </Link>
+                  </h3>
+                  <p>{paper.cardSummary}</p>
+
+                  {paper.cardNumbers.length ? (
+                    <dl className={styles.paperNumbers}>
+                      {paper.cardNumbers.map((entry) => (
+                        <div key={entry.label}>
+                          <dt>{entry.value}</dt>
+                          <dd>{entry.label}</dd>
+                        </div>
+                      ))}
+                    </dl>
+                  ) : (
+                    <p className={styles.notFinding}>
+                      No result is published. The primary comparison remains
+                      incomplete.
+                    </p>
+                  )}
+
+                  <Link
+                    href={`/research/papers/${paper.slug}`}
+                    className={styles.textLink}
+                  >
+                    {index === 0 ? "Read the preprint" : "Read the research status"}
+                    <span aria-hidden>→</span>
+                  </Link>
+                </div>
+              </article>
             ))}
           </div>
 
-          <div className="mt-12 max-w-4xl">
+          <div className={styles.figurePanel}>
             <ResearchFigure figure="fig-f1-agreement-forest" />
           </div>
         </div>
       </section>
 
-      {/* Standalone results. A hairline-divided list, not four cards. */}
-      <section
-        id="results"
-        className="scroll-mt-24 border-b border-hairline bg-void py-24 md:py-32"
-      >
+      <section id="agenda" className={styles.agenda}>
         <div className="shell">
-          <p className="eyebrow">Results</p>
-          <h2 className="mt-4 max-w-[22ch] text-bone" data-reveal="0">
-            Four measurements that stand on their own.
-          </h2>
-          <p className="measure mt-6 text-lead text-ash" data-reveal="1">
-            Findings outside either paper, cited with the same discipline: n,
-            method, date, source.
-          </p>
+          <div className={styles.sectionIntro}>
+            <h2>Research agenda</h2>
+            <p>
+              Five connected questions define the relational layer. We treat
+              them as one system, not a list of companion features.
+            </p>
+          </div>
 
-          <div className="mt-14 divide-y divide-hairline border-t border-hairline">
-            {RESULTS.map((result, i) => (
-              <div
-                key={result.id}
-                id={result.id}
-                className="scroll-mt-24 py-10 md:py-12"
-                data-reveal={i % 3}
-              >
-                <Measure
-                  variant="split"
-                  value={result.number}
-                  valueNote={result.numberNote}
-                  comparison={result.comparisonNumber}
-                  n={result.provenance.n}
-                  method={result.provenance.method}
-                  date={result.provenance.date}
-                  source={result.provenance.source}
-                  accent={result.accent}
-                >
-                  {result.label ? (
-                    <p className="mb-3 font-mono text-micro tracking-[0.16em] text-slate uppercase">
-                      {result.label}
-                    </p>
-                  ) : null}
-                  <h3 className="text-lead leading-snug text-bone">
-                    {result.headline}
-                  </h3>
-                  <p className="measure mt-4 text-body text-ash">
-                    {result.meaning}
-                  </p>
-                </Measure>
-              </div>
+          <div className={styles.agendaGrid}>
+            {PILLARS.map((pillar) => (
+              <article key={pillar.id} id={pillar.id} className={styles.agendaItem}>
+                <h3>{pillar.title}</h3>
+                <p className={styles.agendaQuestion}>{pillar.short}</p>
+                <p>{pillar.summary}</p>
+                <ul aria-label={`${pillar.title} topics`}>
+                  {pillar.terms.map((term) => (
+                    <li key={term}>{term}</li>
+                  ))}
+                </ul>
+              </article>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Evaluation, and the method module that sits inside it. */}
-      <section
-        id="evaluation"
-        className="scroll-mt-24 border-b border-hairline bg-ink py-24 md:py-32"
-      >
-        <div className="shell md:grid md:grid-cols-12 md:gap-16">
-          <div className="md:col-span-4">
-            <p className="eyebrow">Evaluation</p>
-            <h2 className="mt-4 text-bone" data-reveal="0">
-              How we know it is working.
-            </h2>
+      <section id="findings" className={styles.findings}>
+        <div className="shell">
+          <div className={styles.sectionIntro}>
+            <h2>Measured findings</h2>
+            <p>
+              Three empirical findings and one systems measurement. Each value
+              keeps its sample, method, date and source attached.
+            </p>
           </div>
 
-          <div className="mt-8 md:col-span-7 md:col-start-6 md:mt-0">
-            <p className="measure text-lead text-ash" data-reveal="0">
-              Most model evaluations measure a single response. Relational
-              intelligence has to be evaluated across conversations, changing
-              contexts and the systems underneath them.
-            </p>
-
-            <dl className="mt-10 divide-y divide-hairline border-t border-hairline">
-              {[
-                {
-                  t: "Held conversation, not single turns",
-                  d: "Most failures need time to appear. Identity drifts, memory contradicts itself and familiar response patterns begin to repeat. A one-minute demo hides all of it.",
-                },
-                {
-                  t: "Continuity over shared history",
-                  d: "We look for whether preferences, boundaries and prior moments shape later conversations coherently, without turning the relationship into a retrieved transcript.",
-                },
-                {
-                  t: "Memory that remains legible",
-                  d: "Useful recall is only part of the test. People also need to understand what was remembered, correct it and decide what should be forgotten.",
-                },
-                {
-                  t: "Identity through model change",
-                  d: "A stronger underlying model should make an identity more capable without quietly replacing its voice, history or point of view.",
-                },
-              ].map((row, i) => (
-                <div key={row.t} className="py-6" data-reveal={i}>
-                  <dt className="text-body font-medium text-bone">{row.t}</dt>
-                  <dd className="measure mt-2 text-small leading-relaxed text-ash">
-                    {row.d}
-                  </dd>
-                </div>
-              ))}
-            </dl>
-
-            <EvidenceRail pillar="evaluation" />
+          <div className={styles.resultGrid}>
+            {RESULTS.map((result, index) => (
+              <article key={result.id} id={result.id} className={styles.result}>
+                <p className={styles.resultType}>
+                  {index === RESULTS.length - 1
+                    ? "Systems measurement"
+                    : "Empirical finding"}
+                </p>
+                <strong className={styles.resultNumber}>{result.number}</strong>
+                {result.numberNote ? (
+                  <p className={styles.resultNote}>{result.numberNote}</p>
+                ) : null}
+                <h3>{result.headline}</h3>
+                <p className={styles.resultSummary}>
+                  {RESULT_SUMMARIES[result.id]}
+                </p>
+                <details className={styles.provenance}>
+                  <summary>Method and provenance</summary>
+                  <dl>
+                    <div>
+                      <dt>Sample</dt>
+                      <dd>{result.provenance.n}</dd>
+                    </div>
+                    <div>
+                      <dt>Method</dt>
+                      <dd>{result.provenance.method}</dd>
+                    </div>
+                    <div>
+                      <dt>Date</dt>
+                      <dd>{result.provenance.date}</dd>
+                    </div>
+                    <div>
+                      <dt>Source</dt>
+                      <dd>{result.provenance.source}</dd>
+                    </div>
+                  </dl>
+                </details>
+              </article>
+            ))}
           </div>
         </div>
       </section>
 
-      <MethodModule />
-
-      {/* The release. What is not in it, at equal weight to what is. */}
-      <section
-        id="release"
-        className="scroll-mt-24 border-t border-b border-hairline bg-ink py-24 md:py-32"
-      >
-        <div className="shell grid gap-12 md:grid-cols-[minmax(0,26rem)_minmax(0,1fr)] md:gap-20">
-          <div>
-            <p className="eyebrow">Release</p>
-            <h2 className="mt-4 max-w-[16ch] text-bone" data-reveal="0">
-              The harness, the verdicts, and the mistakes.
-            </h2>
-            <p className="measure mt-6 text-body text-ash" data-reveal="1">
-              {release.description}
-            </p>
-
-            <div className="mt-8 flex flex-wrap gap-2" data-reveal="2">
-              <span className="border border-hairline px-3 py-1 font-mono text-micro text-slate">
-                {release.licenses.code} code
-              </span>
-              <span className="border border-hairline px-3 py-1 font-mono text-micro text-slate">
-                {release.licenses.data} data
-              </span>
+      <section id="method" className={styles.method}>
+        <div className="shell">
+          <div className={styles.methodGrid}>
+            <div>
+              <p className={styles.kicker}>Method</p>
+              <h2>Make the claim earn its typography.</h2>
+              <p className={styles.methodLead}>{LAB.standfirst}</p>
             </div>
+            <ol className={styles.methodSteps}>
+              <li>
+                <strong>Fix the bar first.</strong>
+                <span>Qualification criteria are written before candidates run.</span>
+              </li>
+              <li>
+                <strong>Run the control.</strong>
+                <span>Alternative explanations are tested, not narrated away.</span>
+              </li>
+              <li>
+                <strong>Keep provenance attached.</strong>
+                <span>Every number travels with its sample, method, date and source.</span>
+              </li>
+              <li>
+                <strong>Publish the correction.</strong>
+                <span>A failed explanation remains visible with the control that killed it.</span>
+              </li>
+            </ol>
+          </div>
 
-            <p className="mt-6 font-mono text-micro leading-relaxed text-slate">
-              {release.status}
-            </p>
+          <div className={styles.retractions}>
+            {RETRACTIONS.map((retraction) => (
+              <article key={retraction.id}>
+                <p className={styles.struck}>{retraction.claim}</p>
+                <p>{retraction.control}</p>
+                <small>{retraction.source}</small>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
 
-            {/* No public URL exists yet, so this is a state, not a link. */}
-            <p className="mt-6 inline-flex cursor-default items-center rounded-full border border-hairline px-5 py-2.5 text-small text-slate">
-              {release.ctaLabel}
-            </p>
-
-            <p className="mt-8">
+      <section id="artifacts" className={styles.artifacts}>
+        <div className="shell">
+          <div className={styles.artifactGrid}>
+            <div>
+              <p className={styles.kicker}>Artifact package</p>
+              <h2>{release.name}</h2>
+              <p>{release.description}</p>
+            </div>
+            <div className={styles.artifactStatus}>
+              <strong>Publication pending</strong>
+              <p>{release.status}</p>
+              <dl>
+                <div>
+                  <dt>Code license</dt>
+                  <dd>{release.licenses.code}</dd>
+                </div>
+                <div>
+                  <dt>Data license</dt>
+                  <dd>{release.licenses.data}</dd>
+                </div>
+              </dl>
               <Link
                 href={`/research/releases/${release.slug}`}
-                className="group inline-flex items-center gap-1.5 text-small text-ember transition-colors hover:text-bone"
+                className={styles.textLink}
               >
-                Read the datasheet summary
-                <span
-                  aria-hidden
-                  className="transition-transform duration-[var(--duration-fast)] ease-[var(--ease-out-quint)] group-hover:translate-x-0.5"
-                >
-                  →
-                </span>
+                Read the artifact datasheet <span aria-hidden>→</span>
               </Link>
-            </p>
-          </div>
-
-          <div className="grid gap-10 lg:grid-cols-2 lg:gap-12">
-            <div>
-              <p className="font-mono text-micro tracking-[0.16em] text-slate uppercase">
-                In the release
-              </p>
-              <ul className="mt-5 divide-y divide-hairline border-t border-hairline">
-                {release.contents.map((item) => (
-                  <li
-                    key={item}
-                    className="py-4 text-small leading-relaxed text-ash"
-                  >
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div>
-              <p className="font-mono text-micro tracking-[0.16em] text-slate uppercase">
-                Not in the release
-              </p>
-              <ul className="mt-5 divide-y divide-hairline border-t border-hairline">
-                {release.exclusions.map((item) => (
-                  <li
-                    key={item}
-                    className="py-4 text-small leading-relaxed text-ash"
-                  >
-                    {item}
-                  </li>
-                ))}
-              </ul>
-              <p className="mt-6 font-mono text-micro leading-relaxed text-slate">
-                {release.source}
-              </p>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="bg-void py-20 md:py-28">
-        <div className="shell-narrow text-center">
-          <h2 className="text-bone" data-reveal="0">
-            Work on this with us.
-          </h2>
-          <p className="mx-auto mt-5 max-w-[46ch] text-body text-ash" data-reveal="1">
-            If your work spans speech, conversation analysis or long-horizon
-            systems, we would like to hear from you.
+      <section className={styles.collaborate}>
+        <div className="shell-narrow">
+          <h2>Build the evidence with us.</h2>
+          <p>
+            We want to work with researchers in speech, conversation analysis,
+            memory, evaluation and long-horizon systems.
           </p>
-          <div className="mt-8 flex justify-center" data-reveal="2">
-            <Cta href="/company#careers">Work with us</Cta>
-          </div>
+          <Cta href="/company#careers">Work with Vyakti</Cta>
         </div>
       </section>
     </>
