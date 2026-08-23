@@ -332,7 +332,7 @@ function StoryScene({
   const face = useMemo(() => (noor ? prepareFace(noor.face, rig) : null), [noor, rig]);
   const features = noor?.features ?? [];
   const points = useMemo(
-    () => (noor ? makePointGeometry(noor.face, compact ? 7_000 : 14_000) : null),
+    () => (noor ? makePointGeometry(noor.face, compact ? 4_800 : 14_000) : null),
     [compact, noor],
   );
   const faceUniforms = useMemo(
@@ -429,7 +429,7 @@ function StoryScene({
     pointValues.uCohesion.value = cohesion;
     pointValues.uPixelRatio.value = Math.min(
       gl.getPixelRatio(),
-      compact ? 1.25 : 1.5,
+      compact ? 1 : 1.5,
     );
 
     const noorYaw = THREE.MathUtils.lerp(-0.42, -0.025, phase(progress, 0.025, 0.3));
@@ -522,7 +522,7 @@ export default function RelationalStoryCanvas({
     <Canvas
       frameloop="demand"
       camera={{ position: [0, 0, 4.12], fov: 37, near: 0.1, far: 20 }}
-      dpr={[1, 1.5]}
+      dpr={[1, 1.25]}
       gl={{ antialias: false, alpha: true, powerPreference: "high-performance" }}
       style={{ pointerEvents: "none" }}
       onCreated={({ gl, camera, invalidate, scene }) => {

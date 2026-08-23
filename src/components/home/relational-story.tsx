@@ -16,7 +16,12 @@ const StoryCanvas = dynamic(() => import("./relational-story-canvas"), {
   loading: () => <InitialSignalField />,
 });
 
-if (typeof window !== "undefined") gsap.registerPlugin(useGSAP, ScrollTrigger);
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(useGSAP, ScrollTrigger);
+  // Mobile browser chrome changes the visual viewport while a swipe is still
+  // moving. Refreshing trigger geometry for those small resizes causes jumps.
+  ScrollTrigger.config({ ignoreMobileResize: true });
+}
 
 const CHAPTERS = [
   {
@@ -198,6 +203,7 @@ export function RelationalStory() {
         "[data-story-chapter]",
         root.current,
       );
+      const chapterWasVisible: Array<boolean | null> = chapters.map(() => null);
       const update = (progressValue: number, velocity: number) => {
         const progress = THREEClamp(progressValue);
         noorRuntime.current.progress = progress;
@@ -205,17 +211,18 @@ export function RelationalStory() {
         noorRuntime.current.invalidate?.();
         chapters.forEach((chapter, index) => {
           const opacity = chapterOpacity(progress, index);
+          const visible = opacity > 0;
+          if (!visible && chapterWasVisible[index] === false) return;
           const direction = progress < CHAPTERS[index].at ? 1 : -1;
-          gsap.set(chapter, {
-            opacity,
-            visibility: opacity > 0 ? "visible" : "hidden",
-            transform: `translate3d(0, ${direction * (1 - opacity) * 16}px, 0)`,
-          });
+          chapter.style.opacity = String(opacity);
+          chapter.style.visibility = visible ? "visible" : "hidden";
+          chapter.style.transform = `translate3d(0, ${direction * (1 - opacity) * 16}px, 0)`;
           chapter.style.pointerEvents = opacity > 0.7 ? "auto" : "none";
+          chapterWasVisible[index] = visible;
         });
         const visualHandoff = gsap.utils.clamp(0, 1, (progress - 0.62) / 0.04);
         if (leftMask.current) {
-          gsap.set(leftMask.current, { opacity: 1 - visualHandoff });
+          leftMask.current.style.opacity = String(1 - visualHandoff);
         }
 
         // Noor exits completely before Meera's authored portrait enters.
@@ -229,68 +236,71 @@ export function RelationalStory() {
         const meeraEntry = rawMeeraEntry * rawMeeraEntry * (3 - 2 * rawMeeraEntry);
         const mobile = window.innerWidth <= 980;
         if (noorLayer.current) {
-          gsap.set(noorLayer.current, {
-            opacity: 1 - noorExit,
-            visibility: noorExit < 0.998 ? "visible" : "hidden",
-          });
+          noorLayer.current.style.opacity = String(1 - noorExit);
+          noorLayer.current.style.visibility =
+            noorExit < 0.998 ? "visible" : "hidden";
         }
         if (paperBridge.current) {
-          gsap.set(paperBridge.current, {
-            opacity: paperEntry,
-            visibility: paperEntry > 0.002 ? "visible" : "hidden",
-          });
+          paperBridge.current.style.opacity = String(paperEntry);
+          paperBridge.current.style.visibility =
+            paperEntry > 0.002 ? "visible" : "hidden";
         }
         if (meeraLayer.current) {
-          gsap.set(meeraLayer.current, {
-            visibility: progress >= 0.705 ? "visible" : "hidden",
-          });
+          meeraLayer.current.style.visibility =
+            progress >= 0.705 ? "visible" : "hidden";
         }
         if (meeraFrame.current) {
-          gsap.set(meeraFrame.current, {
-            transform: mobile
-              ? `translate3d(0, ${-(1 - meeraEntry) * 101}%, 0)`
-              : `translate3d(${-(1 - meeraEntry) * 101}%, 0, 0)`,
-          });
+          meeraFrame.current.style.transform = mobile
+            ? `translate3d(0, ${-(1 - meeraEntry) * 101}%, 0)`
+            : `translate3d(${-(1 - meeraEntry) * 101}%, 0, 0)`;
         }
         if (meeraMedia.current) {
-          gsap.set(meeraMedia.current, {
-            transform: mobile
-              ? `translate3d(0, ${(1 - meeraEntry) * 101}%, 0)`
-              : `translate3d(${(1 - meeraEntry) * 101}%, 0, 0)`,
-          });
+          meeraMedia.current.style.transform = mobile
+            ? `translate3d(0, ${(1 - meeraEntry) * 101}%, 0)`
+            : `translate3d(${(1 - meeraEntry) * 101}%, 0, 0)`;
         }
       };
       const touchLayout = window.matchMedia(
         "(max-width: 980px), (hover: none), (pointer: coarse)",
       ).matches;
-      const progress = { value: 0 };
       let trigger: ScrollTrigger | null = null;
-      const tween = gsap.to(progress, {
-        value: 0.99999,
-        ease: "none",
-        onUpdate: () => update(progress.value, trigger?.getVelocity() ?? 0),
-      });
-
-      trigger = ScrollTrigger.create({
+      let tween: gsap.core.Tween | null = null;
+      const triggerConfig: ScrollTrigger.Vars = {
         trigger: runway.current,
         start: "top top",
         end: "bottom bottom",
-        animation: tween,
-        // Touch scrolling advances in larger bursts than a wheel. A short,
-        // interruptible catch-up keeps the visual sequence continuous.
-        // Desktop already receives smoothing from Lenis, so it stays 1:1.
-        scrub: touchLayout ? 0.24 : true,
         invalidateOnRefresh: true,
         onToggle: (self) => {
           noorRuntime.current.active = self.isActive;
           noorRuntime.current.invalidate?.();
         },
-      });
+      };
+
+      if (touchLayout) {
+        // Native touch scrolling already supplies momentum. A second scrub
+        // tween makes the scene trail the finger and continue after release.
+        trigger = ScrollTrigger.create({
+          ...triggerConfig,
+          onUpdate: (self) => update(self.progress, self.getVelocity()),
+        });
+      } else {
+        const progress = { value: 0 };
+        tween = gsap.to(progress, {
+          value: 0.99999,
+          ease: "none",
+          onUpdate: () => update(progress.value, trigger?.getVelocity() ?? 0),
+        });
+        trigger = ScrollTrigger.create({
+          ...triggerConfig,
+          animation: tween,
+          scrub: true,
+        });
+      }
 
       update(trigger.progress, 0);
       return () => {
         trigger?.kill();
-        tween.kill();
+        tween?.kill();
       };
     },
     { scope: root, dependencies: [motionEnabled] },

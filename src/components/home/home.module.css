@@ -13,6 +13,7 @@
   top: 0;
   height: 100svh;
   min-height: 100svh;
+  contain: paint;
   overflow: hidden;
   background:
     radial-gradient(circle at 73% 43%, rgb(211 63 44 / 8%), transparent 30%),
@@ -171,7 +172,6 @@
   width: min(47rem, 50vw);
   transform: translate3d(0, 0, 0);
   pointer-events: none;
-  will-change: transform, opacity;
 }
 
 .chapterLeft {

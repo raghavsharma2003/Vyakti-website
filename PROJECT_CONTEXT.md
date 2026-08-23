@@ -282,6 +282,13 @@ These are planning hypotheses from the strategy discussion, not public commitmen
 
 ## Decision log
 
+### 2026-08-24
+
+- Removed numeric GSAP scrub from the touch layout. Native mobile momentum now drives story progress directly, so the face no longer trails the finger or keeps catching up after a swipe.
+- Kept desktop Lenis and ScrollTrigger synchronized through the existing linear scrub path; the mobile change does not alter desktop motion.
+- Reduced compact-canvas particles from 7,000 to 4,800, capped canvas DPR at 1.25 and compact point DPR at 1, stopped rewriting already-hidden chapters, and isolated sticky-stage painting.
+- Configured ScrollTrigger to ignore small mobile browser-chrome resizes during an active swipe while still refreshing for meaningful layout and orientation changes.
+
 ### 2026-08-22
 
 - Rebuilt the homepage story clock around one GSAP progress proxy. Touch devices use a restrained scrub buffer while desktop remains synchronized with Lenis, preventing fast mobile flicks from skipping the face formation, diffusion, and Meera handoff.
