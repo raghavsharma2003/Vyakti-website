@@ -6,8 +6,8 @@ import { useEffect, useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { MeeraPortrait } from "@/components/meera";
 import { Cta } from "@/components/ui/cta";
+import { APPLY_LABEL, APPLY_MAILTO } from "@/lib/site";
 import { createStoryRuntime } from "./story-runtime";
 import styles from "./home.module.css";
 
@@ -23,50 +23,43 @@ if (typeof window !== "undefined") {
   ScrollTrigger.config({ ignoreMobileResize: true });
 }
 
+/**
+ * The canvas beats are authored in a fixed story space: formation ends at
+ * 0.255, the look and blink sit around 0.29 to 0.36, speech runs 0.405 to
+ * 0.535, and the release into signal completes at 0.655. The runway used to
+ * carry a second identity after that release, so scroll progress mapped
+ * straight through. It no longer does, so scroll is remapped onto the part of
+ * the story that has a picture in it. Nothing after the release is scrolled
+ * past on an empty stage.
+ */
+const STORY_SPAN = 0.72;
+
 const CHAPTERS = [
   {
     at: 0.025,
-    side: "left",
-    label: "Vyakti is a relational intelligence lab",
-    title: "Intelligence is becoming abundant. Continuity is not.",
-    body: "We research AI identities that remain recognizable as the intelligence beneath them changes.",
+    label: "Vyakti Rooms",
+    title: "One creator. A room for each follower.",
+    body: "An AI version of the creator, and a private, continuing relationship with it for every person who follows them.",
   },
   {
-    at: 0.165,
-    side: "left",
-    title: "A person is a pattern that persists.",
-    body: "State, history, boundaries, memory, change, and expression. One response cannot establish any of them.",
+    at: 0.185,
+    title: "You answer the same forty questions every week.",
+    body: "There are more people asking than there are hours in the week. Most of them get nothing back.",
   },
   {
-    at: 0.31,
-    side: "left",
-    title: "Identity and memory must move together.",
-    body: "The past has to shape what comes next without rewriting who is speaking.",
+    at: 0.4,
+    title: "So you train an apprentice.",
+    body: "You show them your work. They ask. You correct them. Eventually they take the easy meetings alone.",
   },
   {
-    at: 0.455,
-    side: "left",
-    title: "One inner state. Every signal.",
-    body: "Voice, gaze, timing, reaction, and context should agree.",
+    at: 0.6,
+    title: "Then it answers in your place.",
+    body: "It has to sound like you, and you have to be able to check that it does before anyone hears it.",
   },
   {
-    at: 0.595,
-    side: "left",
-    title: "The engine can change. The person should remain.",
-    body: "Better models should make Meera more capable, not make her someone else.",
-  },
-  {
-    at: 0.765,
-    side: "right",
-    label: "Meet Meera",
-    title: "You do not configure Meera. You meet her.",
-    body: "One AI person in development, designed around stable identity, selective memory, and shared context.",
-  },
-  {
-    at: 0.925,
-    side: "right",
-    title: "The more human AI feels, the clearer its boundaries must be.",
-    body: "Presence without impersonation. Connection without capture.",
+    at: 0.8,
+    title: "Thousands of conversations at once.",
+    body: "Each one is private. What a follower says stays in their room, and no other follower ever learns they were there.",
   },
 ] as const;
 
@@ -133,11 +126,6 @@ export function RelationalStory() {
   const runway = useRef<HTMLDivElement>(null);
   const stage = useRef<HTMLDivElement>(null);
   const noorLayer = useRef<HTMLDivElement>(null);
-  const paperBridge = useRef<HTMLDivElement>(null);
-  const meeraLayer = useRef<HTMLDivElement>(null);
-  const meeraFrame = useRef<HTMLDivElement>(null);
-  const meeraMedia = useRef<HTMLDivElement>(null);
-  const leftMask = useRef<HTMLDivElement>(null);
   const noorRuntime = useRef(createStoryRuntime());
   const [webgl, setWebgl] = useState<boolean | null>(null);
   const [reduced, setReduced] = useState(false);
@@ -205,8 +193,8 @@ export function RelationalStory() {
       );
       const chapterWasVisible: Array<boolean | null> = chapters.map(() => null);
       const update = (progressValue: number, velocity: number) => {
-        const progress = THREEClamp(progressValue);
-        noorRuntime.current.progress = progress;
+        const progress = clampProgress(progressValue);
+        noorRuntime.current.progress = progress * STORY_SPAN;
         noorRuntime.current.scrollVelocity = velocity;
         noorRuntime.current.invalidate?.();
         chapters.forEach((chapter, index) => {
@@ -220,44 +208,16 @@ export function RelationalStory() {
           chapter.style.pointerEvents = opacity > 0.7 ? "auto" : "none";
           chapterWasVisible[index] = visible;
         });
-        const visualHandoff = gsap.utils.clamp(0, 1, (progress - 0.62) / 0.04);
-        if (leftMask.current) {
-          leftMask.current.style.opacity = String(1 - visualHandoff);
-        }
 
-        // Noor exits completely before Meera's authored portrait enters.
-        // The clear-paper interval keeps the lab identity and product identity
-        // spatially separate instead of implying a transformation.
-        const rawNoorExit = gsap.utils.clamp(0, 1, (progress - 0.625) / 0.04);
-        const noorExit = rawNoorExit * rawNoorExit * (3 - 2 * rawNoorExit);
-        const rawPaperEntry = gsap.utils.clamp(0, 1, (progress - 0.638) / 0.027);
-        const paperEntry = rawPaperEntry * rawPaperEntry * (3 - 2 * rawPaperEntry);
-        const rawMeeraEntry = gsap.utils.clamp(0, 1, (progress - 0.705) / 0.085);
-        const meeraEntry = rawMeeraEntry * rawMeeraEntry * (3 - 2 * rawMeeraEntry);
-        const mobile = window.innerWidth <= 980;
+        // The identity releases back into signal over the last chapter. Fading
+        // the layer out with it keeps the empty paper at the end of the runway
+        // clean rather than holding a few stray points on screen.
+        const raw = gsap.utils.clamp(0, 1, (progress - 0.9) / 0.09);
+        const release = raw * raw * (3 - 2 * raw);
         if (noorLayer.current) {
-          noorLayer.current.style.opacity = String(1 - noorExit);
+          noorLayer.current.style.opacity = String(1 - release);
           noorLayer.current.style.visibility =
-            noorExit < 0.998 ? "visible" : "hidden";
-        }
-        if (paperBridge.current) {
-          paperBridge.current.style.opacity = String(paperEntry);
-          paperBridge.current.style.visibility =
-            paperEntry > 0.002 ? "visible" : "hidden";
-        }
-        if (meeraLayer.current) {
-          meeraLayer.current.style.visibility =
-            progress >= 0.705 ? "visible" : "hidden";
-        }
-        if (meeraFrame.current) {
-          meeraFrame.current.style.transform = mobile
-            ? `translate3d(0, ${-(1 - meeraEntry) * 101}%, 0)`
-            : `translate3d(${-(1 - meeraEntry) * 101}%, 0, 0)`;
-        }
-        if (meeraMedia.current) {
-          meeraMedia.current.style.transform = mobile
-            ? `translate3d(0, ${(1 - meeraEntry) * 101}%, 0)`
-            : `translate3d(${(1 - meeraEntry) * 101}%, 0, 0)`;
+            release < 0.998 ? "visible" : "hidden";
         }
       };
       const touchLayout = window.matchMedia(
@@ -345,31 +305,8 @@ export function RelationalStory() {
                 </div>
               ) : null}
             </div>
-            <div
-              ref={paperBridge}
-              className={styles.storyPaperBridge}
-              style={{ opacity: 0, visibility: "hidden" }}
-            />
-            <div
-              ref={meeraLayer}
-              className={styles.meeraPhotoLayer}
-              style={{ visibility: "hidden" }}
-            >
-              <div ref={meeraFrame} className={styles.meeraPhotoFrame}>
-                <div ref={meeraMedia} className={styles.meeraPhotoMedia}>
-                  <Image
-                    src="/images/meera-portrait-v1.webp"
-                    alt=""
-                    fill
-                    loading="lazy"
-                    sizes="(min-width: 981px) 58vw, 100vw"
-                    className={styles.meeraPhotoImage}
-                  />
-                </div>
-              </div>
-            </div>
           </div>
-          <div ref={leftMask} className={styles.leftReadingMask} aria-hidden="true" />
+          <div className={styles.leftReadingMask} aria-hidden="true" />
 
           <div className={styles.chapterLayer}>
             {CHAPTERS.map((chapter, index) => {
@@ -381,20 +318,13 @@ export function RelationalStory() {
                   aria-hidden={motionEnabled && index > 0 ? true : undefined}
                   className={[
                     styles.chapter,
-                    chapter.side === "right" ? styles.chapterRight : styles.chapterLeft,
+                    styles.chapterLeft,
                     index === 0 ? styles.heroChapter : "",
                   ].join(" ")}
                   style={{ opacity: index === 0 ? 1 : 0 }}
                 >
                   {"label" in chapter && chapter.label ? (
-                    <p
-                      className={[
-                        styles.chapterLabel,
-                        index === 5 ? styles.meeraLabel : "",
-                      ].join(" ")}
-                    >
-                      {chapter.label}
-                    </p>
+                    <p className={styles.chapterLabel}>{chapter.label}</p>
                   ) : null}
                   {fallback && index === 0 ? (
                     <figure className={[styles.fallbackPortrait, styles.fallbackNoor].join(" ")}>
@@ -406,47 +336,25 @@ export function RelationalStory() {
                       />
                     </figure>
                   ) : null}
-                  {fallback && index === 5 ? (
-                    <figure className={[styles.fallbackPortrait, styles.fallbackMeera].join(" ")}>
-                      <MeeraPortrait sizes="(max-width: 760px) 92vw, 42vw" />
-                    </figure>
-                  ) : null}
                   <Heading id={index === 0 ? "home-title" : undefined}>
                     {index === 0 ? (
                       <>
-                        <span>Intelligence is becoming abundant.</span>
-                        <span className={styles.signalText}>Continuity is not.</span>
-                      </>
-                    ) : index === 5 ? (
-                      <>
-                        You do not configure <span className={styles.meeraWord}>Meera</span>.
-                        You meet her.
+                        <span>One creator.</span>
+                        <span className={styles.signalText}>
+                          A room for each follower.
+                        </span>
                       </>
                     ) : (
                       chapter.title
                     )}
                   </Heading>
-                  <p className={styles.chapterBody}>
-                    {index === 4 ? (
-                      <>
-                        Better models should make <span className={styles.meeraWord}>Meera</span>{" "}
-                        more capable, not make her someone else.
-                      </>
-                    ) : (
-                      chapter.body
-                    )}
-                  </p>
+                  <p className={styles.chapterBody}>{chapter.body}</p>
                   {index === 0 ? (
                     <div className={styles.chapterActions}>
-                      <Cta href="/meera">Meet Meera</Cta>
-                      <Cta href="/research" variant="secondary">
-                        Explore the research
+                      <Cta href={APPLY_MAILTO}>{APPLY_LABEL}</Cta>
+                      <Cta href="/#rooms" variant="secondary">
+                        How it works
                       </Cta>
-                    </div>
-                  ) : null}
-                  {index === CHAPTERS.length - 1 ? (
-                    <div className={styles.chapterActions}>
-                      <Cta href="/meera#access">Request early access</Cta>
                     </div>
                   ) : null}
                 </article>
@@ -468,7 +376,7 @@ export function RelationalStory() {
   );
 }
 
-function THREEClamp(value: number) {
+function clampProgress(value: number) {
   return Math.min(0.99999, Math.max(0, value));
 }
 
