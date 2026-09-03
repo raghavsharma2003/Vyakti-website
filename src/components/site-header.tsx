@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { NAV } from "@/lib/site";
+import { APPLY_LABEL, APPLY_MAILTO, NAV } from "@/lib/site";
 import { VyaktiLogo } from "@/components/vyakti-logo";
 
 const FOCUSABLE =
@@ -123,10 +123,10 @@ export function SiteHeader() {
 
           <div className="flex items-center gap-2">
             <Link
-              href="/meera#access"
+              href={APPLY_MAILTO}
               className="hidden rounded-full border border-bone px-4 py-2 text-small font-medium text-bone transition-[background-color,color,transform] duration-[var(--duration-fast)] hover:bg-bone hover:text-ink active:scale-[0.98] sm:inline-flex"
             >
-              Meet Meera
+              {APPLY_LABEL}
             </Link>
             <button
               ref={menuButton}
@@ -176,11 +176,11 @@ export function SiteHeader() {
               </Link>
             ))}
             <Link
-              href="/meera#access"
+              href={APPLY_MAILTO}
               onClick={closeMenu}
               className="mt-6 rounded-full bg-ember px-5 py-3 text-center text-small font-medium text-on-ember"
             >
-              Meet Meera
+              {APPLY_LABEL}
             </Link>
           </nav>
         </div>

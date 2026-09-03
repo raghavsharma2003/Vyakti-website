@@ -14,8 +14,9 @@ export function SiteFooter() {
               wordmarkClassName="text-h3 font-medium text-bone"
             />
             <p className="mt-4 text-small leading-relaxed text-ash">
-              A relational intelligence lab studying how an AI identity can
-              build shared context and remain recognizably itself over time.
+              Vyakti builds Rooms. A creator makes an AI version of themselves,
+              and every follower gets a private, continuing relationship with
+              it.
             </p>
             <a href={`mailto:${SITE.email}`} className="mt-6 inline-block text-small text-ash underline decoration-hairline underline-offset-4 transition-colors hover:text-ember">{SITE.email}</a>
           </div>
