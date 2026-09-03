@@ -5,7 +5,7 @@
 
 .storyRunway {
   position: relative;
-  height: 640svh;
+  height: 540svh;
 }
 
 .storyStage {
@@ -93,56 +93,11 @@
   }
 }
 
-.storyPaperBridge {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  background: var(--color-ink);
-  pointer-events: none;
-  will-change: opacity;
-}
-
-.meeraPhotoLayer {
-  position: absolute;
-  inset: 0;
-  z-index: 3;
-  overflow: hidden;
-  pointer-events: none;
-}
-
-.meeraPhotoFrame {
-  position: relative;
-  top: 4.25rem;
-  width: min(58vw, 1100px);
-  height: calc(100% - 4.25rem);
-  overflow: hidden;
-  background: #ebe9e4;
-  transform: translate3d(-101%, 0, 0);
-  will-change: transform;
-}
-
-.meeraPhotoMedia {
-  position: absolute;
-  inset: 0;
-  transform: translate3d(101%, 0, 0);
-  will-change: transform;
-}
-
-.meeraPhotoImage {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  object-position: 50% 50%;
-}
-
 .leftReadingMask {
   position: absolute;
   inset: 0;
   z-index: 2;
   pointer-events: none;
-}
-
-.leftReadingMask {
   background: linear-gradient(
     90deg,
     var(--color-ink) 0%,
@@ -176,11 +131,6 @@
 
 .chapterLeft {
   left: clamp(1.25rem, 4vw, 4.5rem);
-}
-
-.chapterRight {
-  right: clamp(1.25rem, 4vw, 4.5rem);
-  width: min(31vw, 29rem);
 }
 
 .chapterLabel {
@@ -222,10 +172,7 @@
   color: var(--color-ember);
 }
 
-.meeraWord,
-.meeraLabel,
-.chapter h2 .meeraWord,
-.continuityOutput .meeraWord {
+.meeraWord {
   color: var(--color-meera);
 }
 
@@ -292,10 +239,6 @@
   will-change: auto;
 }
 
-.storyFallback .chapterRight {
-  margin-left: auto;
-}
-
 .storyFallback .fallbackPortrait {
   position: relative;
   display: block;
@@ -320,26 +263,16 @@
   mix-blend-mode: multiply;
 }
 
-.fallbackMeera {
-  background: #ebe9e4;
-}
+/* Page chapters below the pinned story. */
 
-.fallbackMeera > * {
-  width: 100%;
-  height: 100%;
-}
-
-.thesisSection,
-.researchSection,
-.evidenceSection,
-.principlesSection {
+.roomsSection,
+.mechanismSection,
+.boundarySection,
+.principlesSection,
+.proofSection,
+.applySection {
   position: relative;
   border-top: 1px solid var(--color-hairline);
-}
-
-.thesisSection {
-  padding-block: clamp(7rem, 14vw, 13rem);
-  background: var(--color-void);
 }
 
 .sectionLead {
@@ -360,127 +293,146 @@
   letter-spacing: -0.018em;
 }
 
-.continuityMap {
-  display: grid;
-  margin-top: clamp(4.5rem, 9vw, 8rem);
-  border-top: 1px solid var(--color-bone);
-  border-bottom: 1px solid var(--color-bone);
-  grid-template-columns: minmax(0, 0.82fr) 3rem minmax(0, 1.2fr) 3rem minmax(0, 0.72fr);
-  align-items: stretch;
+/* Rooms: the one line, then the two people it is for. */
+
+.roomsSection {
+  padding-block: clamp(7rem, 14vw, 13rem);
+  background: var(--color-void);
 }
 
-.continuityNode {
-  min-height: 25rem;
-  padding: clamp(1.5rem, 3vw, 3rem);
+.roomsSection .sectionLead {
+  max-width: 16ch;
 }
 
-.continuityNode small {
-  display: block;
-  color: var(--color-slate);
-  font-size: 0.78rem;
-}
-
-.continuityNode h3 {
-  max-width: 10ch;
-  margin-top: 1.5rem;
-  font-size: clamp(2rem, 3vw, 4rem);
-  line-height: 0.98;
-}
-
-.continuityNode ul {
-  margin-top: 3rem;
-  color: var(--color-ash);
-  font-size: clamp(0.95rem, 0.9rem + 0.18vw, 1.08rem);
-  line-height: 1.85;
-}
-
-.continuityCore {
-  background: var(--color-ember);
-  color: var(--color-on-ember);
-}
-
-.continuityCore small,
-.continuityCore ul {
-  color: color-mix(in oklab, var(--color-on-ember) 72%, transparent);
-}
-
-.continuityArrow {
-  display: grid;
-  min-width: 3rem;
-  place-items: center;
+.roomsAnswer {
+  max-width: 26ch;
+  margin-top: clamp(1.5rem, 3vw, 2.6rem);
+  margin-left: auto;
   color: var(--color-ember);
-  font-size: 1.6rem;
+  font-size: clamp(1.6rem, 3.1vw, 3.6rem);
+  font-weight: 540;
+  line-height: 1.02;
+  letter-spacing: -0.045em;
+  text-align: right;
 }
 
-.continuityOutput {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+.audienceSplit {
+  display: grid;
+  margin-top: clamp(5rem, 10vw, 9rem);
+  border-top: 1px solid var(--color-bone);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
-.continuityOutput strong {
+.audience {
+  padding: clamp(1.75rem, 3vw, 3rem) clamp(1.5rem, 3vw, 3.5rem) clamp(2.5rem, 4vw, 4rem) 0;
+}
+
+.audience + .audience {
+  padding-right: 0;
+  padding-left: clamp(1.5rem, 3vw, 3.5rem);
+  border-left: 1px solid var(--color-hairline);
+}
+
+.audience h3 {
   color: var(--color-bone);
-  font-size: clamp(2.4rem, 4vw, 5rem);
-  font-weight: 560;
-  line-height: 0.9;
-  letter-spacing: -0.065em;
+  font-size: clamp(1.5rem, 1.15rem + 1.1vw, 2.4rem);
 }
 
-.continuityMap figcaption {
-  grid-column: 1 / -1;
-  padding: 1rem 0;
-  color: var(--color-slate);
-  font-size: 0.78rem;
+.audience p {
+  max-width: 40ch;
+  margin-top: 1.4rem;
+  color: var(--color-ash);
+  font-size: clamp(1rem, 0.94rem + 0.26vw, 1.18rem);
+  line-height: 1.6;
 }
 
-.researchSection {
+.readiness {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1.1rem;
+  align-items: baseline;
+  margin-top: 2.4rem;
+  padding-top: 1.2rem;
+  border-top: 1px solid var(--color-hairline);
+}
+
+.readiness strong {
+  color: var(--color-ember);
+  font-family: var(--font-mono);
+  font-size: var(--text-eyebrow);
+  font-weight: 550;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.readiness span {
+  color: var(--color-bone);
+  font-size: 1.05rem;
+  letter-spacing: -0.02em;
+}
+
+/* What makes it not a chatbot with a face. */
+
+.mechanismSection {
   padding-block: clamp(7rem, 13vw, 12rem);
   background: var(--color-ink);
 }
 
-.researchHeader {
-  max-width: 64rem;
+.mechanismHeader {
+  display: grid;
+  gap: 2rem clamp(2rem, 6vw, 6rem);
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 0.8fr);
+  align-items: end;
 }
 
-.researchGrid {
+.statusNote {
+  max-width: 34ch;
+  padding-left: 1.1rem;
+  border-left: 2px solid var(--color-ember);
+  color: var(--color-ash);
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+
+.mechanismGrid {
   display: grid;
   margin-top: clamp(4rem, 8vw, 7rem);
   border-top: 1px solid var(--color-bone);
   grid-template-columns: repeat(12, minmax(0, 1fr));
 }
 
-.researchItem {
+.mechanismItem {
   min-height: 22rem;
   padding: clamp(1.6rem, 3.5vw, 3.6rem);
   border-bottom: 1px solid var(--color-hairline);
 }
 
-.researchItem:nth-child(1) {
+.mechanismItem:nth-child(1) {
   grid-column: span 7;
   border-right: 1px solid var(--color-hairline);
 }
 
-.researchItem:nth-child(2) {
+.mechanismItem:nth-child(2) {
   grid-column: span 5;
 }
 
-.researchItem:nth-child(3) {
+.mechanismItem:nth-child(3) {
   grid-column: span 5;
   border-right: 1px solid var(--color-hairline);
 }
 
-.researchItem:nth-child(4) {
+.mechanismItem:nth-child(4) {
   grid-column: span 7;
   background: var(--color-void);
 }
 
-.researchItem h3 {
+.mechanismItem h3 {
   max-width: 12ch;
   font-size: clamp(2rem, 3.2vw, 4.2rem);
   line-height: 0.98;
 }
 
-.researchItem p {
+.mechanismItem p {
   max-width: 38ch;
   margin-top: 1.3rem;
   color: var(--color-ash);
@@ -488,96 +440,176 @@
   line-height: 1.58;
 }
 
-.researchLink {
-  display: inline-flex;
-  margin-top: 2.8rem;
-  border-bottom: 1px solid currentColor;
-  color: var(--color-bone);
-  font-size: 0.9rem;
-  font-weight: 560;
-  transition:
-    color var(--duration-fast) var(--ease-out-quint),
-    border-color var(--duration-fast) var(--ease-out-quint);
-}
+/* The boundary model. */
 
-.evidenceSection {
+.boundarySection {
   padding-block: clamp(7rem, 13vw, 12rem);
   background: var(--color-void);
 }
 
-.evidenceIntro {
-  max-width: 70rem;
+.boundaryFigure {
+  margin-top: clamp(4rem, 8vw, 7rem);
+  border-top: 1px solid var(--color-bone);
 }
 
-.timeHorizon {
+.boundaryTop {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem 2rem;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: clamp(1.5rem, 3vw, 2.4rem) clamp(1.5rem, 3vw, 2.4rem);
+  background: var(--color-ember);
+  color: var(--color-on-ember);
+}
+
+.boundaryTop small {
+  font-family: var(--font-mono);
+  font-size: var(--text-eyebrow);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.boundaryTop p {
+  font-size: clamp(1.15rem, 1rem + 0.7vw, 1.9rem);
+  letter-spacing: -0.03em;
+}
+
+.boundaryDown,
+.boundaryUp {
   position: relative;
   display: grid;
-  margin-top: clamp(4.5rem, 8vw, 7rem);
-  padding-top: 2.2rem;
-  grid-template-columns: repeat(3, 1fr);
+  padding-block: clamp(2rem, 4vw, 3.2rem);
+  place-items: center;
 }
 
-.timeHorizon::before {
+.boundaryDown::before,
+.boundaryUp::before {
   position: absolute;
   top: 0;
-  right: 0;
-  left: 0;
-  height: 2px;
+  bottom: 0;
+  left: 50%;
+  width: 1px;
   content: "";
-  background: linear-gradient(90deg, var(--color-bone), var(--color-ember));
+  background: var(--color-hairline);
 }
 
-.timePoint {
-  position: relative;
-  padding-right: 2rem;
-}
-
-.timePoint::before {
+.boundaryDown::after,
+.boundaryUp::after {
   position: absolute;
-  top: -2.62rem;
-  left: 0;
-  width: 0.85rem;
-  height: 0.85rem;
-  border: 2px solid var(--color-ink);
-  border-radius: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  margin-left: -5px;
+  border-right: 5px solid transparent;
+  border-left: 5px solid transparent;
   content: "";
-  background: var(--color-ember);
 }
 
-.timePoint strong {
-  display: block;
-  font-size: clamp(1.4rem, 2.3vw, 2.8rem);
-  font-weight: 540;
-  letter-spacing: -0.04em;
+.boundaryDown::after {
+  bottom: 0;
+  border-top: 7px solid var(--color-ember);
 }
 
-.timePoint span {
+.boundaryUp::after {
+  top: 0;
+  border-bottom: 7px solid var(--color-slate);
+}
+
+.boundaryDown span,
+.boundaryUp span {
+  position: relative;
+  z-index: 1;
+  padding-inline: 0.9rem;
+  background: var(--color-void);
+  color: var(--color-slate);
+  font-family: var(--font-mono);
+  font-size: var(--text-micro);
+  letter-spacing: 0.05em;
+  text-align: center;
+}
+
+.boundaryRooms {
+  display: grid;
+  border-top: 1px solid var(--color-bone);
+  border-bottom: 1px solid var(--color-bone);
+  grid-template-columns: minmax(0, 1fr) 6.5rem minmax(0, 1fr) 6.5rem minmax(0, 1fr);
+}
+
+.boundaryRoom {
+  padding: clamp(1.4rem, 2.6vw, 2.2rem) clamp(1.2rem, 2vw, 1.8rem);
+}
+
+.boundaryRoom small {
   display: block;
-  max-width: 27ch;
-  margin-top: 0.7rem;
-  color: var(--color-ash);
-  font-size: 0.9rem;
+  color: var(--color-slate);
+  font-family: var(--font-mono);
+  font-size: var(--text-eyebrow);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.boundaryRoom p {
+  max-width: 22ch;
+  margin-top: 1rem;
+  color: var(--color-bone);
+  font-size: clamp(1rem, 0.94rem + 0.24vw, 1.15rem);
+  line-height: 1.45;
+  letter-spacing: -0.02em;
+}
+
+.boundarySeal {
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+
+.boundarySeal::before {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 1px;
+  content: "";
+  background: var(--color-bone);
+}
+
+.boundarySeal span {
+  position: relative;
+  z-index: 1;
+  padding-block: 0.5rem;
+  background: var(--color-void);
+  color: var(--color-slate);
+  font-family: var(--font-mono);
+  font-size: var(--text-eyebrow);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.boundaryFigure figcaption {
+  max-width: 46ch;
+  padding-top: 1.1rem;
+  color: var(--color-slate);
+  font-size: 0.85rem;
   line-height: 1.55;
 }
 
-.evaluationQuestions {
+.boundaryNotes {
   display: grid;
-  margin-top: clamp(5rem, 9vw, 8rem);
-  gap: clamp(2.5rem, 6vw, 6rem);
-  grid-template-columns: 1.2fr 0.8fr;
+  margin-top: clamp(3rem, 6vw, 5rem);
+  gap: 2rem clamp(2rem, 6vw, 6rem);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
-.evaluationQuestions p {
-  max-width: 18ch;
+.boundaryNotes p {
+  max-width: 34ch;
   color: var(--color-bone);
-  font-size: clamp(2rem, 3.6vw, 4.6rem);
-  line-height: 1;
-  letter-spacing: -0.05em;
+  font-size: clamp(1.15rem, 1rem + 0.7vw, 1.75rem);
+  line-height: 1.28;
+  letter-spacing: -0.035em;
 }
 
-.evaluationQuestions p:nth-child(2) {
-  margin-top: clamp(4rem, 9vw, 9rem);
-}
+/* Trust. */
 
 .principlesSection {
   scroll-margin-top: 5rem;
@@ -612,25 +644,123 @@
   line-height: 1.62;
 }
 
-.finalInvite {
-  display: grid;
-  margin-top: clamp(6rem, 11vw, 10rem);
-  padding-top: clamp(3rem, 6vw, 5rem);
-  border-top: 1px solid var(--color-bone);
-  gap: 2rem;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: end;
+/* Meera as the proof of the engine. */
+
+.proofSection {
+  padding-block: clamp(6rem, 12vw, 11rem);
+  background: var(--color-void);
 }
 
-.finalInvite h2 {
-  max-width: 16ch;
-  font-size: clamp(2.7rem, 5vw, 6.2rem);
-  line-height: 0.95;
+.proofSplit {
+  display: grid;
+  gap: clamp(2.5rem, 5vw, 5rem);
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  align-items: center;
+}
+
+.proofCopy h2 {
+  max-width: 14ch;
+  color: var(--color-bone);
+  font-size: clamp(2.2rem, 3.6vw, 4.4rem);
+  line-height: 0.98;
+  letter-spacing: -0.05em;
+}
+
+.proofLinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.6rem;
+  margin-top: 2.4rem;
+}
+
+.textLink {
+  display: inline-flex;
+  border-bottom: 1px solid currentColor;
+  color: var(--color-bone);
+  font-size: 0.9rem;
+  font-weight: 560;
+  transition:
+    color var(--duration-fast) var(--ease-out-quint),
+    border-color var(--duration-fast) var(--ease-out-quint);
+}
+
+.textLink:hover {
+  color: var(--color-ember);
+}
+
+.proofPortrait {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  overflow: hidden;
+  background: #ebe9e4;
+}
+
+.proofPortrait > * {
+  width: 100%;
+  height: 100%;
+}
+
+/* Apply. */
+
+.applySection {
+  scroll-margin-top: 5rem;
+  padding-block: clamp(7rem, 13vw, 12rem);
+  background: var(--color-ink);
+}
+
+.applyQuestions {
+  margin-top: clamp(3.5rem, 7vw, 6rem);
+  border-top: 1px solid var(--color-bone);
+  counter-reset: apply-question;
+  list-style: none;
+}
+
+.applyQuestions li {
+  display: flex;
+  gap: 1.2rem;
+  padding-block: 1.25rem;
+  border-bottom: 1px solid var(--color-hairline);
+  color: var(--color-bone);
+  counter-increment: apply-question;
+  font-size: clamp(1.1rem, 0.98rem + 0.55vw, 1.6rem);
+  letter-spacing: -0.03em;
+}
+
+.applyQuestions li::before {
+  color: var(--color-ember);
+  content: counter(apply-question) ".";
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  line-height: 1.9;
+}
+
+.applyActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem 2.5rem;
+  align-items: center;
+  margin-top: clamp(2.5rem, 5vw, 3.5rem);
+}
+
+.applyActions p {
+  max-width: 44ch;
+  color: var(--color-ash);
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+
+.applyFooter {
+  margin-top: clamp(3rem, 6vw, 4.5rem);
+  padding-top: 1.4rem;
+  border-top: 1px solid var(--color-hairline);
+  color: var(--color-slate);
+  font-size: 0.9rem;
 }
 
 @media (max-width: 980px) {
   .storyRunway {
-    height: 820svh;
+    height: 700svh;
   }
 
   .storyStage {
@@ -645,27 +775,6 @@
     bottom: auto;
     left: 0;
     height: 60%;
-  }
-
-  .meeraPhotoLayer {
-    overflow: hidden;
-  }
-
-  .meeraPhotoFrame {
-    top: 4.25rem;
-    width: min(100%, calc(60svh - 4.25rem));
-    height: auto;
-    margin-inline: auto;
-    aspect-ratio: 1;
-    transform: translate3d(0, -101%, 0);
-  }
-
-  .meeraPhotoMedia {
-    transform: translate3d(0, 101%, 0);
-  }
-
-  .meeraPhotoImage {
-    object-position: 50% 50%;
   }
 
   .initialSignalField::before {
@@ -721,26 +830,25 @@
     margin-top: 1.2rem;
   }
 
-  .continuityMap {
+  .mechanismHeader {
     grid-template-columns: 1fr;
+    align-items: start;
   }
 
-  .continuityNode {
-    min-height: auto;
-    padding-block: 2.5rem;
-  }
-
-  .continuityArrow {
-    min-height: 3.5rem;
-    transform: rotate(90deg);
-  }
-
-  .researchItem:nth-child(n) {
+  .mechanismItem:nth-child(n) {
     grid-column: span 6;
   }
 
-  .researchItem:nth-child(odd) {
+  .mechanismItem:nth-child(odd) {
     border-right: 1px solid var(--color-hairline);
+  }
+
+  .proofSplit {
+    grid-template-columns: 1fr;
+  }
+
+  .proofPortrait {
+    max-width: 32rem;
   }
 }
 
@@ -752,7 +860,7 @@
 
 @media (max-width: 980px) and (orientation: landscape) and (max-height: 700px) {
   .storyRunway {
-    height: 620svh;
+    height: 540svh;
   }
 
   .storyVisual {
@@ -762,11 +870,6 @@
     left: 0;
     width: 52%;
     height: 100%;
-  }
-
-  .meeraPhotoFrame {
-    top: 4.25rem;
-    width: min(100%, calc(100svh - 4.25rem));
   }
 
   .leftReadingMask {
@@ -803,7 +906,7 @@
 
 @media (max-width: 680px) {
   .storyRunway {
-    height: 860svh;
+    height: 720svh;
   }
 
   .chapterLabel {
@@ -833,51 +936,75 @@
     font-size: clamp(2.5rem, 12vw, 4.4rem);
   }
 
-  .researchGrid {
+  .roomsAnswer {
+    max-width: none;
+    margin-left: 0;
+    text-align: left;
+  }
+
+  .audienceSplit {
+    grid-template-columns: 1fr;
+  }
+
+  .audience {
+    padding-right: 0;
+    padding-bottom: 2.5rem;
+  }
+
+  .audience + .audience {
+    padding-top: 2.5rem;
+    padding-left: 0;
+    border-top: 1px solid var(--color-hairline);
+    border-left: 0;
+  }
+
+  .mechanismGrid {
     display: block;
   }
 
-  .researchItem:nth-child(n) {
+  .mechanismItem:nth-child(n) {
     min-height: auto;
     padding-block: 3rem;
+    padding-inline: 0;
     border-right: 0;
   }
 
-  .timeHorizon {
-    gap: 2.6rem;
+  .boundaryRooms {
     grid-template-columns: 1fr;
   }
 
-  .timeHorizon::before {
-    top: 0;
-    bottom: 0;
+  .boundaryRoom {
+    padding-inline: 0;
+  }
+
+  .boundarySeal {
+    padding-block: 0.9rem;
+  }
+
+  .boundarySeal::before {
+    top: 50%;
+    right: 0;
+    bottom: auto;
     left: 0;
-    width: 2px;
-    height: auto;
-    background: linear-gradient(180deg, var(--color-bone), var(--color-ember));
+    width: auto;
+    height: 1px;
   }
 
-  .timePoint {
-    padding-left: 2rem;
+  .boundarySeal span {
+    padding-block: 0;
+    padding-inline: 0.8rem;
   }
 
-  .timePoint::before {
-    top: 0.3rem;
-    left: -0.34rem;
-  }
-
-  .evaluationQuestions {
+  .boundaryNotes {
     grid-template-columns: 1fr;
   }
 
-  .evaluationQuestions p:nth-child(2) {
-    margin-top: 0;
-    margin-left: 12%;
+  .principle {
+    grid-template-columns: 1fr;
   }
 
-  .principle,
-  .finalInvite {
-    grid-template-columns: 1fr;
+  .applyQuestions li {
+    gap: 0.9rem;
   }
 }
 
@@ -922,10 +1049,6 @@
     transform: none !important;
     pointer-events: auto !important;
     will-change: auto;
-  }
-
-  .chapterRight {
-    margin-left: auto;
   }
 
   .fallbackPortrait {

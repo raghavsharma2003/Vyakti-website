@@ -22,7 +22,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     })),
   ];
 
-  const lastModified = new Date("2026-08-18T00:00:00.000Z");
+  const lastModified = new Date("2026-09-03T00:00:00.000Z");
 
   return routes.map(({ path, priority, changeFrequency }) => ({
     url: `${SITE.url}${path}`,

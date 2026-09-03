@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 
 export const alt =
-  "Vyakti, a relational intelligence lab";
+  "Vyakti Rooms, one creator and a private room for every follower";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -57,7 +57,7 @@ export default function OpengraphImage() {
               two-tone headline is built as two single-text rows. */}
           <div
             style={{
-              fontSize: 74,
+              fontSize: 72,
               lineHeight: 1.08,
               fontWeight: 500,
               letterSpacing: "-0.038em",
@@ -65,11 +65,11 @@ export default function OpengraphImage() {
               maxWidth: 960,
             }}
           >
-            Intelligence is becoming abundant.
+            One creator.
           </div>
           <div
             style={{
-              fontSize: 74,
+              fontSize: 72,
               lineHeight: 1.08,
               fontWeight: 500,
               letterSpacing: "-0.038em",
@@ -77,7 +77,7 @@ export default function OpengraphImage() {
               maxWidth: 960,
             }}
           >
-            Continuity is not.
+            A room for each follower.
           </div>
           <div
             style={{
@@ -85,9 +85,10 @@ export default function OpengraphImage() {
               fontSize: 27,
               color: "#55564F",
               letterSpacing: "-0.01em",
+              maxWidth: 900,
             }}
           >
-            A relational intelligence lab. Meera is our first product in development.
+            An AI version of the creator, and a private, continuing relationship with it.
           </div>
         </div>
       </div>

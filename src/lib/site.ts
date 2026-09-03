@@ -2,45 +2,72 @@ export const SITE = {
   name: "Vyakti",
   domain: "vyakti.ai",
   url: "https://vyakti.ai",
-  tagline: "A relational intelligence lab.",
+  tagline: "One creator. A private room for every follower.",
   description:
-    "Vyakti researches AI identities that build shared context over time and remain recognizable as the models beneath them change. Meera is our first product in development.",
+    "Vyakti Rooms gives a creator an AI version of themselves, and gives every follower a private, continuing relationship with it. A hand-built first phase, one creator at a time.",
   locale: "en_US",
   twitter: "@vyakti_ai",
   email: "hello@vyakti.ai",
   careers: "careers@vyakti.ai",
 } as const;
 
+/**
+ * The application ask is three questions, and this repository has no backend.
+ * A prefilled mailto keeps the ask honest instead of implying a pipeline that
+ * does not exist yet. Kept here so the header, hero, and apply section cannot
+ * drift apart.
+ */
+export const APPLY_QUESTIONS = [
+  "Where your audience is",
+  "How many of them already pay you for something",
+  "A link to your longest published work",
+] as const;
+
+export const APPLY_LABEL = "Apply for a Room";
+
+export const APPLY_MAILTO = `mailto:${SITE.email}?subject=${encodeURIComponent(
+  "Apply for one of the first Rooms",
+)}&body=${encodeURIComponent(
+  [
+    "1. Where your audience is:",
+    "",
+    "2. How many of them already pay you for something:",
+    "",
+    "3. A link to your longest published work:",
+    "",
+  ].join("\n"),
+)}`;
+
 export const NAV = [
+  { label: "Rooms", href: "/#rooms" },
   { label: "Research", href: "/research" },
   { label: "Meera", href: "/meera" },
-  { label: "Principles", href: "/#principles" },
   { label: "Company", href: "/company" },
 ] as const;
 
 export const FOOTER_GROUPS = [
   {
-    title: "Explore",
+    title: "Rooms",
     links: [
-      { label: "Research", href: "/research" },
-      { label: "Papers", href: "/research#papers" },
-      { label: "Release", href: "/research/releases/vyakti-judge-qual" },
-      { label: "Meera", href: "/meera" },
-      { label: "Principles", href: "/#principles" },
+      { label: "What it is", href: "/#rooms" },
+      { label: "The boundaries", href: "/#boundaries" },
+      { label: "Trust", href: "/#principles" },
+      { label: "Apply", href: "/#apply" },
     ],
   },
   {
     title: "Lab",
     links: [
+      { label: "Research", href: "/research" },
+      { label: "Papers", href: "/research#papers" },
+      { label: "Meera", href: "/meera" },
       { label: "Company", href: "/company" },
-      { label: "Careers", href: "/company#careers" },
-      { label: "Contact", href: "/company#contact" },
     ],
   },
   {
     title: "Connect",
     links: [
-      { label: "Request access", href: "/meera#access" },
+      { label: "Careers", href: "/company#careers" },
       { label: "Email the lab", href: "mailto:hello@vyakti.ai" },
     ],
   },

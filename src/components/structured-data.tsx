@@ -19,10 +19,10 @@ export function StructuredData() {
         slogan: SITE.tagline,
         knowsAbout: [
           "Relational artificial intelligence",
-          "Identity continuity",
+          "Identity fidelity evaluation",
           "Long-term memory systems",
-          "Multimodal interaction",
-          "Conversational turn-taking",
+          "Private-scope conversation architecture",
+          "Synthetic voice disclosure and watermarking",
         ],
       },
       {
@@ -36,12 +36,12 @@ export function StructuredData() {
       },
       {
         "@type": "SoftwareApplication",
-        "@id": `${SITE.url}/meera#software`,
-        name: "Meera",
+        "@id": `${SITE.url}/#rooms`,
+        name: "Vyakti Rooms",
         applicationCategory: "Conversational AI",
         description:
-          "Vyakti's first product in development: a text and voice AI companion designed around stable identity, selective memory and user-controlled shared context.",
-        url: `${SITE.url}/meera`,
+          "A creator builds an AI version of themselves, and every follower gets a private, continuing relationship with it. In a hand-built first phase, one creator at a time.",
+        url: `${SITE.url}/#rooms`,
         publisher: { "@id": `${SITE.url}/#organization` },
       },
     ],
