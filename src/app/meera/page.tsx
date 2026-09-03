@@ -1,45 +1,45 @@
 import type { Metadata } from "next";
 import { MeeraPortrait } from "@/components/meera";
 import { Cta } from "@/components/ui/cta";
-import { SITE } from "@/lib/site";
+import { APPLY_LABEL, APPLY_MAILTO } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Meera",
   description:
-    "Meera is Vyakti's first consumer product in development: an AI companion designed around identity continuity, shared history and multimodal expression.",
+    "Meera is the first proof of the relational engine behind Vyakti Rooms: one AI person, built and measured on identity that holds, memory with provenance, and privacy enforced before retrieval.",
   alternates: { canonical: "/meera" },
   openGraph: {
-    title: "Meera, by Vyakti",
+    title: "Meera, the first proof of the engine",
     description:
-      "An AI companion in development, designed to build shared context over time while remaining clearly AI.",
+      "The relational engine behind Vyakti Rooms was built and measured on one AI person first.",
     url: "/meera",
   },
 };
 
-const CAPABILITIES = [
+const PROVEN = [
   {
-    t: "Conversation that breathes",
-    d: "We are building voice around turn prediction, interruption and comfortable silence, so talking can feel fluid instead of request and response.",
+    t: "Identity that holds its shape",
+    d: "An authored identity with executable invariants, so the same person survives a long conversation rather than drifting into whatever the last few turns implied.",
   },
   {
-    t: "A shared history",
-    d: "The aim is memory with judgement: what mattered can shape the next conversation, without turning every personal detail into permanent storage.",
+    t: "Memory with provenance",
+    d: "Episodes are cited and beliefs carry validity in time, which is what lets a system say what it used to think without pretending it always thought that.",
   },
   {
-    t: "Context she can see",
-    d: "When you choose to share a view, an object or an expression, vision should become part of the same conversation rather than a separate feature.",
+    t: "Forgetting that means it",
+    d: "A request to forget is a hard deletion with defence against re-deriving what was deleted, not a flag that hides a row from one view.",
   },
   {
-    t: "Expression that agrees",
-    d: "Voice, words, timing, gaze and facial response should express one underlying state, without the seams between models showing through.",
+    t: "Privacy before retrieval",
+    d: "Disclosure is filtered where memory is read, not asked for in a prompt. That is the mechanism a Room needs to hold thousands of separate confidences.",
   },
   {
-    t: "A recognisable identity",
-    d: "A point of view, tastes, humour, boundaries and contradictions that remain coherent while leaving room for genuine change.",
+    t: "Register that stays hers",
+    d: "Hindi, Hinglish and English in one voice, with the code-switching, timing and restraint that make the register belong to a person instead of a translation layer.",
   },
   {
-    t: "Clearly AI",
-    d: "Presence should not depend on deception. Meera will identify as AI and communicate uncertainty, memory limits and perceptual boundaries plainly.",
+    t: "Gates that block a release",
+    d: "Safety, honesty, prompt budget and audio floor are deterministic checks that fail a build outright. The fidelity battery in Rooms is being built from the same idea.",
   },
 ];
 
@@ -50,18 +50,19 @@ export default function MeeraPage() {
       <section className="relative border-b border-hairline bg-ink pt-28 pb-16 md:pt-32 md:pb-24">
         <div className="shell grid items-center gap-10 md:grid-cols-[minmax(0,1fr)_minmax(0,0.9fr)] md:gap-12">
           <div className="relative z-20">
-            <p className="eyebrow text-meera">Our first product</p>
+            <p className="eyebrow text-meera">The first proof of the engine</p>
             <h1 className="mt-6 text-bone">
-              Meet <span className="text-meera">Meera</span>.
+              <span className="text-meera">Meera</span> came first.
             </h1>
             <p className="measure mt-6 text-lead text-ash">
-              An AI companion designed to be known, and to know you over time.
-              The first consumer expression of our relational intelligence research.
+              Before a creator could have an AI version of themselves, we had to
+              find out whether an AI person can stay one person across months of
+              conversation. Meera is where that was built, broken and measured.
             </p>
             <div className="mt-9 flex flex-wrap gap-3">
-              <Cta href="#access">Request early access</Cta>
-              <Cta href="/research" variant="secondary">
-                The research behind it
+              <Cta href="/research">Read the research</Cta>
+              <Cta href="/#rooms" variant="secondary">
+                What we built with it
               </Cta>
             </div>
           </div>
@@ -76,18 +77,22 @@ export default function MeeraPage() {
         </div>
       </section>
 
-      {/* Capabilities. Two column list, no cards. */}
+      {/* What the proof produced. Two column list, no cards. */}
       <section
-        id="capabilities"
+        id="engine"
         className="scroll-mt-24 border-b border-hairline bg-void py-24 md:py-32"
       >
         <div className="shell">
-          <h2 className="max-w-[22ch] text-bone" data-reveal="0">
-            The companion we are building.
+          <h2 className="max-w-[24ch] text-bone" data-reveal="0">
+            What one person taught us to build.
           </h2>
+          <p className="measure mt-6 text-lead text-ash" data-reveal="1">
+            Every part of Rooms that is hard was hard here first. These are the
+            pieces that carried over.
+          </p>
 
           <div className="mt-14 grid gap-x-16 gap-y-10 border-t border-hairline pt-12 sm:grid-cols-2">
-            {CAPABILITIES.map((item, i) => (
+            {PROVEN.map((item, i) => (
               <div key={item.t} data-reveal={i}>
                 <h3 className="text-body font-medium text-bone">{item.t}</h3>
                 <p className="measure mt-2 text-small leading-relaxed text-ash">
@@ -104,40 +109,38 @@ export default function MeeraPage() {
         <div className="shell md:grid md:grid-cols-12 md:gap-16">
           <div className="md:col-span-7 md:col-start-4">
             <h2 className="text-bone" data-reveal="0">
-              This is early work. We will say so.
+              A proof is not a finished thing.
             </h2>
             <p className="measure mt-6 text-lead text-ash" data-reveal="1">
-              A carefully edited minute can make almost any companion look
-              complete. Identity drift, false memories and repetitive behaviour
-              only appear with time. That is the real test.
+              A carefully edited minute can make almost any AI person look
+              complete. Drift, invented memories and repetition only appear with
+              time, which is why the useful measurements took months and why
+              several of them came back negative.
             </p>
             <p className="measure mt-5 text-body text-ash" data-reveal="2">
-              We will describe what Meera can perceive, remember and do, publish
-              meaningful limitations, and expand access as the experience earns it.
+              The results we publish keep their sample sizes, their methods and
+              their retractions. Where a layer is not yet populated for everyone,
+              we say that rather than describing the architecture as if it were
+              finished.
             </p>
           </div>
         </div>
       </section>
 
-      {/* Access. */}
-      <section id="access" className="scroll-mt-24 bg-void py-24 md:py-32">
+      {/* Forward to the product. */}
+      <section id="rooms" className="scroll-mt-24 bg-void py-24 md:py-32">
         <div className="shell-narrow text-center">
           <h2 className="text-bone" data-reveal="0">
-            Request early access.
+            The product is Rooms.
           </h2>
-          <p className="mx-auto mt-6 max-w-[48ch] text-lead text-ash" data-reveal="1">
-            When access begins, we will invite people gradually and learn from
-            long-term use. Tell us who you are and what you hope a companion
-            could become.
+          <p className="mx-auto mt-6 max-w-[52ch] text-lead text-ash" data-reveal="1">
+            One creator, an AI version of them, and a private continuing
+            relationship with it for every follower. We are building the first
+            of them by hand, one creator at a time.
           </p>
           <div className="mt-9 flex justify-center" data-reveal="2">
-            <Cta href={`mailto:${SITE.email}?subject=Meera%20access`}>
-              Email the team
-            </Cta>
+            <Cta href={APPLY_MAILTO}>{APPLY_LABEL}</Cta>
           </div>
-          <p className="mt-6 text-small text-slate" data-reveal="3">
-            {SITE.email}
-          </p>
         </div>
       </section>
     </>

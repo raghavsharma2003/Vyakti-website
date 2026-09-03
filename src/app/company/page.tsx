@@ -1,40 +1,40 @@
 import type { Metadata } from "next";
 import { Cta } from "@/components/ui/cta";
-import { SITE } from "@/lib/site";
+import { APPLY_LABEL, APPLY_MAILTO, SITE } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Company",
   description:
-    "Vyakti is an independent relational intelligence lab building persistent AI identities and Meera, its first consumer product in development.",
+    "Vyakti is an independent lab building Vyakti Rooms: an AI version of a creator, and a private, continuing relationship with it for every follower.",
   alternates: { canonical: "/company" },
   openGraph: {
     title: "Company",
     description:
-      "An independent relational intelligence lab researching identity continuity, shared history and multimodal expression.",
+      "An independent lab building an AI version of a creator, and a private room with it for every follower.",
     url: "/company",
   },
 };
 
 const ROLES = [
   {
+    title: "Relational systems",
+    detail:
+      "Memory, provenance, belief validity in time, and the write-time rules that keep thousands of private scopes separate. The interesting part is what must never leak, not what can be retrieved.",
+  },
+  {
+    title: "Fidelity and evaluation",
+    detail:
+      "Designing the battery that decides whether an AI version of a person is close enough to publish. Experimental design, human raters, and a healthy suspicion of your own results.",
+  },
+  {
     title: "Speech and voice",
     detail:
-      "Speech-to-speech modelling, prosody and expressive synthesis. You have shipped audio models and care about how they sound to a person, not only how they score.",
-  },
-  {
-    title: "Conversation systems",
-    detail:
-      "Turn-taking, endpointing and full-duplex dialogue. Comfortable with real-time constraints and with linguistics literature that predates deep learning.",
-  },
-  {
-    title: "Long-horizon evaluation",
-    detail:
-      "Designing the studies that tell us whether any of this is working. Experimental design, human subjects, and a healthy suspicion of your own results.",
+      "Expressive synthesis, disclosure and watermarking in the same pipeline. You have shipped audio and care how it sounds to a person, not only how it scores.",
   },
   {
     title: "Design engineering",
     detail:
-      "The surfaces people meet these systems through. Interface, motion and sound, built to the standard the research is held to.",
+      "The surfaces creators and followers meet this through. Interface, motion and sound, built to the standard the research is held to.",
   },
 ];
 
@@ -44,13 +44,18 @@ export default function CompanyPage() {
       <section className="border-b border-hairline bg-ink pt-32 pb-20 md:pt-40 md:pb-28">
         <div className="shell">
           <h1 className="max-w-[20ch] text-bone">
-            A small lab with one question.
+            A small lab, one question at a time.
           </h1>
           <p className="measure mt-8 text-lead text-ash">
             Vyakti takes its name from the Sanskrit word for a person: the
-            individual, that which is made manifest. The question is whether a
-            machine can sustain identity, history and presence without pretending
-            to be human.
+            individual, that which is made manifest. We spent a year on whether
+            an AI can be someone in particular and stay that way. Now we are
+            building what that is for.
+          </p>
+          <p className="measure mt-5 text-body text-ash">
+            Vyakti Rooms gives a creator an AI version of themselves, and gives
+            every follower a private, continuing relationship with it. India
+            first, in Hindi, Hinglish and English.
           </p>
         </div>
       </section>
@@ -75,8 +80,12 @@ export default function CompanyPage() {
                 d: "Every system has a range where it works reliably and a range where it does not. Reporting only the first obscures the work still required.",
               },
               {
-                t: "Research through one product",
-                d: "Research that never reaches real use stays theoretical. Meera is where the work has to survive contact with time, context and shared history.",
+                t: "Separation is a structure, not a promise",
+                d: "A rule that lives only in a prompt is a request. What a follower says stays in their room because of where it is written, not because the system was asked nicely.",
+              },
+              {
+                t: "One creator at a time, by hand",
+                d: "The first Rooms are built with the person whose name is on them. Scale is what you earn after the thing is good, not the plan for making it good.",
               },
               {
                 t: "Culture is not a setting",
@@ -134,7 +143,7 @@ export default function CompanyPage() {
 
       {/* Contact. */}
       <section id="contact" className="scroll-mt-24 bg-void py-20 md:py-28">
-        <div className="shell grid gap-8 sm:grid-cols-2">
+        <div className="shell grid gap-8 sm:grid-cols-3">
           <div>
             <h2 className="text-h3 font-medium text-bone">General</h2>
             <a
@@ -152,6 +161,12 @@ export default function CompanyPage() {
             >
               {SITE.careers}
             </a>
+          </div>
+          <div>
+            <h2 className="text-h3 font-medium text-bone">Creators</h2>
+            <div className="mt-3">
+              <Cta href={APPLY_MAILTO}>{APPLY_LABEL}</Cta>
+            </div>
           </div>
         </div>
       </section>
