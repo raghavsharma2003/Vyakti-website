@@ -1,8 +1,12 @@
 # vyakti.ai
 
-Marketing and research site for **Vyakti**, an AI research lab working on human
-indistinguishability in conversation. Built with Next.js 16 (App Router,
-Turbopack), React 19, Tailwind v4 and Three.js.
+Public site for **Vyakti** and **Vyakti Rooms**: a creator builds an AI version
+of themselves, and every follower gets a private, continuing relationship with
+it. Built with Next.js 16 (App Router, Turbopack), React 19, Tailwind v4 and
+Three.js.
+
+`PROJECT_CONTEXT.md` is the governing doc. Read its "Current product
+direction" and copy guardrails before changing any user-facing string.
 
 ## Running it
 
@@ -23,25 +27,23 @@ src/app/            routes: /, /research, /meera, /company
   sitemap.ts        route list for search engines
   robots.ts
 src/components/
-  hero-stage        pinned hero: owns the scroll runway and copy beats
+  home/             the pinned Noor story plus every homepage section style
   head/             the WebGL face (scene, shaders, capability gate)
-  turn-diagram      annotated conversation figure
+  meera/            the canonical portrait, used on / and /meera
   site-header       site-footer  ui/cta  reveal  smooth-scroll
-src/lib/site.ts     copy source of truth: nav, footer, research tracks
+src/lib/site.ts     copy source of truth: nav, footer, the apply mailto
 docs/research/      competitor and landscape research behind the positioning
 ```
 
 ## Design system
 
 Tokens live in `src/app/globals.css`. Colours resolve through `--c-*` custom
-properties so the dark and light themes are one set of semantic names, not two
-parallel stylesheets.
+properties, so semantic names stay stable even though the site is light only.
 
 - **Type.** One family (Geist) plus Geist Mono for labels and data. Tracking is
   size-specific and tightens as type grows.
-- **Colour.** Warm near-black surfaces with a single ember accent, carried over
-  from the product build so the site and the app read as one brand. Solid ember
-  fills use `--color-on-ember`, which flips per theme to hold AA contrast.
+- **Colour.** Cool paper surfaces, near-black ink, and one signal red. Solid
+  accent fills use `--color-on-ember` to hold AA contrast.
 - **Motion.** One easing family and four durations. Scroll reveals fire once and
   stay revealed. Everything collapses under `prefers-reduced-motion`.
 

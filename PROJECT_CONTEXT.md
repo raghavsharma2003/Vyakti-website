@@ -1,12 +1,60 @@
 # Vyakti project context
 
-Last updated: 2026-08-14
+Last updated: 2026-09-03
 
 This is the durable source of truth for the Vyakti website and product narrative. Read it before making product, copy, brand, or motion decisions. Add dated entries to the decision log when the direction changes.
 
+## Current product direction (adopted 2026-09-02)
+
+The company is building **Vyakti Rooms**. A creator builds an AI version of
+themselves. Every follower gets a private, continuing relationship with it.
+
+The line the public site leads with:
+
+> A creator can only talk to one person at a time. Here, they talk to all of
+> them, and none of them can hear each other.
+
+For the creator this is capacity with a guarantee: something that measurably
+sounds like them answers the questions they cannot get to, with a Readiness
+score (five parts, one number, one suggested action), correction a card at a
+time, and notification on the day it drifts. For the follower it is access that
+remembers, and that they can be honest with because it cannot repeat them.
+
+What separates it from a chatbot with a face:
+
+1. **Measurably them.** A fidelity battery locks publishing below threshold.
+2. **Current.** Positions live in a graph with validity in time, so the AI can
+   say what the creator used to think.
+3. **Thousands of separate confidences.** One persona, one private scope per
+   follower, enforced at write time.
+4. **Drift detection.** The creator is told when their AI stops matching them.
+
+The boundary model, which is a product commitment and not a policy page:
+creator material flows down to everyone; a follower's words stay in their own
+private scope and never write to the creator's AI and never reach another
+follower; the creator sees themes only as counts, never names, never verbatim;
+introductions between followers happen only when both say yes, and neither
+learns the other exists until then; export everything, delete everything.
+
+Status: a hand-built first phase, one creator at a time. India first, in Hindi,
+Hinglish and English. No pricing numbers are published yet. The site's only
+call to action is an application delivered by prefilled mailto, because this
+repository has no backend.
+
+Meera is now positioned as the first proof of the engine, not the product. The
+relational engine behind Rooms was built and measured on her.
+
+### Vocabulary rules for user-facing copy
+
+- Use "your AI", "<Name> AI", and "apprentice" for an early AI.
+- Never use clone, model, fine-tune, or replica in user-facing copy.
+- No em-dash or en-dash anywhere in user-visible copy (house rule carried over
+  from the product repo).
+
 ## Company thesis
 
-Vyakti is a relational intelligence lab.
+Vyakti is a relational intelligence lab, and Vyakti Rooms is what the lab is
+building with what it learned.
 
 The lab studies how an artificial intelligence can know someone over time, maintain a coherent relationship, and remain recognizably itself while its underlying models, capabilities, and circumstances change.
 
@@ -61,7 +109,11 @@ Personality is not a prompt. The working model is:
 
 ## Product strategy
 
-Current external product: Meera.
+Current external product: Vyakti Rooms. Superseded by the "Current product
+direction" section above; the Meera material below is retained because it
+describes the engine Rooms is built on and the evidence behind it.
+
+Previous external product: Meera.
 
 Current internal system: the Vyakti relational layer, sometimes referred to internally as the Relational OS.
 
@@ -82,11 +134,14 @@ The intended first product is focused:
 
 The product promise is that the relationship becomes more meaningful with time instead of resetting every session.
 
-Useful framing:
+Framing retired on 2026-09-03, kept here so it is not reintroduced:
 
 > You do not configure Meera. You meet her.
 
-Meera should be clearly and consistently identified as AI. Presence must not depend on deception.
+It was true of Meera and is wrong for Rooms, where configuring the AI is the
+creator's job and the whole point of the Readiness score.
+
+Meera should be clearly and consistently identified as AI. Presence must not depend on deception. This applies unchanged to every AI in a Room.
 
 ### Architecture
 
@@ -159,18 +214,26 @@ The homepage must work for four audiences in this order:
 
 ## Website narrative
 
-The recommended homepage sequence is:
+The homepage sequence adopted on 2026-09-03 is:
 
-1. Abundance: intelligence is becoming cheap and interchangeable.
-2. The open problem: what makes an intelligence remain someone?
-3. Formation: a human identity consolidates from signal into a coherent face.
-4. Research: identity, relational memory, social cognition, expression, and evaluation operate as one system.
-5. Model independence: engines can change while identity persists.
-6. Meera: the first consumer expression of the research, shown as a distinct female identity.
-7. Trust: the more human AI feels, the clearer its boundaries must be.
-8. Invitation: meet Meera, follow the research, or work with the lab.
+1. The offer: one creator, a room for each follower, said in the hero.
+2. The pressure: more people asking than there are hours in a week.
+3. Formation: an identity consolidates from signal, which is what an AI version
+   of a person is. Noor's scene carries beats 2 to 5.
+4. Fidelity: it has to sound like you, and you have to be able to check that.
+5. Scale with separation: thousands of conversations, none of them overlapping.
+6. Rooms: the one line, then what it is for the creator and for the follower.
+7. Mechanism: what keeps it from being a chatbot with a face.
+8. The boundary model, drawn.
+9. Trust, including voice disclosure and self-only verification.
+10. Meera as the first proof of the engine.
+11. Apply for one of the first Rooms.
 
 The homepage should not lead with market size, generic capability lists, fake metrics, investor language, or an API diagram. Strategy can be precise without making the public site feel like a deck.
+
+The superseded sequence, which led with "intelligence is becoming abundant,
+continuity is not" and handed off from Noor to a Meera product chapter, is kept
+in the decision log entry for 2026-09-03 rather than here.
 
 ## Visual and motion direction
 
@@ -204,25 +267,25 @@ Motion constraints:
 
 ## Current homepage implementation
 
-The public homepage uses one React Three Fiber research scene for Noor and one independent photographic scene for Meera. They are deliberately not a shared mesh, morph target, or identity dissolve:
+The pinned homepage story is now one React Three Fiber scene only. Noor carries five chapters:
 
-1. a dispersed signal field resolves into Noor
-2. Noor consolidates as the lab identity
-3. Noor holds, looks, blinks, and performs one deterministic speech phrase
-4. Noor releases into his own signal field and exits completely
-5. a short clear-paper beat separates the lab identity from the product identity
-6. Meera's canonical full-colour portrait enters as a sharp editorial image
-7. the portrait settles with restrained scroll parallax and remains present through the trust chapter
+1. a dispersed signal field resolves into Noor, under the hero
+2. Noor consolidates while the pressure on the creator is stated
+3. Noor holds, looks, blinks, and performs one deterministic speech phrase under "so you train an apprentice" and "then it answers in your place"
+4. Noor releases into his own signal field under "thousands of conversations at once"
+5. the stage finishes on clear paper, and the Rooms chapters follow as static editorial sections
+
+The canvas beats are authored in a fixed story space (formation ends at 0.255, look and blink around 0.29 to 0.36, speech 0.405 to 0.535, release completes at 0.655). Scroll progress is remapped onto that space through `STORY_SPAN` in `relational-story.tsx`, so the runway never scrolls past an empty stage. Change `STORY_SPAN` rather than the canvas constants when the chapter count changes.
 
 Noor uses `androgynous-soft.glb` and a semantic oral rig. Skin, mouth socket, and teeth receive coherent jaw and viseme transforms, so speech does not depend on a hardcoded mouth-region ripple.
 
-Meera uses `meera-portrait-v1.webp`, her canonical synthetic portrait. It is presented as a sharp, square photographic plate with her real colour palette and curly-hair silhouette intact. The source portrait is a fictional adult identity generated for Vyakti, not a real person. Do not convert it into a browser 3D reconstruction unless a future asset is manually art-directed and clears direct visual review.
+Meera's canonical portrait `meera-portrait-v1.webp` is no longer a product handoff inside the pinned story. It appears once, as a square editorial plate in the "first proof of the engine" section, and again on `/meera`. The source portrait is a fictional adult identity generated for Vyakti, not a real person. Do not convert it into a browser 3D reconstruction unless a future asset is manually art-directed and clears direct visual review.
 
-The main page is deliberately white-first and editorial. It uses black plus one signal-red accent, one face-as-research-object, asymmetric research blocks, an architecture map, and an evaluation timeline. It does not use decorative marquees, fake waveforms, invented benchmark numbers, or repeated startup-style card grids.
+The main page is deliberately white-first and editorial. It uses black plus one signal-red accent, one face-as-research-object, asymmetric mechanism blocks, and a drawn boundary model. It does not use decorative marquees, fake waveforms, invented benchmark numbers, fake dashboards, invented screenshots, or repeated startup-style card grids. The Readiness score is described in words and never rendered as a mock number.
 
-Desktop uses a sticky long-form story. Mobile uses native scrolling with a compact sticky visual and protected reading band. Reduced motion becomes a linear editorial layout with static portraits rather than a blank canvas. A late WebGL failure preserves the sticky runway and current scroll position while replacing only Noor's canvas, so the document never collapses underneath the reader. Noor's canvas renders on demand and caps DPR. Meera remains a lightweight responsive image.
+Desktop uses a sticky long-form story. Mobile uses native scrolling with a compact sticky visual and protected reading band. Reduced motion becomes a linear editorial layout with a static Noor portrait rather than a blank canvas. A late WebGL failure preserves the sticky runway and current scroll position while replacing only Noor's canvas, so the document never collapses underneath the reader. Noor's canvas renders on demand and caps DPR.
 
-Normal first load never renders a solid Noor poster. Server output starts with a lightweight dots-only signal field, which hands directly to the real particle canvas after WebGL and the semantic rig are ready. Meera's square source portrait is contained without zoom or crop and begins below the fixed header on both desktop and mobile.
+Normal first load never renders a solid Noor poster. Server output starts with a lightweight dots-only signal field, which hands directly to the real particle canvas after WebGL and the semantic rig are ready.
 
 ## Current repository state
 
@@ -281,6 +344,60 @@ These are planning hypotheses from the strategy discussion, not public commitmen
 - Final age policy after legal review.
 
 ## Decision log
+
+### 2026-09-03
+
+- Rewrote the public story around **Vyakti Rooms**, adopted as the company's
+  product on 2026-09-02. Reason: the site said Vyakti was "a relational
+  intelligence lab" whose product was Meera, and that stopped being true. The
+  first creator's followers will arrive at this domain, and the site has to
+  tell them what the product is before they do.
+- Replaced the homepage thesis. "Intelligence is becoming abundant. Continuity
+  is not." and "You do not configure Meera. You meet her." are retired as
+  public copy. The hero is now "One creator. A room for each follower.", and
+  the section lead is "A creator can only talk to one person at a time. Here
+  they talk to all of them, and none of them can hear each other."
+- Kept Noor's formation scene. Identity consolidating out of signal is a better
+  picture of an AI version of a person than it was of a lab thesis, so the
+  scene stayed and only its chapters were rewritten.
+- Removed the Noor-to-Meera product handoff from the pinned story: the paper
+  bridge, the Meera photo layer, the reading-mask fade, and the right-side
+  chapter column are gone. Scroll now maps onto the story through `STORY_SPAN`
+  so the runway ends with Noor's release instead of scrolling past an empty
+  stage. The runway shortened from 640/820/860svh to 540/700/720svh for six
+  chapters becoming five.
+- Added the Rooms product chapter as static editorial sections: the one line,
+  the creator and follower cases with Readiness described in words, four
+  mechanisms (fidelity battery, validity in time, one private scope per
+  follower enforced at write time, drift detection), and the boundary model
+  drawn as a figure (down to every room, no path sideways, back up as counts
+  only).
+- Extended the trust principles with the two new commitments: every generated
+  voice carries a spoken disclosure and a watermark, and a creator may build an
+  AI version of themselves only, verified.
+- Repositioned Meera on `/meera` as the first proof of the engine rather than
+  the product, listing what carried over into Rooms and keeping the honest
+  limits section. `/research` was left untouched; the standing doc governs it.
+- Rewrote `/company` around the new thesis and added two working beliefs that
+  the product now depends on: separation is a structure and not a promise, and
+  the first Rooms are built one creator at a time by hand.
+- The only call to action is "Apply for a Room", a prefilled mailto to
+  hello@vyakti.ai carrying the three questions. This repository has no backend,
+  and a form that pretends otherwise would be the first dishonest thing on the
+  site. One label for that intent everywhere: header, hero, apply section,
+  company contact, and `/meera`.
+- Deliberately not claimed: no user counts, no retention, no revenue share
+  percentage, no launch date, no benchmark numbers, no creator names, no
+  testimonials, no screenshots of a product that is still being hand-built. The
+  Readiness score is described and never shown as a number. Every mechanism
+  sentence sits under a visible status note saying this is what we are building
+  now.
+- Vocabulary enforced in user-facing copy: no clone, model, fine-tune, or
+  replica; no em-dash or en-dash. Verified against the rendered HTML of `/`,
+  `/meera` and `/company`. `/research` still contains one en-dash inside the
+  actual title of a preprint, which is a citation and was left alone.
+- Updated metadata, keywords, the JSON-LD graph (the SoftwareApplication is now
+  Vyakti Rooms), the social card, the sitemap date, navigation and footer.
 
 ### 2026-08-24
 
