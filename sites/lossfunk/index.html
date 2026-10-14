@@ -127,7 +127,7 @@
     <div class="map-head">
       <p class="eyebrow rv">03 · The broader vision</p>
       <h2 class="split">Understanding a person, <em>mapped.</em></h2>
-      <p class="lede rv">Learning is the first door. Behind it is the whole person: seven families, 25 dimensions. Each has a core question, a reason it is still open, and a ground truth that could prove the AI right. That last column decides what can be researched first.</p>
+      <p class="lede rv">Learning is the first door. Behind it is the whole person: seven families, 25 dimensions. A to E describe the person; F and G describe the AI, its own self and the loop that makes it better. Each dimension has a core question, a reason it is still open, and a ground truth that could prove the AI right, which decides what gets researched first.</p>
       <div class="fam-chips rv" id="famChips" role="group" aria-label="Families"></div>
     </div>
     <div class="map-vis rv">
@@ -160,19 +160,28 @@
     <h2 class="split manifesto">Language models learned language by predicting the next word. Vyakti learns <em>a person</em> by predicting <em>the person.</em></h2>
     <div class="hyp-grid">
       <div class="hyp-text">
-        <p class="lede rv">It forms beliefs about you, bets on what you will do next, and lets reality grade every bet. Each miss rewrites its theory of you. So it should understand you better in week six than in week one, and teach you better because of it.</p>
+        <p class="lede rv">It forms beliefs about the whole person: what you know<i class="fk" aria-hidden="true">A</i>, how you learn<i class="fk" aria-hidden="true">B</i>, what you feel<i class="fk" aria-hidden="true">C</i>, what your talk gives away<i class="fk" aria-hidden="true">D</i>, how far you trust it<i class="fk" aria-hidden="true">E</i>. Every belief is a bet on what you will do next, and reality grades every bet. Each miss rewrites the theory, so it should understand you better in week six than in week one, and teach you better because of it.</p>
         <div class="hs">
-          <div class="h rv"><span class="k">H1 · Seeing</span><b>Understanding can be read from ordinary interaction</b><p><span>Wrong if</span>its reading predicts later performance no better than asking the learner.</p></div>
-          <div class="h rv"><span class="k">H2 · Acting</span><b>Writing a belief before each move turns inference into action</b><p><span>Wrong if</span>moves fit the learner no better, judged blind.</p></div>
-          <div class="h rv"><span class="k">H3 · Trusting</span><b>Continuity and a steady self make people reveal more</b><p><span>Wrong if</span>admitted confusion doesn’t rise with memory switched on.</p></div>
-          <div class="h rv"><span class="k">H4 · Growing</span><b>Accuracy about each person rises with time</b><p><span>Wrong if</span>the hit rate stays flat, or plain memory keeps pace.</p></div>
+          <div class="h rv"><span class="k">H1 · Seeing<span class="fks" title="Tests families A, B, C and D"><i>A</i><i>B</i><i>C</i><i>D</i></span></span><b>What a person knows, feels and hides shows in ordinary interaction</b><p><span>Wrong if</span>its reading predicts what they do a week later no better than asking them.</p></div>
+          <div class="h rv"><span class="k">H2 · Acting<span class="fks" title="Tests families B and G"><i>B</i><i>G</i></span></span><b>Writing a belief before each move turns inference into action</b><p><span>Wrong if</span>moves fit the person no better, judged blind.</p></div>
+          <div class="h rv"><span class="k">H3 · Trusting<span class="fks" title="Tests families C, E and F"><i>C</i><i>E</i><i>F</i></span></span><b>Continuity and a steady self make people reveal more</b><p><span>Wrong if</span>admitted confusion doesn’t rise with memory switched on.</p></div>
+          <div class="h rv"><span class="k">H4 · Growing<span class="fks" title="Tests families A to E, and G"><i>A–E</i><i>G</i></span></span><b>Accuracy about each person rises with time, in every family</b><p><span>Wrong if</span>the hit rate stays flat, or plain memory keeps pace.</p></div>
         </div>
       </div>
       <div class="card chart rv">
         <div class="chart-h"><b>Does it get better at you?</b><span class="tiny">Hypothesis</span></div>
-        <svg id="betChart" viewBox="0 0 560 300" role="img" aria-label="Hypothesis: the share of Vyakti's predictions about each person that come true rises week after week, while the same model with plain memory stays nearly flat and the learner's own judgement stays low."></svg>
+        <svg id="betChart" viewBox="0 0 560 236" role="img" aria-label="Hypothesis: the share of Vyakti's predictions about each person, in every family from what they know to how far they trust it, that come true rises week after week, while the same model with plain memory stays nearly flat and the learner's own judgement stays low."></svg>
         <div class="chart-key"><span><i class="v"></i>Vyakti</span><span><i class="m"></i>Same model, plain memory</span><span><i class="y"></i>Learner’s own judgement</span></div>
-        <p class="tiny chart-note">Share of written predictions that came true: will she solve a new problem next week, where will she get stuck, will she ask for help, will she come back.</p>
+        <div class="fbets" id="fbets">
+          <p class="tiny chart-note">Share of its written bets that came true. It bets in every family:</p>
+          <ol>
+            <li><i>A</i><span>solves a new one next week</span></li>
+            <li><i>B</i><span>a number line beats a pie chart</span></li>
+            <li><i>C</i><span>this struggle resolves</span></li>
+            <li><i>D</i><span>her quick “okay” means lost</span></li>
+            <li><i>E</i><span>admits confusion unprompted</span></li>
+          </ol>
+        </div>
       </div>
     </div>
   </div>

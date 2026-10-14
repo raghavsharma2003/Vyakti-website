@@ -321,6 +321,18 @@ These are planning hypotheses from the strategy discussion, not public commitmen
   storage, so a blanket redirect would break the app and make Maya forget
   people. Every "Meet Maya" / "Talk to Maya" link now opens the product;
   the nav item still opens the `/maya` page.
+- Lossfunk proposal (`sites/lossfunk`): the hypothesis now names the families
+  it is about. Before, H1–H4 were written in learner terms and never pointed
+  back to the map, so the core claim read narrower than the vision (the
+  owner asked why A–E were missing). Now the hypothesis text names A–E (know,
+  learn, feel, talk, trust), and each H card carries the families it tests
+  (H1 A–D, H2 B·G, H3 C·E·F, H4 A–E·G). The chart has one gradable bet per family
+  that lights as the line reaches the week it is graded, and the theory
+  card's rows show family names, not bare letters. The map text now says A
+  to E describe the person and F and G describe the AI. Desktop deck fit was
+  re-measured after the change (min slack 21px on the hypothesis slide, at
+  1536x730). Reverse if a first-time reader finds the family letters noise
+  rather than a thread: drop the inline badges first, keep the H-card tags.
 
 ### 2026-08-24
 

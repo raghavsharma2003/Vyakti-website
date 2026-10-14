@@ -285,7 +285,11 @@ h1 em, h2 em { font-size: 1.08em; line-height: .9; }
 .hyp-text { display: grid; gap: 16px; align-content: start; }
 .hs { display: grid; grid-template-columns: minmax(0, 1fr); gap: .6rem; }
 .h { padding: .85rem 1rem; border: 1px solid var(--line); border-radius: 12px; background: var(--card); display: grid; gap: .25rem; }
-.h .k { font-family: var(--f-mono); font-size: max(.64rem, 9px); letter-spacing: .1em; text-transform: uppercase; color: var(--sig); }
+.h .k { font-family: var(--f-mono); font-size: max(.64rem, 9px); letter-spacing: .1em; text-transform: uppercase; color: var(--sig); display: flex; justify-content: space-between; align-items: center; gap: .5rem; }
+/* the families a hypothesis tests, lettered as on the map */
+.fks { display: inline-flex; gap: .2rem; flex: none; }
+.fks i, .fk { font-family: var(--f-serif); font-style: italic; font-size: .92rem; line-height: 1; letter-spacing: 0; text-transform: none; color: var(--sig); background: var(--sig-soft); border-radius: 99px; min-width: 1.45em; padding: .2em .38em; text-align: center; }
+.fk { display: inline-block; font-size: .8em; margin-left: .28em; vertical-align: .12em; }
 .h b { font-size: .95rem; line-height: 1.3; }
 .h p { font-size: .82rem; color: var(--ink3); line-height: 1.4; }
 .h p span { font-family: var(--f-mono); font-size: max(.6rem, 9px); letter-spacing: .09em; text-transform: uppercase; color: var(--ink2); margin-right: .45em; }
@@ -307,6 +311,12 @@ h1 em, h2 em { font-size: 1.08em; line-height: .9; }
 .chart-key i.m { background: repeating-linear-gradient(90deg, var(--ink2) 0 2px, transparent 2px 6px); }
 .chart-key i.y { background: var(--line2); }
 .chart-note { text-transform: none; letter-spacing: .01em; line-height: 1.45; }
+/* one bet per family; each lights as the line reaches the week it is graded */
+.fbets { display: grid; gap: .5rem; padding-top: .65rem; border-top: 1px solid var(--line); }
+.fbets ol { display: grid; grid-template-columns: minmax(0, 1fr); gap: .4rem; }
+.fbets li { display: grid; grid-template-columns: 1.7rem minmax(0, 1fr); gap: .6rem; align-items: center; font-size: .84rem; line-height: 1.3; color: var(--ink2); }
+.fbets li i { font-family: var(--f-serif); font-style: italic; font-size: 1.02rem; width: 1.7rem; height: 1.7rem; border-radius: 50%; display: grid; place-items: center; border: 1px solid var(--line2); color: var(--ink3); background: var(--paper); transition: background .5s var(--ease), color .5s, border-color .5s, transform .5s var(--ease); }
+.fbets li.on i { background: var(--sig2); border-color: var(--sig2); color: #fff; transform: scale(1.06); }
 
 /* ---------- theory ---------- */
 .principles { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: .7rem 1rem; }
@@ -325,8 +335,9 @@ h1 em, h2 em { font-size: 1.08em; line-height: .9; }
 .timeline button.cur { color: var(--ink); }
 .timeline button.cur::before { box-shadow: 0 0 0 .3rem var(--sig-soft); }
 .drows { display: grid; }
-.drow { display: grid; grid-template-columns: 1.6rem minmax(0, 1fr) 5.4rem; gap: .7rem; padding: .55rem 0; border-top: 1px solid var(--line); align-items: start; }
-.drow .k { font-family: var(--f-serif); font-style: italic; font-size: 1.2rem; line-height: 1.1; color: var(--ink3); }
+.drow { display: grid; grid-template-columns: 3.3rem minmax(0, 1fr) 5.4rem; gap: .7rem; padding: .55rem 0; border-top: 1px solid var(--line); align-items: start; align-content: start; }
+.drow .k { font-family: var(--f-serif); font-style: italic; font-size: 1.2rem; line-height: 1.1; color: var(--ink3); display: grid; justify-items: start; gap: .15rem; }
+.drow .k small { font-family: var(--f-mono); font-style: normal; font-size: max(.56rem, 8.5px); letter-spacing: .06em; text-transform: uppercase; color: var(--ink3); }
 .drow .tx { position: relative; font-size: .88rem; color: var(--ink2); line-height: 1.4; display: grid; }
 .drow .tx > span { grid-area: 1 / 1; }
 .drow .old { text-decoration: line-through; text-decoration-color: var(--sig2); color: var(--ink3); animation: oldOut 1.6s var(--ease) forwards; }
@@ -558,8 +569,6 @@ h1 em, h2 em { font-size: 1.08em; line-height: .9; }
   #mapSvg .ctrt { font-size: 34px; }
   #mapSvg .halo { stroke-width: 2.4; }
   .map-vis { max-width: none; }
-  .drow { grid-template-columns: 1.4rem minmax(0, 1fr); }
-  .drow .cbar { grid-column: 2; }
   /* the orbit keeps turning on phones: a stage for it (the top padding), then the card below */
   .orbit { --stage: 20rem; height: auto; padding-top: var(--stage); }
   .orbit .olines { inset: 0 0 auto; height: var(--stage); }
@@ -575,7 +584,8 @@ h1 em, h2 em { font-size: 1.08em; line-height: .9; }
   /* the room: forty seats, lighter */
   .seats { max-width: 19rem; gap: .4rem; }
   /* theory card: confidence stays beside each belief, so the card is a screen, not two */
-  .drow { grid-template-columns: 1.3rem minmax(0, 1fr) 3.7rem; gap: .5rem; }
+  .drow { grid-template-columns: minmax(0, 1fr) 3.7rem; gap: .3rem .6rem; }
+  .drow .k { grid-column: 1 / -1; display: flex; align-items: baseline; gap: .45rem; font-size: 1.1rem; }
   .drow .cbar { grid-column: auto; }
   .drow .tx { font-size: .86rem; }
   .doc { padding: 1rem 1.05rem; }
@@ -604,7 +614,7 @@ h1 em, h2 em { font-size: 1.08em; line-height: .9; }
   /* the face draws above the dialog card; a canvas needs an explicit height or it sizes to its own buffer */
   .face-stage canvas { height: calc(100% - 4.4rem); }
   .dialog .who, .dialog .read b, .face-state, .rn span, .bar.empty em, .dim-top .fam, .dim-top .star, .dim-card dt, .h .k, .h p span,
-  .lane-h span, .tl, .pbar, .psay b, .use .k, .fcard .when, .dims, .cbar span, .betrow .o, .drow .tag, .timeline button, .sc-b p span,
+  .lane-h span, .tl, .pbar, .psay b, .use .k, .fcard .when, .dims, .cbar span, .betrow .o, .drow .tag, .drow .k small, .timeline button, .sc-b p span,
   .sources summary, .src, .tiny { font-size: max(.7rem, 11px); }
   .psay { font-size: .8rem; }
   .node span, .modes button span { font-size: .78rem; }
@@ -692,6 +702,8 @@ h1 em, h2 em { font-size: 1.08em; line-height: .9; }
   .manifesto { font-size: 2.7rem; max-width: 34ch; }
   .hyp-grid { grid-template-columns: minmax(0, 1.12fr) minmax(0, .88fr); gap: 2.6rem; align-items: start; }
   .hs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .fbets ol { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: .7rem; }
+  .fbets li { grid-template-columns: minmax(0, 1fr); align-items: start; gap: .35rem; font-size: .74rem; }
 
   /* system */
   .nodes.five { grid-template-columns: repeat(5, minmax(0, 1fr)); }

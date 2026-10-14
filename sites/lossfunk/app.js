@@ -441,7 +441,9 @@ const DIMS = [
    ===================================================================== */
 (function chart() {
   const svg = $("#betChart"); if (!svg) return;
-  const x0 = 56, x1 = 540, y0 = 18, y1 = 250, X = w => x0 + (w - 1) * (x1 - x0) / 5;
+  const x0 = 56, x1 = 540, y0 = 18, y1 = 206, X = w => x0 + (w - 1) * (x1 - x0) / 5;
+  const Yv = y => y0 + (y - 18) * (y1 - y0) / 232;   // the curves below were drawn for a 232-tall plot
+  const bets = $$("#fbets li");                       // one bet per family, graded as the line passes weeks 2 to 6
   const defs = svgEl("defs", {}, svg), lg = svgEl("linearGradient", { id: "areaG", x1: "0", x2: "0", y1: "0", y2: "1" }, defs);
   svgEl("stop", { offset: "0", "stop-color": C.sig, "stop-opacity": ".16" }, lg); svgEl("stop", { offset: "1", "stop-color": C.sig, "stop-opacity": "0" }, lg);
   for (let i = 0; i < 4; i++) { const y = y0 + i * (y1 - y0) / 3; svgEl("line", { x1: x0, x2: x1, y1: y, y2: y, class: "grid" }, svg); }
@@ -450,9 +452,9 @@ const DIMS = [
   const hi = svgEl("text", { x: x0 - 10, y: y0 + 4, class: "lbl", "text-anchor": "end" }, svg); hi.textContent = "more";
   const lo = svgEl("text", { x: x0 - 10, y: y1, class: "lbl", "text-anchor": "end" }, svg); lo.textContent = "fewer";
   const smooth = pts => { let d = `M${pts[0][0]},${pts[0][1]}`; for (let i = 0; i < pts.length - 1; i++) { const p0 = pts[i - 1] || pts[i], p1 = pts[i], p2 = pts[i + 1], p3 = pts[i + 2] || p2; d += ` C${p1[0] + (p2[0] - p0[0]) / 6},${p1[1] + (p2[1] - p0[1]) / 6} ${p2[0] - (p3[0] - p1[0]) / 6},${p2[1] - (p3[1] - p1[1]) / 6} ${p2[0]},${p2[1]}`; } return d; };
-  const V = [196, 178, 150, 120, 92, 66].map((y, i) => [X(i + 1), y]);
-  const M = [192, 186, 182, 179, 177, 175].map((y, i) => [X(i + 1), y]);
-  const Y = [222, 224, 221, 223, 222, 224].map((y, i) => [X(i + 1), y]);
+  const V = [196, 178, 150, 120, 92, 66].map((y, i) => [X(i + 1), Yv(y)]);
+  const M = [192, 186, 182, 179, 177, 175].map((y, i) => [X(i + 1), Yv(y)]);
+  const Y = [222, 224, 221, 223, 222, 224].map((y, i) => [X(i + 1), Yv(y)]);
   const area = svgEl("path", { d: smooth(V) + ` L${X(6)},${y1} L${X(1)},${y1} Z`, class: "area", opacity: 0 }, svg);
   const ly = svgEl("path", { d: smooth(Y), class: "ly" }, svg), lm = svgEl("path", { d: smooth(M), class: "lm" }, svg);
   const vp = svgEl("path", { d: smooth(V), class: "lv" }, svg);
@@ -464,6 +466,7 @@ const DIMS = [
     vp.style.strokeDashoffset = len * (1 - f); const pt = vp.getPointAtLength(len * f);
     [dot, halo].forEach(c => { c.setAttribute("cx", pt.x); c.setAttribute("cy", pt.y); });
     area.setAttribute("opacity", f.toFixed(3)); ticks.forEach(t => t.setAttribute("r", t.getAttribute("cx") <= pt.x + 1 ? 3.5 : 0));
+    bets.forEach((b, i) => b.classList.toggle("on", pt.x >= X(i + 2) - 1));
   }
   set(reduce ? 1 : 0);
   onShow(svg, () => {
@@ -528,7 +531,7 @@ const DIMS = [
       const tag = changed ? `<span class="tag changed">revised</span>` : isNew ? `<span class="tag new">new</span>` : "";
       const tx = changed ? `<span class="old">${esc(p.t)}</span><span class="new">${esc(r.t)}${tag}</span>` : `<span class="${isNew ? "new" : ""}">${esc(r.t)}${tag}</span>`;
       const fadeLine = fading ? `<span class="new" style="grid-area:auto;margin-top:.25rem;color:var(--ink3);font-size:.82rem"><span class="tag fading">fading</span> ${esc(S[i].fade[k])}</span>` : "";
-      return `<div class="drow${r.ch && animate ? " ch" : ""}"><span class="k">${k}</span><div class="tx">${tx}${fadeLine}</div><div class="cbar"><span>${Math.round(r.c * 100)}% sure</span><i><b style="width:${Math.round((animate && p ? p.c : r.c) * 100)}%" data-w="${Math.round(r.c * 100)}"></b></i></div></div>`;
+      return `<div class="drow${r.ch && animate ? " ch" : ""}"><span class="k">${k}<small>${FAM.find(f => f.k === k).name}</small></span><div class="tx">${tx}${fadeLine}</div><div class="cbar"><span>${Math.round(r.c * 100)}% sure</span><i><b style="width:${Math.round((animate && p ? p.c : r.c) * 100)}%" data-w="${Math.round(r.c * 100)}"></b></i></div></div>`;
     }).join("");
     const pb = i ? S[i - 1].bets : [];
     betsEl.innerHTML = `<span class="tiny">Open bets, graded by what she does</span>` + S[i].bets.map(([t, p, o, ol]) => {
