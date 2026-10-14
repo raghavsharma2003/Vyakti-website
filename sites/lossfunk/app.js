@@ -141,6 +141,7 @@ function shown(el) {
 window.VyaktiDeck = {
   covered: el => { const s = el.closest(".slide"); return !!(s && s._covered); },
   cover: el => { const s = el.closest(".slide"); return s ? (s._cover || 0) : 0; },
+  current: () => current,
 };
 /* a single animation clock that only runs things that are visible */
 const loops = new Set();
