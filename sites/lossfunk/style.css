@@ -61,11 +61,21 @@ h1 em, h2 em { font-size: 1.08em; line-height: .9; }
 
 /* ---------- reveal motion ---------- */
 .js .rv { opacity: 0; transform: translateY(1.1rem); transition: opacity .9s var(--ease), transform .9s var(--ease); transition-delay: calc(var(--d, 0) * 1ms); }
-.js .seen .rv { opacity: 1; transform: none; }
 .split .wm { display: inline-block; overflow: hidden; vertical-align: top; padding: 0 .1em .16em .02em; margin: 0 -.1em -.16em -.02em; }
 .split .wi { display: inline-block; }
 .js .split .wi { transform: translateY(112%) rotate(3deg); transform-origin: 0 100%; transition: transform 1.05s var(--ease); transition-delay: calc(var(--i) * 30ms + 60ms); }
-.js .seen .split .wi { transform: none; }
+/* the deck reveals a slide at a time; the phone/tablet flow reveals each element as it scrolls in */
+@media (min-width: 1000px) and (min-height: 540px) and (min-aspect-ratio: 5/4) {
+  .js .seen .rv { opacity: 1; transform: none; }
+  .js .seen .split .wi { transform: none; }
+  .seen .bar b { transform: scaleX(1); }
+}
+@media not all and (min-width: 1000px) and (min-height: 540px) and (min-aspect-ratio: 5/4) {
+  .js .rv { transform: translateY(1.6rem); transition-duration: .8s; transition-delay: calc(var(--fd, 0) * 1ms); }
+  .js .rv.in { opacity: 1; transform: none; }
+  .js .split.in .wi { transform: none; }
+  .in .bar b { transform: scaleX(1); }
+}
 @media (prefers-reduced-motion: reduce) {
   .js .rv, .js .split .wi { opacity: 1; transform: none; transition: none; }
 }
@@ -75,7 +85,7 @@ h1 em, h2 em { font-size: 1.08em; line-height: .9; }
   display: inline-flex; align-items: center; justify-content: center; min-height: 2.9em; padding: 0 1.3em; border-radius: 999px; border: 1px solid var(--line2);
   background: var(--card); text-decoration: none; font-size: .95rem; font-weight: 500; white-space: nowrap; transition: transform .25s var(--ease), border-color .2s, background .2s;
 }
-.btn:hover { transform: translateY(-1px); border-color: var(--ink3); }
+@media (hover: hover) { .btn:hover { transform: translateY(-1px); border-color: var(--ink3); } }
 .btn.primary { background: var(--ink); color: var(--paper); border-color: var(--ink); }
 .btn.sm { min-height: 2.5em; padding: 0 1em; font-size: .86rem; }
 .seg { display: flex; flex-wrap: wrap; gap: .4rem; }
@@ -169,7 +179,6 @@ h1 em, h2 em { font-size: 1.08em; line-height: .9; }
 .rl span { font-size: .84rem; color: var(--ink3); }
 .bar { grid-column: 1 / -1; grid-row: 2; position: relative; height: .7rem; border-radius: 99px; background: var(--raised); overflow: hidden; }
 .bar b { position: absolute; top: 0; bottom: 0; left: var(--l, 0); width: var(--w); border-radius: 99px; transform-origin: 0 50%; transform: scaleX(0); transition: transform 1.4s var(--ease); transition-delay: calc(var(--i, 0) * 180ms + 400ms); }
-.seen .bar b { transform: scaleX(1); }
 .bar b.ok { background: var(--ok); } .bar b.half { background: var(--half); } .bar b.lost { background: var(--lost); }
 .bar b.soft { opacity: .4; border-radius: 0 99px 99px 0; }
 .bar b.reach { top: 42%; bottom: auto; height: 2px; border-radius: 0; background: repeating-linear-gradient(90deg, rgba(31, 107, 84, .65) 0 5px, transparent 5px 9px); transition-duration: 2.2s; }
@@ -303,7 +312,7 @@ h1 em, h2 em { font-size: 1.08em; line-height: .9; }
 .principles { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: .7rem 1rem; }
 .principles li { font-size: .86rem; color: var(--ink3); padding-top: .6rem; border-top: 2px solid var(--ink); }
 .principles b { display: block; color: var(--ink); font-size: .92rem; }
-.doc { padding: 1.2rem 1.3rem; display: grid; gap: .8rem; align-content: start; }
+.doc { padding: 1.2rem 1.3rem; display: grid; gap: .8rem; align-content: stretch; grid-template-rows: auto auto 1fr auto auto; }
 .doc-top { display: flex; justify-content: space-between; align-items: flex-start; gap: .6rem; }
 .doc-top h3 { font-family: var(--f-serif); font-style: italic; font-weight: 400; font-size: 2rem; line-height: 1; }
 .play { width: 2.2rem; height: 2.2rem; border-radius: 50%; border: 1px solid var(--line2); background: var(--paper); font-size: .7rem; flex: none; }
@@ -405,7 +414,7 @@ h1 em, h2 em { font-size: 1.08em; line-height: .9; }
 .verdict { display: grid; gap: .15rem; padding-top: .7rem; opacity: .2; transition: opacity .8s; }
 .verdict.on { opacity: 1; }
 .verdict b { font-family: var(--f-serif); font-style: italic; font-weight: 400; font-size: 1.45rem; line-height: 1.15; }
-.playhead { position: absolute; top: 0; bottom: 0; left: 0; width: 2px; background: var(--sig2); opacity: 0; box-shadow: 0 0 18px 6px rgba(211, 63, 44, .12); }
+.playhead { position: absolute; top: 0; left: .6rem; right: .6rem; height: 2px; border-radius: 2px; background: linear-gradient(90deg, transparent, var(--sig2) 14%, var(--sig2) 86%, transparent); opacity: 0; box-shadow: 0 0 16px 3px rgba(211, 63, 44, .14); pointer-events: none; z-index: 2; }
 .surface { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 1rem; align-items: center; }
 .phone { width: 12.5rem; aspect-ratio: 9 / 18; border-radius: 2rem; background: var(--ink); padding: .5rem; box-shadow: 0 30px 60px -34px rgba(13, 15, 14, .6); }
 .scr { height: 100%; border-radius: 1.55rem; background: var(--paper); display: grid; grid-template-rows: auto minmax(0, 1fr) auto; overflow: hidden; }
@@ -476,17 +485,17 @@ h1 em, h2 em { font-size: 1.08em; line-height: .9; }
 .future-head { display: grid; gap: 14px; }
 .fgrid { display: grid; grid-template-columns: minmax(0, 1fr); gap: .7rem; }
 .fcard { position: relative; padding: 1.1rem 1.1rem 1.2rem; border-radius: var(--r); background: var(--card); border: 1px solid var(--line); box-shadow: var(--shadow); display: grid; gap: .45rem; align-content: start; overflow: hidden; transition: transform .5s var(--ease), box-shadow .5s; }
-.fcard:hover { transform: translateY(-4px); box-shadow: 0 30px 60px -36px rgba(13, 15, 14, .45); }
+@media (hover: hover) { .fcard:hover { transform: translateY(-4px); box-shadow: 0 30px 60px -36px rgba(13, 15, 14, .45); } .fcard:hover::after { transform: scaleX(1); } }
 .fcard .fn { font-family: var(--f-serif); font-style: italic; font-size: 2.6rem; line-height: .9; color: var(--line2); }
 .fcard .when { font-family: var(--f-mono); font-size: max(.62rem, 9px); letter-spacing: .1em; text-transform: uppercase; color: var(--sig); }
 .fcard h3 { font-size: 1.12rem; }
 .fcard p:not(.when) { font-size: .86rem; color: var(--ink2); line-height: 1.45; }
 .fcard.dark { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.fdots { display: none; }
 .fcard.dark .fn { color: #4a4d49; }
 .fcard.dark .when { color: #f3a493; }
 .fcard.dark p:not(.when) { color: #c9cac4; }
 .fcard::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: var(--sig2); transform: scaleX(0); transform-origin: 0 50%; transition: transform .6s var(--ease); }
-.fcard:hover::after { transform: scaleX(1); }
 
 /* ---------- research ---------- */
 .res-grid { display: grid; gap: 18px; }
@@ -551,18 +560,83 @@ h1 em, h2 em { font-size: 1.08em; line-height: .9; }
   .map-vis { max-width: none; }
   .drow { grid-template-columns: 1.4rem minmax(0, 1fr); }
   .drow .cbar { grid-column: 2; }
-  .orbit { height: auto; display: grid; gap: 12px; }
-  .orbit-core { position: relative; left: auto; top: auto; transform: none; width: 100%; aspect-ratio: auto; border-radius: 18px; padding: 1.2rem; }
-  .olines { display: none; }
-  .ochips { display: flex; flex-wrap: wrap; gap: .4rem; }
-  .ochip { position: relative; transform: none !important; opacity: 1 !important; font-size: .86rem; box-shadow: none; }
-  .subj-card { position: relative; left: auto; bottom: auto; transform: none; width: 100%; }
+  /* the orbit keeps turning on phones: a stage for it (the top padding), then the card below */
+  .orbit { --stage: 20rem; height: auto; padding-top: var(--stage); }
+  .orbit .olines { inset: 0 0 auto; height: var(--stage); }
+  .orbit-core { top: calc(var(--stage) * .5); width: 8.4rem; padding: .9rem; gap: .1rem; box-shadow: 0 0 0 .45rem rgba(13, 15, 14, .05), 0 0 0 1rem rgba(13, 15, 14, .03), 0 24px 48px -26px rgba(13, 15, 14, .6); }
+  .orbit-core b { font-size: 1.7rem; }
+  .orbit-core .oc-sub { display: none; }
+  .ochip { font-size: .84rem; padding: .5em .9em; }
+  .subj-card { position: relative; left: auto; bottom: auto; transform: none; width: 100%; margin-top: .3rem; }
+  .sc-b { grid-template-columns: minmax(0, 1fr); gap: .6rem; }
+  /* hero: the face gets the stage, the dialog card sits under the ring instead of over it */
+  .face-stage { height: min(62svh, 520px); }
+  .dialog { bottom: 8px; }
+  /* the room: forty seats, lighter */
+  .seats { max-width: 19rem; gap: .4rem; }
+  /* theory card: confidence stays beside each belief, so the card is a screen, not two */
+  .drow { grid-template-columns: 1.3rem minmax(0, 1fr) 3.7rem; gap: .5rem; }
+  .drow .cbar { grid-column: auto; }
+  .drow .tx { font-size: .86rem; }
+  .doc { padding: 1rem 1.05rem; }
+  .doc-top h3 { font-size: 1.75rem; }
+  /* the trust loop's type, set for a phone-width diagram */
+  #loopSvg .nd text { font-size: 23px; }
+  #loopSvg .nd .s { font-size: 14px; }
+  #loopSvg .ctr { font-size: 54px; }
+  #loopSvg .ctr2 { font-size: 15px; }
+  /* system stepper controls never push the column wider than the phone */
+  .st-ctrl { flex-wrap: wrap; }
+  .sdots i { width: .7rem; }
+  .fdots { display: flex; justify-content: center; gap: 6px; margin-top: -.15rem; }
+  .fdots i { width: 6px; height: 6px; border-radius: 6px; background: var(--line2); transition: width .35s var(--ease), background .35s; }
+  .fdots i.on { width: 20px; background: var(--ink); }
   .fgrid { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; margin: 0 calc(-1 * var(--gut)); padding: 4px var(--gut) 14px; scrollbar-width: none; }
   .fgrid::-webkit-scrollbar { display: none; }
   .fcard { flex: 0 0 78%; scroll-snap-align: center; }
   .trust-stat .n { font-size: 3.2rem; }
   .map-vis { max-width: 400px; }
   .dialog .who { padding-right: 6rem; }
+}
+
+/* phones and tablets: no label under 11px, no target under 40px */
+@media not all and (min-width: 1000px) and (min-height: 540px) and (min-aspect-ratio: 5/4) {
+  /* the face draws above the dialog card; a canvas needs an explicit height or it sizes to its own buffer */
+  .face-stage canvas { height: calc(100% - 4.4rem); }
+  .dialog .who, .dialog .read b, .face-state, .rn span, .bar.empty em, .dim-top .fam, .dim-top .star, .dim-card dt, .h .k, .h p span,
+  .lane-h span, .tl, .pbar, .psay b, .use .k, .fcard .when, .dims, .cbar span, .betrow .o, .drow .tag, .timeline button, .sc-b p span,
+  .sources summary, .src, .tiny { font-size: max(.7rem, 11px); }
+  .psay { font-size: .8rem; }
+  .node span, .modes button span { font-size: .78rem; }
+}
+@media (pointer: coarse) {
+  .brand-links a { display: inline-block; padding: .6rem .15rem; }
+  .logo { min-height: 2.75rem; }
+  .fam-chips button { min-height: 2.5rem; padding-inline: .85em; }
+  .seg button { min-height: 2.6rem; }
+  .ochip { min-height: 2.6rem; align-items: center; }
+  .play { width: 2.6rem; height: 2.6rem; }
+  .timeline button { padding-top: 1.5rem; min-height: 2.75rem; }
+  .sources summary { padding: .5rem 0; }
+}
+
+/* the smallest phones: a nav that fits on one line, a dialog card that leaves room for the face */
+@media (max-width: 359px) {
+  .count { display: none; }
+  .nav nav a.key { padding: .4em .75em; font-size: .8rem; }
+  .dialog > .layer { padding: .6rem .75rem; }
+  .dialog .txt { font-size: .9rem; }
+  .dialog .read div { grid-template-columns: 4.3rem minmax(0, 1fr); font-size: .8rem; }
+  .face-stage { height: min(64svh, 520px); }
+}
+/* phones on their side: face and words side by side, like the deck, instead of a face the height of a stamp */
+@media (max-width: 999px) and (max-height: 520px) and (orientation: landscape) {
+  .hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: start; }
+  .hero .inner { order: 1; grid-column: 1; grid-row: 1; padding-top: calc(var(--nav) + 18px); padding-bottom: 28px; }
+  .face-stage { order: 2; grid-column: 2; grid-row: 1; height: calc(100svh - var(--nav)); min-height: 300px; position: sticky; top: var(--nav); margin-top: var(--nav); }
+  .face-stage canvas { height: calc(100% - 5.2rem); }
+  .dialog { left: 8px; right: 8px; }
+  .hero h1 { font-size: 2.2rem; }
 }
 
 /* ======================================================================

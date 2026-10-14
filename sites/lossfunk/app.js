@@ -48,6 +48,13 @@ $$(".split").forEach(el => {
   })(el);
 });
 slides.forEach(s => $$(".rv", s).forEach((el, k) => el.style.setProperty("--d", 260 + k * 70)));
+/* phones and tablets: a section runs several screens tall, so each element reveals as it arrives rather
+   than when its section's top edge does, which played every animation before anyone could see it */
+const flowIO = "IntersectionObserver" in window ? new IntersectionObserver(es => {
+  let k = 0;
+  es.forEach(e => { if (!e.isIntersecting) return; e.target.style.setProperty("--fd", Math.min(k++, 5) * 90); e.target.classList.add("in"); flowIO.unobserve(e.target); });
+}, { rootMargin: "0px 0px -8% 0px" }) : null;
+$$(".deck .rv, .deck .split").forEach(el => flowIO ? flowIO.observe(el) : el.classList.add("in"));
 
 /* snap markers: plain blocks the browser can snap to, one per slide (sticky elements snap badly) */
 const snaps = document.createElement("div"); snaps.className = "snaps"; snaps.setAttribute("aria-hidden", "true");
@@ -63,6 +70,13 @@ const scrollFns = [];
 const onScroll = fn => scrollFns.push(fn);
 const seenFns = new Map();
 const onSeen = (slideId, fn) => { const s = document.getElementById(slideId); if (!s) return; if (s.classList.contains("seen")) fn(); else seenFns.set(s, [...(seenFns.get(s) || []), fn]); };
+/* run once when an element is really on screen: with its slide in the deck, by itself in the flow */
+function onShow(el, fn) {
+  if (!el) return; let done = false, io = null;
+  const fire = () => { if (done) return; done = true; if (io) io.disconnect(); fn(); };
+  if ("IntersectionObserver" in window) { io = new IntersectionObserver(es => { if (!deckMQ.matches && es.some(e => e.isIntersecting)) fire(); }, { rootMargin: "0px 0px -22% 0px" }); io.observe(el); }
+  const s = el.closest(".slide"); if (s) onSeen(s.id, () => { if (deckMQ.matches || !io) fire(); });
+}
 let current = 0, lastCovered = "";
 const navEl = $("#nav"), prog = $("#prog"), curEl = $("#cur"), links = $$("#nav nav a");
 
@@ -145,7 +159,7 @@ function countUp(el) {
   const start = performance.now(), dur = 1600;
   (function f(now) { const p = clamp((now - start) / dur); el.textContent = fmt(target * ease(p)); if (p < 1) requestAnimationFrame(f); })(start);
 }
-slides.forEach(s => onSeen(s.id, () => $$("[data-count]", s).forEach(el => setTimeout(() => countUp(el), 500))));
+$$("[data-count]").forEach(el => onShow(el, () => setTimeout(() => countUp(el), 250)));
 
 /* =====================================================================
    HERO: the face listens, thinks, answers; the seven families orbit it
@@ -352,7 +366,7 @@ const DIMS = [
   });
   const ctr = svgEl("circle", { cx: CX, cy: CY, r: 58, class: "ctr" }, svg);
   const ct = svgEl("text", { x: CX, y: CY, class: "ctrt" }, svg); ct.textContent = "a person";
-  onSeen("map", () => { spokes.forEach(s => s.style.strokeDashoffset = 0); dnodes.forEach(n => n.g.style.transform = "scale(1)"); });
+  onShow(svg, () => { spokes.forEach(s => s.style.strokeDashoffset = 0); dnodes.forEach(n => n.g.style.transform = "scale(1)"); });
 
   const famBtns = FAM.map(f => {
     const b = document.createElement("button"); b.type = "button"; b.innerHTML = `<b>${f.k}</b>${f.name}`;
@@ -387,7 +401,8 @@ const DIMS = [
    ===================================================================== */
 (function trustLoop() {
   const svg = $("#loopSvg"); if (!svg) return;
-  const cx = 280, cy = 280, R = 196, CIRC = 2 * Math.PI * R;
+  // a smaller ring on phones leaves room for labels set large enough to read there
+  const cx = 280, cy = 280, R = matchMedia("(max-width: 639px)").matches ? 168 : 196, CIRC = 2 * Math.PI * R;
   svgEl("circle", { cx, cy, r: R, class: "track" }, svg);
   const lit = svgEl("circle", { cx, cy, r: R, class: "lit", transform: `rotate(-90 ${cx} ${cy})`, "stroke-dasharray": `0 ${CIRC}` }, svg);
   const pts = Array.from({ length: 26 }, (_, i) => ({ c: svgEl("circle", { r: 2.2, class: "pt" }, svg), o: i / 26 }));
@@ -398,11 +413,14 @@ const DIMS = [
   const nodes = N.map(([deg, t, s]) => {
     const a = deg * Math.PI / 180, x = cx + R * Math.cos(a), y = cy + R * Math.sin(a);
     const g = svgEl("g", { class: "nd" }, svg);
-    svgEl("rect", { x: x - 88, y: y - 32, width: 176, height: 64, rx: 32 }, g);
+    const rect = svgEl("rect", { x: x - 88, y: y - 32, width: 176, height: 64, rx: 32 }, g);
     const tt = svgEl("text", { x, y: y + 1 }, g); tt.textContent = t;
     const ss = svgEl("text", { x, y: y + 19, class: "s" }, g); ss.textContent = s;
+    // each pill grows to its own label, so larger phone type never spills out of it
+    g._fit = () => { try { const w = Math.max(176, Math.max(tt.getComputedTextLength(), ss.getComputedTextLength()) + 44); rect.setAttribute("x", (x - w / 2).toFixed(1)); rect.setAttribute("width", w.toFixed(1)); } catch (e) {} };
     return g;
   });
+  const fitAll = () => nodes.forEach(n => n._fit()); fitAll(); if (document.fonts) document.fonts.ready.then(fitAll);
   let p = 0;
   loop(svg, (t, dt) => {
     p = (p + dt * (reduce ? 0 : 0.085)) % 1;
@@ -448,7 +466,7 @@ const DIMS = [
     area.setAttribute("opacity", f.toFixed(3)); ticks.forEach(t => t.setAttribute("r", t.getAttribute("cx") <= pt.x + 1 ? 3.5 : 0));
   }
   set(reduce ? 1 : 0);
-  onSeen("hypothesis", () => {
+  onShow(svg, () => {
     [ly, lm].forEach(p => p.style.strokeDashoffset = 0);
     if (reduce) return;
     const start = performance.now() + 500, dur = 2600;
@@ -583,7 +601,7 @@ const DIMS = [
   $("#stPrev").addEventListener("click", () => { auto = false; go(cur - 1); });
   loop(board, t => paths.forEach(q => { const u = ((t * 0.7 + q.o) % 1); const pt = q.p.getPointAtLength(q.len * u); q.c.setAttribute("cx", pt.x.toFixed(1)); q.c.setAttribute("cy", pt.y.toFixed(1)); q.c.setAttribute("opacity", Math.sin(u * Math.PI).toFixed(2)); }));
   every(stepper, 5200, () => { if (auto) go(cur + 1); });
-  onSeen("system", drawFlows);
+  onShow(board, drawFlows);
 })();
 
 /* =====================================================================
@@ -601,13 +619,18 @@ const DIMS = [
     b.style.setProperty("--h", Math.max(2, h).toFixed(1) + "px"); if (cls) b.className = cls; wave.appendChild(b);
   }
   const rows = $$(".track", tracks), verdict = $(".verdict", tracks), head = $(".playhead", tracks);
+  /* a scan line reads the signals top to bottom, lighting each one as it passes, then the verdict */
   async function play() {
     if (reduce) { rows.forEach(r => r.classList.add("on")); verdict.classList.add("on"); return; }
-    head.animate([{ left: "0%", opacity: 0 }, { left: "4%", opacity: 1, offset: 0.06 }, { left: "96%", opacity: 1, offset: 0.92 }, { left: "100%", opacity: 0 }], { duration: 4200, easing: "cubic-bezier(.4,0,.2,1)" });
-    for (const r of rows) { await wait(620); r.classList.add("on"); }
-    await wait(500); verdict.classList.add("on");
+    const STEP = 620, stops = [...rows, verdict].map(el => el.offsetTop + el.offsetHeight / 2), total = STEP * stops.length + 420;
+    const frames = [{ transform: `translateY(${rows[0].offsetTop}px)`, opacity: 0, offset: 0 }];
+    stops.forEach((y, i) => frames.push({ transform: `translateY(${y.toFixed(1)}px)`, opacity: 1, offset: ((i + 1) * STEP) / total }));
+    frames.push({ transform: `translateY(${stops[stops.length - 1].toFixed(1)}px)`, opacity: 0, offset: 1 });
+    head.animate(frames, { duration: total, easing: "linear" });
+    for (const r of rows) { await wait(STEP); r.classList.add("on"); }
+    await wait(STEP); verdict.classList.add("on");
   }
-  onSeen("senses", () => setTimeout(play, 500));
+  onShow(tracks, () => setTimeout(play, 250));
 })();
 (function phone() {
   const list = $("#modes"), stage = $("#phStage"), say = $("#phSay"), lab = $("#phMode"); if (!list) return;
@@ -640,7 +663,7 @@ const DIMS = [
   const wrap = document.createElement("div"); wrap.className = "ochips"; box.appendChild(wrap);
   const chips = SUB.map(([n, g], i) => {
     const c = document.createElement("button"); c.type = "button"; c.className = "ochip"; c.innerHTML = `<i>${g}</i>${n}`;
-    c.addEventListener("click", () => { target = -i * Math.PI * 2 / SUB.length; hold = 5; if (mobile.matches) setActive(i); });
+    c.addEventListener("click", () => { target = -i * Math.PI * 2 / SUB.length; hold = 5; });
     wrap.appendChild(c); return c;
   });
   const card = document.createElement("div"); card.className = "card subj-card"; card.setAttribute("aria-live", "polite"); box.appendChild(card);
@@ -652,14 +675,19 @@ const DIMS = [
     const [n, g, hid, chk] = SUB[i];
     card.innerHTML = `<div class="sc-h${quiet ? "" : " anim"}"><b>${n}</b><span class="tiny">same learner, new subject</span></div><div class="sc-b${quiet ? "" : " anim"}"><p><span>Hidden idea it looks for</span>${esc(hid)}</p><p><span>Quiet check</span>${esc(chk)}</p></div>`;
   }
+  /* on phones the orbit gets its own stage above the card (the box's top padding); everywhere the
+     ellipse is narrowed so the widest chip never leaves the box */
   function measure() {
-    W = box.clientWidth; H = box.clientHeight; cx = W / 2; cy = H * 0.4; RX = W * 0.44; RY = H * 0.29;
-    svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
     sizes = chips.map(c => [c.offsetWidth, c.offsetHeight]);
+    const widest = Math.max(0, ...sizes.map(s => s[0]));
+    W = box.clientWidth; H = mobile.matches ? parseFloat(getComputedStyle(box).paddingTop) : box.clientHeight;
+    cx = W / 2; cy = H * (mobile.matches ? 0.5 : 0.4);
+    RX = Math.max(40, Math.min(W * 0.44, W / 2 - widest / 2 - 4)); RY = H * (mobile.matches ? 0.36 : 0.29);
+    svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
   }
-  box.addEventListener("pointerenter", () => hover = true); box.addEventListener("pointerleave", () => hover = false);
+  // a touch never "leaves", so only a mouse pauses the orbit
+  box.addEventListener("pointerenter", e => { if (e.pointerType === "mouse") hover = true; }); box.addEventListener("pointerleave", () => hover = false);
   function place(t) {
-    if (mobile.matches) { chips.forEach(c => { c.style.transform = ""; c.style.opacity = ""; c.style.zIndex = ""; }); return; }
     let best = 0, bz = -2;
     chips.forEach((c, i) => {
       const a = ang + i * Math.PI * 2 / SUB.length, z = Math.cos(a), x = cx + Math.sin(a) * RX, y = cy + z * RY;
@@ -677,7 +705,6 @@ const DIMS = [
       sp.setAttribute("cx", (cx + (x2 - cx) * u).toFixed(1)); sp.setAttribute("cy", (cy + (y2 - cy) * u).toFixed(1)); sp.setAttribute("opacity", Math.sin(u * Math.PI).toFixed(2)); });
   }
   loop(box, (t, dt) => {
-    if (mobile.matches) return;
     if (target !== null) { let d = target - ang; d = Math.atan2(Math.sin(d), Math.cos(d)); ang += d * Math.min(1, dt * 4); if (Math.abs(d) < 0.002) target = null; }
     else if (hold > 0) hold -= dt;
     else if (!hover && !reduce) ang -= dt * 0.15;
@@ -685,7 +712,16 @@ const DIMS = [
   });
   measure(); place(0); setActive(0, true);
   addEventListener("resize", () => { measure(); place(0); }); if (document.fonts) document.fonts.ready.then(() => { measure(); place(0); });
-  every(box, 4200, () => { if (mobile.matches) setActive((active + 1) % SUB.length); });
+})();
+
+/* the future cards scroll sideways on phones: dots say how many there are and which one is showing */
+(function futureDots() {
+  const grid = $(".fgrid"); if (!grid || !("IntersectionObserver" in window)) return;
+  const cards = $$(".fcard", grid), dots = document.createElement("div"); dots.className = "fdots"; dots.setAttribute("aria-hidden", "true");
+  const ds = cards.map(() => dots.appendChild(document.createElement("i")));
+  grid.after(dots); ds[0].classList.add("on");
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.intersectionRatio > 0.6) ds.forEach((d, i) => d.classList.toggle("on", cards[i] === e.target)); }), { root: grid, threshold: [0.6] });
+  cards.forEach(c => io.observe(c));
 })();
 
 /* =====================================================================

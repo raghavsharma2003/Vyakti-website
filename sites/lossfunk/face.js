@@ -308,7 +308,8 @@
   pts.frustumCulled = false; pts.renderOrder = 4; head.add(pts);
 
   function resize() {
-    const w = Math.max(1, stage.clientWidth), h = Math.max(1, stage.clientHeight);
+    // size to the canvas itself: on desktop it sits below the nav, on phones above the dialog card
+    const w = Math.max(1, cv.clientWidth || stage.clientWidth), h = Math.max(1, cv.clientHeight || stage.clientHeight);
     const dpr = Math.min(devicePixelRatio || 1, 2);
     renderer.setPixelRatio(dpr); renderer.setSize(w, h, false);
     camera.aspect = w / h; camera.updateProjectionMatrix();
