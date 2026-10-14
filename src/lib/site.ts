@@ -4,9 +4,7 @@ export const SITE = {
   url: "https://vyakti.ai",
   // Maya, the product. The display name changed from Meera on 2026-08-23;
   // meera-silk.vercel.app still serves the same app for the Android build.
-  // Points at the existing address until the maya.vyakti.ai DNS record is
-  // live, so no Maya link is ever dead; then this becomes maya.vyakti.ai.
-  maya: "https://meera-silk.vercel.app",
+  maya: "https://maya.vyakti.ai",
   tagline: "A relational intelligence lab.",
   description:
     "Vyakti researches AI that understands a person over time and remains recognizably itself as the models beneath it change. Maya is our first AI person.",
