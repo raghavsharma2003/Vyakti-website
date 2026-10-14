@@ -29,7 +29,7 @@ const CHAPTERS = [
     side: "left",
     label: "Vyakti is a relational intelligence lab",
     title: "Intelligence is becoming abundant. Continuity is not.",
-    body: "We research AI identities that remain recognizable as the intelligence beneath them changes.",
+    body: "We research AI that comes to understand a person over time, and remains recognizably itself as the intelligence beneath it changes.",
   },
   {
     at: 0.165,

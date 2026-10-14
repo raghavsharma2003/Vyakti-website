@@ -282,6 +282,37 @@ These are planning hypotheses from the strategy discussion, not public commitmen
 
 ## Decision log
 
+### 2026-10-14
+
+- Widened the public thesis from "an AI identity that persists" to its full
+  shape: AI that comes to understand a person over time *and* remains
+  recognizably itself. The two halves (knowing someone, being someone) are one
+  loop, joined by the relationship. Hero structure and story timing are
+  unchanged; only chapter one's body line moved.
+- Added five homepage sections after the story, in order: the vision (with a
+  ladder of published external results: LongMemEval, PersonaMem-v2/CUPID,
+  SimpleToM, each cited, none ours), an interactive map of a person (seven
+  families, 25 dimensions, each with core question, why it is open, and ground
+  truth), the relationship as instrument (Flückiger et al. 2018, r ≈ .28),
+  persistence (a living theory of an illustrative learner whose beliefs are
+  revised, scored by bets, and fade without fresh evidence, plus the existing
+  continuity map), and where the layer begins (learning first, Meera, groups,
+  later domains), each with an explicit status.
+- The map and living theory are ported from the Lossfunk research proposal
+  (lossfunk.vyakti.ai), which the learning row links to. Learning is the first
+  proving ground because it is the one domain with an answer key.
+- The continuity-map caption now states that the base model still sets a
+  strong identity ceiling (the 38 to 2 swap result), so model independence is
+  presented as a measured question, not a promise.
+- Added "Beliefs, not labels" to the principles, a fourth evaluation horizon
+  ("one week: did what it predicted about the person come true?"), and two
+  research areas (understanding the person; learning from being wrong).
+- Product repo read for this change: `html-portfolio` main at `3a921798`.
+- Open: the product renamed Meera to **Maya** for display on 2026-08-23
+  (`maya-rename-display-only` in the product repo). This site still says
+  Meera everywhere. The rename is an owner decision and was deliberately left
+  out of this change.
+
 ### 2026-08-24
 
 - Removed numeric GSAP scrub from the touch layout. Native mobile momentum now drives story progress directly, so the face no longer trails the finger or keeps catching up after a swipe.

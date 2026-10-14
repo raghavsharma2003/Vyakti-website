@@ -4,7 +4,7 @@ export const SITE = {
   url: "https://vyakti.ai",
   tagline: "A relational intelligence lab.",
   description:
-    "Vyakti researches AI identities that build shared context over time and remain recognizable as the models beneath them change. Meera is our first product in development.",
+    "Vyakti researches AI that understands a person over time and remains recognizably itself as the models beneath it change. Meera is our first product in development.",
   locale: "en_US",
   twitter: "@vyakti_ai",
   email: "hello@vyakti.ai",
@@ -12,6 +12,7 @@ export const SITE = {
 } as const;
 
 export const NAV = [
+  { label: "Vision", href: "/#vision" },
   { label: "Research", href: "/research" },
   { label: "Meera", href: "/meera" },
   { label: "Principles", href: "/#principles" },

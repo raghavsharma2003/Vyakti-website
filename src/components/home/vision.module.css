@@ -1,0 +1,1605 @@
+/* ------------------------------------------------------------------------
+   Homepage vision sections: knowing someone, the map of a person, the
+   relationship as instrument, persistence, and where the layer begins.
+   Same system as home.module.css: paper, ink, hairlines, one ember accent.
+   ------------------------------------------------------------------------ */
+
+.vision,
+.mapSection,
+.instrument,
+.persist,
+.frontiers {
+  position: relative;
+  border-top: 1px solid var(--color-hairline);
+  scroll-margin-top: 4.5rem;
+}
+
+.vision,
+.frontiers {
+  padding-block: clamp(6.5rem, 12vw, 11rem);
+  background: var(--color-void);
+}
+
+.mapSection,
+.persist {
+  padding-block: clamp(6.5rem, 12vw, 11rem);
+  background: var(--color-ink);
+}
+
+.signal {
+  color: var(--color-ember);
+}
+
+.headSplit {
+  display: grid;
+  gap: clamp(1.5rem, 4vw, 5rem);
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr);
+  align-items: end;
+}
+
+.headSplit p {
+  margin-top: 0;
+}
+
+.kicker {
+  margin-bottom: 1.6rem;
+}
+
+/* ---------- the ladder: how far AI has climbed toward a person ---------- */
+
+.ladder {
+  margin-top: clamp(4rem, 8vw, 6.5rem);
+  border-top: 1px solid var(--color-bone);
+}
+
+.ladderHead {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-block: 1rem;
+  color: var(--color-slate);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.rung {
+  display: grid;
+  padding-block: clamp(1.1rem, 2vw, 1.6rem);
+  border-top: 1px solid var(--color-hairline);
+  gap: 0.6rem clamp(1.5rem, 3vw, 3rem);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr) minmax(0, 0.8fr);
+  align-items: center;
+}
+
+.rungLabel b {
+  display: block;
+  font-size: clamp(1.3rem, 1.05rem + 0.9vw, 2rem);
+  font-weight: 540;
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.rungLabel span {
+  display: block;
+  margin-top: 0.35rem;
+  color: var(--color-ash);
+  font-size: 0.9rem;
+}
+
+.bar {
+  position: relative;
+  height: 0.7rem;
+  border-radius: 99px;
+  background: color-mix(in oklab, var(--color-bone) 7%, transparent);
+}
+
+.bar > b,
+.bar > i {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: var(--l, 0%);
+  width: 0;
+  border-radius: 99px;
+  transition: width 1.4s var(--ease-out-expo) calc(var(--d, 0) * 1ms + 200ms);
+}
+
+:global(.is-revealed) .bar > b,
+:global(.is-revealed) .bar > i {
+  width: var(--w);
+}
+
+.barKnown {
+  background: var(--color-sage);
+}
+
+.barHalf {
+  background: #c48a22;
+}
+
+.barSoft {
+  opacity: 0.38;
+}
+
+.barLost {
+  background: var(--color-ember);
+}
+
+.barReach {
+  border: 1.5px dashed color-mix(in oklab, var(--color-ember) 65%, transparent);
+  background: transparent !important;
+}
+
+.barNone {
+  display: grid;
+  height: auto;
+  min-height: 2.2rem;
+  border: 1.5px dashed var(--color-hairline);
+  background: transparent;
+  place-items: center;
+  color: var(--color-slate);
+  font-size: 0.82rem;
+  font-style: italic;
+}
+
+.rungFig b {
+  display: block;
+  font-size: clamp(1.3rem, 1rem + 0.9vw, 2rem);
+  font-weight: 560;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+}
+
+.rungFig b small {
+  color: var(--color-slate);
+  font-size: 0.55em;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+.rungFig span {
+  display: block;
+  margin-top: 0.35rem;
+  color: var(--color-slate);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+}
+
+.rungOpen .rungFig b {
+  color: var(--color-ember);
+}
+
+.ladderNote {
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-hairline);
+  color: var(--color-slate);
+  font-size: 0.78rem;
+}
+
+/* ---------- two halves of one problem ---------- */
+
+.halves {
+  display: grid;
+  margin-top: clamp(4.5rem, 9vw, 8rem);
+  grid-template-columns: minmax(0, 1fr) clamp(7rem, 12vw, 11rem) minmax(0, 1fr);
+}
+
+.half {
+  padding-top: 1.6rem;
+  border-top: 1px solid var(--color-bone);
+}
+
+.half h3 {
+  font-size: clamp(2.2rem, 3.6vw, 4.4rem);
+  font-weight: 540;
+  line-height: 0.95;
+  letter-spacing: -0.055em;
+}
+
+.half > p {
+  max-width: 40ch;
+  margin-top: 1.4rem;
+  color: var(--color-ash);
+  font-size: clamp(1rem, 0.94rem + 0.25vw, 1.15rem);
+  line-height: 1.58;
+}
+
+.halfNum {
+  display: block;
+  margin-bottom: 2.2rem;
+  color: var(--color-ember);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+}
+
+.half ul {
+  margin-top: 2rem;
+  border-top: 1px solid var(--color-hairline);
+}
+
+.half li {
+  display: flex;
+  gap: 0.8rem;
+  padding-block: 0.72rem;
+  border-bottom: 1px solid var(--color-hairline);
+  color: var(--color-bone);
+  font-size: 0.98rem;
+}
+
+.half li::before {
+  flex: none;
+  width: 0.45rem;
+  height: 0.45rem;
+  margin-top: 0.55em;
+  border-radius: 50%;
+  content: "";
+  background: var(--color-ember);
+}
+
+.bridge {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.9rem;
+  padding-inline: 0.5rem;
+}
+
+.bridgeTrack {
+  position: relative;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, var(--color-bone), var(--color-ember), var(--color-bone));
+  opacity: 0.85;
+}
+
+.bridgeTrack i {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 0.7rem;
+  height: 0.7rem;
+  margin-top: -0.35rem;
+  border-radius: 50%;
+  background: var(--color-ember);
+  box-shadow: 0 0 0 0.35rem color-mix(in oklab, var(--color-ember) 18%, transparent);
+  animation: bridge-travel 4.8s var(--ease-out-quint) infinite alternate;
+}
+
+.bridgeTrack i:nth-child(2) {
+  width: 0.45rem;
+  height: 0.45rem;
+  margin-top: -0.225rem;
+  background: var(--color-bone);
+  box-shadow: none;
+  animation-delay: -2.4s;
+}
+
+@keyframes bridge-travel {
+  from {
+    left: 0;
+  }
+
+  to {
+    left: calc(100% - 0.7rem);
+  }
+}
+
+.bridge span {
+  color: var(--color-slate);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+/* ---------- the map of a person ---------- */
+
+.mapWrap {
+  margin-top: clamp(3.5rem, 7vw, 6rem);
+}
+
+.famChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.famChips button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.95rem;
+  border: 1px solid var(--color-hairline);
+  border-radius: 99px;
+  color: var(--color-ash);
+  font-size: 0.88rem;
+  font-weight: 520;
+  cursor: pointer;
+  transition:
+    background-color var(--duration-fast) var(--ease-out-quint),
+    border-color var(--duration-fast) var(--ease-out-quint),
+    color var(--duration-fast) var(--ease-out-quint);
+}
+
+.famChips button:hover {
+  border-color: var(--color-ash);
+  color: var(--color-bone);
+}
+
+.famChips button b {
+  color: var(--color-ember);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+
+.famChips button[aria-pressed="true"] {
+  border-color: var(--color-bone);
+  background: var(--color-bone);
+  color: var(--color-ink);
+}
+
+.mapBody {
+  display: grid;
+  margin-top: clamp(2rem, 4vw, 3.5rem);
+  gap: clamp(2rem, 5vw, 6rem);
+  grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
+  align-items: center;
+}
+
+.mapVis svg {
+  display: block;
+  width: 100%;
+  max-width: 44rem;
+  height: auto;
+  margin-inline: auto;
+  overflow: visible;
+}
+
+.orbitRing {
+  fill: none;
+  stroke: var(--color-hairline);
+  stroke-dasharray: 2 7;
+  transform-origin: 350px 350px;
+  animation: orbit-spin 60s linear infinite;
+}
+
+.orbitRing:nth-child(2) {
+  animation-direction: reverse;
+}
+
+@keyframes orbit-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spoke {
+  stroke: color-mix(in oklab, var(--color-bone) 22%, transparent);
+  stroke-width: 1.2;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition:
+    stroke-dashoffset 1s var(--ease-out-quint) calc(200ms + var(--i) * 30ms),
+    stroke 300ms,
+    stroke-width 300ms;
+}
+
+.mapLive .spoke {
+  stroke-dashoffset: 0;
+}
+
+.spokeOn {
+  stroke: var(--color-ember);
+  stroke-width: 2.2;
+}
+
+.arc {
+  fill: none;
+  stroke: var(--color-hairline);
+  stroke-width: 3;
+  stroke-linecap: round;
+  transition: stroke 300ms;
+}
+
+.arcOn {
+  stroke: var(--color-ember);
+}
+
+.famLabel {
+  fill: var(--color-slate);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  transition: fill 300ms;
+}
+
+.famKey {
+  fill: var(--color-ember);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.famLabelOn {
+  fill: var(--color-bone);
+  font-weight: 640;
+}
+
+.halo {
+  fill: color-mix(in oklab, var(--color-ember) 16%, transparent);
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: halo-pulse 2.2s ease-in-out infinite;
+}
+
+@keyframes halo-pulse {
+  50% {
+    transform: scale(1.22);
+  }
+}
+
+.node {
+  cursor: pointer;
+  outline: none;
+  transform-box: fill-box;
+  transform-origin: center;
+  transform: scale(0);
+  transition: transform 700ms var(--ease-out-quint) calc(450ms + var(--i) * 35ms);
+}
+
+.mapLive .node {
+  transform: scale(1);
+}
+
+.node circle,
+.node text {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.node circle {
+  fill: var(--color-surface);
+  stroke: var(--color-bone);
+  stroke-width: 1.4;
+  transition:
+    fill 250ms,
+    stroke 250ms,
+    stroke-width 250ms;
+}
+
+.node text {
+  fill: var(--color-bone);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  text-anchor: middle;
+  dominant-baseline: central;
+  pointer-events: none;
+}
+
+.nodeFirst circle {
+  fill: var(--color-bone);
+}
+
+.nodeFirst text {
+  fill: var(--color-ink);
+}
+
+.node:hover circle {
+  stroke: var(--color-ember);
+}
+
+.node:focus-visible circle {
+  stroke: var(--color-ember);
+  stroke-width: 3.5;
+}
+
+.nodeOn circle {
+  fill: var(--color-ember);
+  stroke: var(--color-ember);
+}
+
+.nodeOn text {
+  fill: #fff;
+}
+
+.hub {
+  fill: var(--color-bone);
+}
+
+.hubText {
+  fill: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  font-weight: 520;
+  letter-spacing: -0.02em;
+  text-anchor: middle;
+  dominant-baseline: central;
+}
+
+.dimStack {
+  display: grid;
+}
+
+.dimCard {
+  grid-area: 1 / 1;
+  padding-top: 1.3rem;
+  border-top: 1px solid var(--color-bone);
+  opacity: 0;
+  visibility: hidden;
+  transform: translate3d(0, 10px, 0);
+  transition:
+    opacity 260ms var(--ease-out-quint),
+    transform 260ms var(--ease-out-quint),
+    visibility 0s linear 260ms;
+}
+
+.dimCardOn {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition:
+    opacity 420ms var(--ease-out-quint) 80ms,
+    transform 520ms var(--ease-out-expo) 80ms,
+    visibility 0s;
+}
+
+.dimTop {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.6rem 1rem;
+  color: var(--color-slate);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.chipFirst,
+.chipLater {
+  padding: 0.25rem 0.6rem;
+  border-radius: 99px;
+  font-size: 0.64rem;
+}
+
+.chipFirst {
+  background: var(--color-ember);
+  color: var(--color-on-ember);
+}
+
+.chipLater {
+  border: 1px solid var(--color-hairline);
+}
+
+.dimCard h3 {
+  display: flex;
+  gap: 0.9rem;
+  margin-top: 1.4rem;
+  font-size: clamp(1.75rem, 1.3rem + 1.4vw, 2.8rem);
+  font-weight: 540;
+  line-height: 1;
+  letter-spacing: -0.045em;
+}
+
+.dimNum {
+  flex: none;
+  padding-top: 0.2em;
+  color: var(--color-ember);
+  font-family: var(--font-mono);
+  font-size: 0.42em;
+  letter-spacing: 0;
+}
+
+.dimCard dl {
+  margin-top: 1.6rem;
+  border-top: 1px solid var(--color-hairline);
+}
+
+.dimCard dl > div {
+  display: grid;
+  padding-block: 0.95rem;
+  border-bottom: 1px solid var(--color-hairline);
+  gap: 0.4rem 1.2rem;
+  grid-template-columns: 8.5rem minmax(0, 1fr);
+}
+
+.dimCard dt {
+  padding-top: 0.25rem;
+  color: var(--color-slate);
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.dimCard dd {
+  color: var(--color-bone);
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.dimCard dd.truth {
+  color: var(--color-sage);
+  font-weight: 540;
+}
+
+.dimNav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1.3rem;
+}
+
+.dimNav button {
+  display: grid;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 1px solid var(--color-hairline);
+  border-radius: 50%;
+  place-items: center;
+  cursor: pointer;
+  transition:
+    border-color var(--duration-fast),
+    background-color var(--duration-fast);
+}
+
+.dimNav button:hover {
+  border-color: var(--color-bone);
+  background: var(--color-surface);
+}
+
+.dimNav span {
+  margin-left: 0.5rem;
+  color: var(--color-slate);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+}
+
+/* ---------- the relationship is part of the instrument ---------- */
+
+.instrument {
+  overflow: hidden;
+  padding-block: clamp(6rem, 11vw, 10rem);
+  border-top: 0;
+  background: var(--color-ember);
+  color: var(--color-on-ember);
+}
+
+.instrument :global(.eyebrow) {
+  color: color-mix(in oklab, var(--color-on-ember) 75%, transparent);
+}
+
+.instrument h2 {
+  max-width: 17ch;
+  margin-top: 1.6rem;
+  font-size: clamp(2.6rem, 5.2vw, 6.4rem);
+  font-weight: 540;
+  line-height: 0.95;
+  letter-spacing: -0.058em;
+}
+
+.instrument h2 span {
+  color: color-mix(in oklab, var(--color-on-ember) 62%, transparent);
+}
+
+.instrumentGrid {
+  display: grid;
+  margin-top: clamp(3.5rem, 7vw, 6rem);
+  gap: clamp(2rem, 5vw, 5rem);
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  align-items: center;
+}
+
+.stat {
+  display: flex;
+  align-items: flex-end;
+  gap: 1.6rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid color-mix(in oklab, var(--color-on-ember) 35%, transparent);
+}
+
+.stat strong {
+  flex: none;
+  font-size: clamp(5rem, 11vw, 10rem);
+  font-weight: 520;
+  line-height: 0.78;
+  letter-spacing: -0.07em;
+  font-variant-numeric: tabular-nums;
+}
+
+.stat p {
+  max-width: 30ch;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.stat cite {
+  display: block;
+  margin-top: 0.6rem;
+  color: color-mix(in oklab, var(--color-on-ember) 70%, transparent);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-style: normal;
+  letter-spacing: 0.06em;
+}
+
+.instrumentCopy {
+  max-width: 44ch;
+  margin-top: 2rem;
+  font-size: clamp(1.05rem, 0.95rem + 0.45vw, 1.35rem);
+  line-height: 1.5;
+}
+
+.loop svg {
+  display: block;
+  width: 100%;
+  max-width: 34rem;
+  height: auto;
+  margin-inline: auto;
+  overflow: visible;
+}
+
+.loopTrack {
+  fill: none;
+  stroke: color-mix(in oklab, var(--color-on-ember) 30%, transparent);
+  stroke-width: 1.5;
+}
+
+.loopLit {
+  fill: none;
+  stroke: var(--color-on-ember);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-dasharray: 0.2 0.8;
+  transform-origin: 310px 260px;
+  animation: orbit-spin 10s linear infinite;
+}
+
+.loopNode rect {
+  fill: color-mix(in oklab, var(--color-bone) 22%, var(--color-ember));
+  stroke: color-mix(in oklab, var(--color-on-ember) 45%, transparent);
+  stroke-width: 1;
+  animation: loop-node 10s linear infinite;
+  animation-delay: calc(var(--n) * 2.5s);
+}
+
+.loopNode text {
+  fill: var(--color-on-ember);
+  font-family: var(--font-sans);
+  font-size: 17px;
+  font-weight: 560;
+  letter-spacing: -0.02em;
+  text-anchor: middle;
+  dominant-baseline: central;
+}
+
+@keyframes loop-node {
+  0%,
+  24% {
+    fill: var(--color-on-ember);
+  }
+
+  25%,
+  100% {
+    fill: color-mix(in oklab, var(--color-bone) 22%, var(--color-ember));
+  }
+}
+
+.loopNode text {
+  animation: loop-text 10s linear infinite;
+  animation-delay: calc(var(--n) * 2.5s);
+}
+
+@keyframes loop-text {
+  0%,
+  24% {
+    fill: var(--color-ember);
+  }
+
+  25%,
+  100% {
+    fill: var(--color-on-ember);
+  }
+}
+
+.loopCentre {
+  fill: var(--color-on-ember);
+  font-family: var(--font-sans);
+  font-size: 30px;
+  font-weight: 540;
+  letter-spacing: -0.04em;
+  text-anchor: middle;
+}
+
+.loopCentreSub {
+  fill: color-mix(in oklab, var(--color-on-ember) 70%, transparent);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-anchor: middle;
+}
+
+/* ---------- persistence ---------- */
+
+.persistGrid {
+  display: grid;
+  margin-top: clamp(4rem, 8vw, 6.5rem);
+  gap: clamp(2rem, 5vw, 5.5rem);
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  align-items: start;
+}
+
+.persistSide h3 {
+  max-width: 14ch;
+  font-size: clamp(1.8rem, 2.6vw, 3rem);
+  font-weight: 540;
+  line-height: 1;
+  letter-spacing: -0.045em;
+}
+
+.rules {
+  margin-top: 2rem;
+  border-top: 1px solid var(--color-bone);
+}
+
+.rules li {
+  padding-block: 1.05rem;
+  border-bottom: 1px solid var(--color-hairline);
+}
+
+.rules b {
+  display: block;
+  font-size: 1.08rem;
+  font-weight: 560;
+  letter-spacing: -0.02em;
+}
+
+.rules span {
+  display: block;
+  margin-top: 0.2rem;
+  color: var(--color-ash);
+  font-size: 0.94rem;
+}
+
+.theory {
+  padding: clamp(1.25rem, 2.6vw, 2.2rem);
+  border: 1px solid var(--color-hairline);
+  border-radius: 1.1rem;
+  background: var(--color-surface);
+  box-shadow: var(--shadow-lift);
+}
+
+.theoryTop {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.theoryTop h3 {
+  font-size: clamp(1.6rem, 1.3rem + 1vw, 2.3rem);
+  font-weight: 560;
+  line-height: 1;
+  letter-spacing: -0.045em;
+}
+
+.theoryTop span {
+  display: block;
+  margin-top: 0.45rem;
+  color: var(--color-slate);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+}
+
+.play {
+  display: grid;
+  flex: none;
+  width: 2.4rem;
+  height: 2.4rem;
+  border: 1px solid var(--color-hairline);
+  border-radius: 50%;
+  place-items: center;
+  color: var(--color-bone);
+  font-size: 0.7rem;
+  cursor: pointer;
+}
+
+.play:hover {
+  border-color: var(--color-bone);
+}
+
+.timeline {
+  position: relative;
+  display: grid;
+  margin-top: 1.6rem;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.timeline::before,
+.timelineFill {
+  position: absolute;
+  top: 0.45rem;
+  left: 12.5%;
+  height: 2px;
+  content: "";
+}
+
+.timeline::before {
+  right: 12.5%;
+  background: var(--color-hairline);
+}
+
+.timelineFill {
+  background: var(--color-ember);
+  transition: width 600ms var(--ease-out-quint);
+}
+
+.timeline button {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0;
+  color: var(--color-slate);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: color 300ms;
+}
+
+.timeline button::before {
+  width: 0.95rem;
+  height: 0.95rem;
+  border: 2px solid var(--color-hairline);
+  border-radius: 50%;
+  content: "";
+  background: var(--color-surface);
+  transition:
+    border-color 300ms,
+    background-color 300ms,
+    transform 300ms var(--ease-out-quint);
+}
+
+.timeline button.past::before {
+  border-color: var(--color-ember);
+}
+
+.timeline button.cur {
+  color: var(--color-bone);
+  font-weight: 600;
+}
+
+.timeline button.cur::before {
+  background: var(--color-ember);
+  transform: scale(1.18);
+}
+
+.theoryStack {
+  display: grid;
+  margin-top: 1.4rem;
+}
+
+.stageLive,
+.stageSizer {
+  grid-area: 1 / 1;
+}
+
+.stageSizer {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.rows {
+  border-top: 1px solid var(--color-hairline);
+}
+
+.row {
+  display: grid;
+  padding-block: 0.8rem;
+  border-bottom: 1px solid var(--color-hairline);
+  gap: 0.4rem 1rem;
+  grid-template-columns: 6.2rem minmax(0, 1fr) 7.5rem;
+  align-items: start;
+  transition: background-color 600ms;
+}
+
+.rowChanged {
+  animation: row-flash 1.6s var(--ease-out-quint);
+}
+
+@keyframes row-flash {
+  from {
+    background: color-mix(in oklab, var(--color-ember) 9%, transparent);
+  }
+}
+
+.rowKey {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding-top: 0.1rem;
+  color: var(--color-slate);
+  font-size: 0.82rem;
+}
+
+.rowKey b {
+  display: grid;
+  width: 1.45rem;
+  height: 1.45rem;
+  border-radius: 50%;
+  place-items: center;
+  background: var(--color-bone);
+  color: var(--color-ink);
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+}
+
+.rowText {
+  display: grid;
+  gap: 0.2rem;
+  font-size: 0.93rem;
+  line-height: 1.45;
+}
+
+.swap {
+  display: grid;
+}
+
+.swap > * {
+  grid-area: 1 / 1;
+}
+
+.old,
+.oldStatic {
+  color: var(--color-slate);
+  text-decoration-color: var(--color-ember);
+  text-decoration-thickness: 1.5px;
+}
+
+.oldStatic {
+  visibility: hidden;
+}
+
+.old {
+  opacity: 0;
+  pointer-events: none;
+  animation: old-out 2.1s var(--ease-out-quint) both;
+}
+
+@keyframes old-out {
+  0%,
+  45% {
+    opacity: 1;
+    transform: none;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate3d(0, -6px, 0);
+  }
+}
+
+.enter {
+  animation: text-in 700ms var(--ease-out-expo) both;
+}
+
+.enterLate {
+  animation: text-in 800ms var(--ease-out-expo) 1.05s both;
+}
+
+@keyframes text-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 6px, 0);
+  }
+}
+
+.tagRevised,
+.tagNew,
+.tagFading {
+  display: inline-block;
+  margin-left: 0.45rem;
+  padding: 0.1rem 0.42rem;
+  border-radius: 99px;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  font-style: normal;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  vertical-align: 0.12em;
+}
+
+.tagRevised {
+  background: color-mix(in oklab, var(--color-ember) 14%, transparent);
+  color: var(--color-ember);
+}
+
+.tagNew {
+  background: color-mix(in oklab, var(--color-sage) 14%, transparent);
+  color: var(--color-sage);
+}
+
+.tagFading {
+  margin-left: 0;
+  margin-right: 0.3rem;
+  border: 1px dashed var(--color-slate);
+  color: var(--color-slate);
+}
+
+.fadeLine {
+  margin-top: 0.25rem;
+  color: var(--color-slate);
+  font-size: 0.8rem;
+}
+
+.conf {
+  display: grid;
+  gap: 0.35rem;
+  padding-top: 0.15rem;
+}
+
+.conf span {
+  color: var(--color-slate);
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  text-align: right;
+}
+
+.conf i {
+  position: relative;
+  display: block;
+  height: 0.32rem;
+  overflow: hidden;
+  border-radius: 99px;
+  background: color-mix(in oklab, var(--color-bone) 8%, transparent);
+}
+
+.conf b {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  border-radius: 99px;
+  background: var(--color-bone);
+  transition: width 900ms var(--ease-out-expo);
+}
+
+.bets {
+  display: grid;
+  margin-top: 1.1rem;
+  gap: 0.45rem;
+}
+
+.betsHead {
+  color: var(--color-slate);
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.bet {
+  display: grid;
+  padding: 0.6rem 0.8rem;
+  border-radius: 0.6rem;
+  background: var(--color-raised);
+  gap: 0.8rem;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  font-size: 0.88rem;
+}
+
+.betFlip {
+  animation: bet-flip 900ms var(--ease-out-expo);
+}
+
+@keyframes bet-flip {
+  from {
+    transform: scale(0.97);
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-ember) 30%, transparent);
+  }
+}
+
+.odds {
+  color: var(--color-slate);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+
+.betState {
+  padding: 0.18rem 0.55rem;
+  border-radius: 99px;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.bet_open {
+  border: 1px solid var(--color-hairline);
+  color: var(--color-slate);
+}
+
+.bet_hit {
+  background: var(--color-sage);
+  color: #fff;
+}
+
+.bet_miss {
+  background: var(--color-ember);
+  color: #fff;
+}
+
+.theoryNote {
+  margin-top: 1rem;
+  color: var(--color-ash);
+  font-size: 0.92rem;
+}
+
+.theoryNote b {
+  color: var(--color-bone);
+  font-weight: 600;
+}
+
+.continuityLead {
+  max-width: 22ch;
+  margin-top: clamp(6rem, 11vw, 10rem);
+  font-size: clamp(2rem, 3.6vw, 4.2rem);
+  font-weight: 540;
+  line-height: 0.98;
+  letter-spacing: -0.05em;
+}
+
+/* ---------- where it begins ---------- */
+
+.frontierGrid {
+  display: grid;
+  margin-top: clamp(3.5rem, 7vw, 6rem);
+  gap: clamp(2rem, 5vw, 6rem);
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  align-items: center;
+}
+
+.hubVis svg {
+  display: block;
+  width: 100%;
+  max-width: 32rem;
+  height: auto;
+  margin-inline: auto;
+  overflow: visible;
+}
+
+.hubSpoke {
+  stroke: var(--color-bone);
+  stroke-width: 1.6;
+  stroke-dasharray: 3 9;
+  animation: spoke-flow 1.4s linear infinite;
+}
+
+.hubSpokeLater {
+  stroke: var(--color-hairline);
+  stroke-width: 1.4;
+  stroke-dasharray: 2 8;
+  animation: none;
+}
+
+@keyframes spoke-flow {
+  to {
+    stroke-dashoffset: -12;
+  }
+}
+
+.hubCore {
+  fill: var(--color-bone);
+}
+
+.hubCoreRing {
+  fill: none;
+  stroke: color-mix(in oklab, var(--color-ember) 40%, transparent);
+  stroke-width: 1.5;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: core-breathe 3.2s ease-in-out infinite;
+}
+
+@keyframes core-breathe {
+  50% {
+    opacity: 0.25;
+    transform: scale(1.14);
+  }
+}
+
+.hubCoreText {
+  fill: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: 17px;
+  font-weight: 560;
+  letter-spacing: -0.02em;
+  text-anchor: middle;
+}
+
+.hubSat circle {
+  fill: var(--color-surface);
+  stroke: var(--color-bone);
+  stroke-width: 1.4;
+}
+
+.hubSatFirst circle {
+  fill: var(--color-ember);
+  stroke: var(--color-ember);
+}
+
+.hubSatLater circle {
+  stroke: var(--color-hairline);
+  stroke-dasharray: 3 4;
+}
+
+.hubSat text {
+  fill: var(--color-bone);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  font-weight: 560;
+  letter-spacing: -0.02em;
+  text-anchor: middle;
+  dominant-baseline: central;
+}
+
+.hubSatFirst text {
+  fill: #fff;
+}
+
+.hubSatLater text {
+  fill: var(--color-slate);
+  font-weight: 500;
+}
+
+.frontierList {
+  border-top: 1px solid var(--color-bone);
+}
+
+.frontierList li {
+  display: grid;
+  padding-block: clamp(1.2rem, 2.2vw, 1.8rem);
+  border-bottom: 1px solid var(--color-hairline);
+  gap: 0.5rem 1.6rem;
+  grid-template-columns: 9.5rem minmax(0, 1fr);
+}
+
+.status {
+  align-self: start;
+  justify-self: start;
+  margin-top: 0.35rem;
+  padding: 0.25rem 0.6rem;
+  border: 1px solid var(--color-hairline);
+  border-radius: 99px;
+  color: var(--color-slate);
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.statusFirst {
+  border-color: var(--color-ember);
+  background: var(--color-ember);
+  color: var(--color-on-ember);
+}
+
+.statusLive {
+  border-color: var(--color-bone);
+  color: var(--color-bone);
+}
+
+.frontierList h3 {
+  font-size: clamp(1.5rem, 1.2rem + 1vw, 2.3rem);
+  font-weight: 540;
+  line-height: 1;
+  letter-spacing: -0.045em;
+}
+
+.frontierList p {
+  max-width: 52ch;
+  margin-top: 0.6rem;
+  color: var(--color-ash);
+  font-size: 0.98rem;
+  line-height: 1.55;
+}
+
+.frontierList a {
+  display: inline-flex;
+  margin-top: 0.8rem;
+  border-bottom: 1px solid currentColor;
+  color: var(--color-bone);
+  font-size: 0.86rem;
+  font-weight: 560;
+  transition: color var(--duration-fast);
+}
+
+.frontierList a:hover {
+  color: var(--color-ember);
+}
+
+/* ---------- responsive ---------- */
+
+@media (max-width: 980px) {
+  .headSplit,
+  .mapBody,
+  .instrumentGrid,
+  .persistGrid,
+  .frontierGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .headSplit p {
+    margin-top: 0.5rem;
+  }
+
+  .halves {
+    grid-template-columns: 1fr;
+  }
+
+  .bridge {
+    flex-direction: row;
+    min-height: 6rem;
+    padding: 0;
+  }
+
+  .bridgeTrack {
+    flex: 1;
+  }
+
+  .mapVis svg {
+    max-width: 36rem;
+  }
+
+  .hubVis svg {
+    max-width: 24rem;
+  }
+}
+
+@media (max-width: 680px) {
+  .rung {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .rung .bar {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+
+  .rungFig {
+    text-align: right;
+  }
+
+  .famChips {
+    gap: 0.4rem;
+  }
+
+  .famChips button {
+    padding: 0.42rem 0.75rem;
+    font-size: 0.8rem;
+  }
+
+  .famLabel {
+    font-size: 23px;
+  }
+
+  .famKey {
+    font-size: 17px;
+  }
+
+  .node circle {
+    transform: scale(1.4);
+  }
+
+  .node text {
+    font-size: 17px;
+  }
+
+  .hubText {
+    font-size: 22px;
+  }
+
+  .dimCard dl > div {
+    grid-template-columns: 1fr;
+  }
+
+  .stat {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .row {
+    grid-template-columns: minmax(0, 1fr) 5.5rem;
+  }
+
+  .rowKey {
+    grid-column: 1 / -1;
+  }
+
+  .rowText {
+    grid-column: 1;
+  }
+
+  .bet {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .odds {
+    display: none;
+  }
+
+  .timeline button {
+    font-size: 0.6rem;
+  }
+
+  .frontierList li {
+    grid-template-columns: 1fr;
+  }
+
+  .hubSat text {
+    font-size: 17px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bar > b,
+  .bar > i,
+  .spoke,
+  .node,
+  .dimCard,
+  .dimCardOn,
+  .conf b,
+  .timelineFill {
+    transition: none;
+  }
+
+  .orbitRing,
+  .halo,
+  .bridgeTrack i,
+  .loopLit,
+  .loopNode rect,
+  .loopNode text,
+  .hubSpoke,
+  .hubCoreRing,
+  .rowChanged,
+  .old,
+  .enter,
+  .enterLate,
+  .betFlip {
+    animation: none;
+  }
+
+  .spoke {
+    stroke-dashoffset: 0;
+  }
+
+  .node {
+    transform: none;
+  }
+
+  .bridgeTrack i {
+    left: calc(50% - 0.35rem);
+  }
+
+  .bridgeTrack i:nth-child(2) {
+    display: none;
+  }
+}
