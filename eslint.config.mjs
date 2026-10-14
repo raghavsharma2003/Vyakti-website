@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Static sites deployed by their own Vercel projects, not part of the app.
+    "sites/**",
   ]),
 ]);
 

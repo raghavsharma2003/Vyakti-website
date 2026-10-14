@@ -1,0 +1,453 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Vyakti · Relational intelligence</title>
+<meta name="description" content="Vyakti: relational intelligence. AI that understands the person, starting with learning. A research proposal for Lossfunk.">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f6f6f1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@600&text=%E0%A4%B5%E0%A5%8D%E0%A4%AF&display=swap">
+<link rel="stylesheet" href="style.css">
+
+<meta property="og:title" content="Vyakti: relational intelligence">
+<meta property="og:description" content="AI that understands the person, starting with learning. A research proposal for Lossfunk.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://lossfunk.vyakti.ai/">
+<meta property="og:image" content="https://vyakti.ai/opengraph-image">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="https://vyakti.ai/icon" type="image/png">
+</head>
+<body>
+<header class="nav" id="nav">
+  <a class="logo" href="#top" data-go="0" aria-label="Vyakti, back to the start"><span class="mark" lang="hi" aria-hidden="true">व्य</span><span class="word">vyakti<span class="tld">.ai</span></span></a>
+  <nav aria-label="Sections">
+    <a href="#problem" data-go="1">Problem</a>
+    <a href="#map" data-go="3">The map</a>
+    <a href="#hypothesis" data-go="5">Hypothesis</a>
+    <a href="#system" data-go="7">System</a>
+    <a href="#future" data-go="11">Future</a>
+    <a href="#research" data-go="12" class="key">The research</a>
+  </nav>
+  <span class="count" aria-hidden="true"><b id="cur">01</b> / <span id="tot">14</span></span>
+  <span class="prog" aria-hidden="true"><b id="prog"></b></span>
+</header>
+
+<main class="deck" id="deck">
+
+<!-- 01 ============ HERO ============ -->
+<section class="slide hero" id="top" data-name="Vyakti">
+  <div class="inner">
+    <div class="hero-copy">
+      <p class="eyebrow rv"><span class="pulse"></span>Vyakti · relational intelligence</p>
+      <h1 class="split">AI knows almost everything. <em>Except you.</em></h1>
+      <p class="lede rv">Vyakti is research toward AI that understands the person in front of it: what they really understand, how they think, what they feel, and how to earn their trust. It gets better at each person with every conversation. We start with learning, the one place where understanding a person can be measured.</p>
+      <div class="ctas rv">
+        <a class="btn primary" href="#map" data-go="3">See the map</a>
+        <a class="btn" href="#problem" data-go="1">Start with the problem</a>
+      </div>
+      <p class="hero-note rv">A research proposal for the Lossfunk residency · October 2026</p>
+    </div>
+  </div>
+  <div class="face-stage" id="faceStage">
+    <svg class="ring back" id="ringBack" aria-hidden="true"></svg>
+    <canvas id="face" role="img" aria-label="Vyakti's face, drawn in ink. It listens to a learner, thinks, and answers."></canvas>
+    <div class="face-fallback" aria-hidden="true"></div>
+    <svg class="ring front" id="ringFront" aria-hidden="true"></svg>
+    <div class="dialog" id="dialog" aria-live="polite"><span class="face-state" id="faceState" aria-hidden="true"><i></i><b>listening</b></span></div>
+  </div>
+</section>
+
+<!-- 02 ============ THE PROBLEM ============ -->
+<section class="slide" id="problem" data-name="The problem">
+  <div class="inner two">
+    <div class="col-text">
+      <p class="eyebrow rv">01 · The problem</p>
+      <h2 class="split">Intelligence is no longer the bottleneck. <em>Understanding the person is.</em></h2>
+      <p class="lede rv">Models now solve olympiad problems and write production code. Yet a tutor still can’t tell whether a child understood, a coach can’t tell when you are about to quit, and an assistant agrees with you when it should push back.</p>
+      <p class="rv muted">Remembering a person is close to solved. Understanding one, acting on that understanding, and getting better at it over time are not, and almost nobody measures them.</p>
+    </div>
+    <div class="card ladder rv" id="ladder">
+      <p class="eyebrow">How far AI has climbed</p>
+      <div class="rung" style="--i:0">
+        <div class="rl"><b>Remember you</b><span>Recall what you said</span></div>
+        <div class="bar"><b class="ok" style="--w:90%"></b></div>
+        <div class="rn"><b data-count="90" data-suf="%+">0</b><span>LongMemEval</span></div>
+      </div>
+      <div class="rung" style="--i:1">
+        <div class="rl"><b>Infer you</b><span>Work out what you know, want or believe</span></div>
+        <div class="bar"><b class="half" style="--w:37%"></b><b class="half soft" style="--l:37%;--w:28%"></b></div>
+        <div class="rn"><b>37–65%</b><span>PersonaMem-v2 · CUPID</span></div>
+      </div>
+      <div class="rung" style="--i:2">
+        <div class="rl"><b>Act on it</b><span>Use what it inferred</span></div>
+        <div class="bar"><b class="reach" style="--l:15%;--w:80%"></b><b class="lost" style="--w:15%"></b><i class="mark" style="--at:95%"></i></div>
+        <div class="rn"><b><span data-count="15" data-suf="%">0</span> <small>→ 95% if reminded</small></b><span>SimpleToM</span></div>
+      </div>
+      <div class="rung" style="--i:3">
+        <div class="rl"><b>Get better at you</b><span>Improve with every conversation</span></div>
+        <div class="bar empty"><em>no benchmark exists</em></div>
+        <div class="rn"><b class="sig">?</b><span>Vyakti’s question</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 03 ============ WHY LEARNING ============ -->
+<section class="slide" id="learning" data-name="Why learning">
+  <div class="inner two">
+    <div class="col-text">
+      <p class="eyebrow rv">02 · Where we start</p>
+      <h2 class="split">Learning is where misreading a person costs the most, <em>and where it can be proven.</em></h2>
+      <ul class="facts">
+        <li class="rv"><b>Confusion hides.</b> In class, a student asks about one question every nine hours. With a one-to-one tutor, about 26 questions get asked an hour. <span class="src">Graesser &amp; Person 1994</span></li>
+        <li class="rv"><b>Learners can’t see it either.</b> How well people judge their own understanding tracks reality at only about .27. <span class="src">Dunlosky &amp; Lipko 2007</span></li>
+        <li class="rv"><b>AI tutors make it worse when they trust surface success.</b> Practice scores rose 48%; exam scores fell 17%. <span class="src">Bastani et al., PNAS 2025</span></li>
+        <li class="rv"><b>And learning has an answer key.</b> A fresh problem a week later shows whether the AI was right about the person.</li>
+      </ul>
+    </div>
+    <div class="card room rv" id="room">
+      <div class="seats" id="seats" role="img" aria-label="Forty students. Switch views to compare what the teacher sees, what is really going on, and what an AI tutor records."></div>
+      <div class="seg" id="seatModes" role="group" aria-label="View">
+        <button type="button" data-m="see" aria-pressed="true">What the teacher sees</button>
+        <button type="button" data-m="true" aria-pressed="false">What’s really going on</button>
+        <button type="button" data-m="ai" aria-pressed="false">What an AI tutor records</button>
+      </div>
+      <p class="room-cap" id="seatCap"></p>
+      <div class="legend"><span><i class="ok"></i>Understood</span><span><i class="half"></i>Half understood</span><span><i class="lost"></i>Lost, hiding it</span><span class="tiny">Illustration</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- 04 ============ THE MAP ============ -->
+<section class="slide" id="map" data-name="The map">
+  <div class="inner map-grid">
+    <div class="map-head">
+      <p class="eyebrow rv">03 · The broader vision</p>
+      <h2 class="split">Understanding a person, <em>mapped.</em></h2>
+      <p class="lede rv">Learning is the first door. Behind it is the whole person: seven families, 25 dimensions. Each has a core question, a reason it is still open, and a ground truth that could prove the AI right. That last column decides what can be researched first.</p>
+      <div class="fam-chips rv" id="famChips" role="group" aria-label="Families"></div>
+    </div>
+    <div class="map-vis rv">
+      <svg id="mapSvg" viewBox="0 0 700 700" role="img" aria-label="A map of 25 dimensions of understanding a person, grouped into seven families around a person at the centre."></svg>
+    </div>
+    <div class="card dim-card rv" id="dimCard" aria-live="polite"></div>
+  </div>
+</section>
+
+<!-- 05 ============ THE INSIGHT ============ -->
+<section class="slide dark" id="trust" data-name="The insight">
+  <div class="inner trust-grid">
+    <div class="trust-copy">
+      <p class="eyebrow rv">04 · The insight that ties it together</p>
+      <h2 class="split big">People reveal more to someone they trust. <em>So the relationship is part of the instrument.</em></h2>
+      <div class="trust-stat rv">
+        <span class="n" data-count=".28" data-dec="2">.00</span>
+        <p>How strongly the strength of the relationship predicts outcomes in therapy, across nearly 300 studies and more than 30,000 patients. Teams that feel safe admit errors and ask for help.<span class="src">Flückiger et al. 2018 · Edmondson 1999</span></p>
+      </div>
+      <p class="rv trust-so">For an AI, memory, one steady personality and a bond that grows are not product features. They are how honest signals get in. Relational intelligence and understanding are one loop.</p>
+    </div>
+    <div class="loop-vis rv"><svg id="loopSvg" viewBox="0 0 560 560" role="img" aria-label="The loop: trust leads to honest signals, a truer theory of the person, feeling understood, and back to more trust."></svg></div>
+  </div>
+</section>
+
+<!-- 06 ============ HYPOTHESIS ============ -->
+<section class="slide" id="hypothesis" data-name="The hypothesis">
+  <div class="inner">
+    <p class="eyebrow rv">05 · The hypothesis</p>
+    <h2 class="split manifesto">Language models learned language by predicting the next word. Vyakti learns <em>a person</em> by predicting <em>the person.</em></h2>
+    <div class="hyp-grid">
+      <div class="hyp-text">
+        <p class="lede rv">It forms beliefs about you, bets on what you will do next, and lets reality grade every bet. Each miss rewrites its theory of you. So it should understand you better in week six than in week one, and teach you better because of it.</p>
+        <div class="hs">
+          <div class="h rv"><span class="k">H1 · Seeing</span><b>Understanding can be read from ordinary interaction</b><p><span>Wrong if</span>its reading predicts later performance no better than asking the learner.</p></div>
+          <div class="h rv"><span class="k">H2 · Acting</span><b>Writing a belief before each move turns inference into action</b><p><span>Wrong if</span>moves fit the learner no better, judged blind.</p></div>
+          <div class="h rv"><span class="k">H3 · Trusting</span><b>Continuity and a steady self make people reveal more</b><p><span>Wrong if</span>admitted confusion doesn’t rise with memory switched on.</p></div>
+          <div class="h rv"><span class="k">H4 · Growing</span><b>Accuracy about each person rises with time</b><p><span>Wrong if</span>the hit rate stays flat, or plain memory keeps pace.</p></div>
+        </div>
+      </div>
+      <div class="card chart rv">
+        <div class="chart-h"><b>Does it get better at you?</b><span class="tiny">Hypothesis</span></div>
+        <svg id="betChart" viewBox="0 0 560 300" role="img" aria-label="Hypothesis: the share of Vyakti's predictions about each person that come true rises week after week, while the same model with plain memory stays nearly flat and the learner's own judgement stays low."></svg>
+        <div class="chart-key"><span><i class="v"></i>Vyakti</span><span><i class="m"></i>Same model, plain memory</span><span><i class="y"></i>Learner’s own judgement</span></div>
+        <p class="tiny chart-note">Share of written predictions that came true: will she solve a new problem next week, where will she get stuck, will she ask for help, will she come back.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 07 ============ A LIVING THEORY ============ -->
+<section class="slide" id="theory" data-name="A living theory">
+  <div class="inner two wide-right">
+    <div class="col-text">
+      <p class="eyebrow rv">06 · A theory that never sets</p>
+      <h2 class="split">Every belief is a bet. <em>None of them is permanent.</em></h2>
+      <p class="lede rv">Vyakti keeps a written theory of each person, in its own words. Every interaction can move it. Beliefs reality contradicts get rewritten, with the reason kept. Beliefs nobody re-confirms fade. So it can’t harden into a label.</p>
+      <ul class="principles">
+        <li class="rv"><b>Evidence, not impressions</b>Every belief cites what it saw.</li>
+        <li class="rv"><b>Confidence that moves</b>Each interaction nudges it up or down.</li>
+        <li class="rv"><b>Fades without fresh proof</b>Old beliefs decay unless retested.</li>
+        <li class="rv"><b>Yours to read and correct</b>The person can see it, fix it, delete it.</li>
+      </ul>
+    </div>
+    <div class="card doc rv" id="doc">
+      <div class="doc-top">
+        <div><h3>Meher</h3><span class="tiny">Illustrative learner · rewritten after every session</span></div>
+        <button type="button" class="play" id="docPlay" aria-label="Pause">❚❚</button>
+      </div>
+      <div class="timeline" id="timeline" role="tablist" aria-label="Moments"></div>
+      <div class="drows" id="drows"></div>
+      <div class="dbets" id="dbets"></div>
+      <p class="dnote" id="dnote"></p>
+    </div>
+  </div>
+</section>
+
+<!-- 08 ============ SYSTEM ============ -->
+<section class="slide" id="system" data-name="The system">
+  <div class="inner two wide-right">
+    <div class="col-text">
+      <p class="eyebrow rv">07 · The system</p>
+      <h2 class="split">Software made of <em>minds,</em> each on its own clock</h2>
+      <p class="lede rv">LLM-native end to end. No hand-written decision tree: every judgement is a model’s, written down with its reason. Small fast models think inside the pause before the teacher speaks. Strong models reflect overnight. Every week the system rewrites its own methods. Code keeps the records. Reality keeps the score.</p>
+      <div class="card stepper rv" id="stepper">
+        <div class="st-top"><span class="tiny">One moment, slowed down</span><span class="tiny" id="stCount">1 / 7</span></div>
+        <p class="st-who" id="stWho"></p>
+        <p class="st-txt" id="stTxt"></p>
+        <div class="st-ctrl"><button type="button" class="btn sm" id="stPrev">Back</button><button type="button" class="btn sm primary" id="stNext">Next</button><div class="sdots" id="stDots"></div></div>
+      </div>
+    </div>
+    <div class="board rv" id="board">
+      <svg class="flows" id="flows" aria-hidden="true"></svg>
+      <div class="lane"><div class="lane-h"><b>Live</b><span>every turn · fast models</span></div>
+        <div class="nodes five">
+          <div class="node" data-n="listener"><b>Listener</b><span>notices, never concludes</span></div>
+          <div class="node" data-n="director"><b>Director</b><span>states intent, picks the surface</span></div>
+          <div class="node" data-n="prober"><b>Prober</b><span>designs quiet checks</span></div>
+          <div class="node" data-n="maker"><b>Maker</b><span>builds for the exact gap</span></div>
+          <div class="node" data-n="voice"><b>Voice</b><span>one steady personality</span></div>
+        </div></div>
+      <div class="lane"><div class="lane-h"><b>Held</b><span>written by models · read before every move</span></div>
+        <div class="nodes three">
+          <div class="node doc" data-n="ledger"><b>Prediction ledger</b><span>every bet, with a due date</span></div>
+          <div class="node core" data-n="theory"><b>Theory of the person</b><span>beliefs · evidence · confidence</span></div>
+          <div class="node doc" data-n="self"><b>Self</b><span>who I am with you</span></div>
+        </div></div>
+      <div class="lane"><div class="lane-h"><b>Overnight</b><span>strong models · judged by reality</span></div>
+        <div class="nodes three">
+          <div class="node judge" data-n="reality"><b>Reality</b><span>what the person does next</span></div>
+          <div class="node" data-n="reflector"><b>Reflector</b><span>scores bets, rewrites the theory</span></div>
+          <div class="node" data-n="dreamer"><b>Dreamer</b><span>rehearses with a simulated you</span></div>
+        </div></div>
+      <div class="lane"><div class="lane-h"><b>Weekly, then later</b><span>across all learners</span></div>
+        <div class="nodes three">
+          <div class="node" data-n="evolver"><b>Playbook evolver</b><span>rewrites how every mind works</span></div>
+          <div class="node" data-n="keeper"><b>Self keeper</b><span>growth without drift</span></div>
+          <div class="node future" data-n="weights"><b>Weights</b><span>later: a model that has learned you</span></div>
+        </div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 09 ============ SENSES ============ -->
+<section class="slide" id="senses" data-name="Senses">
+  <div class="inner">
+    <div class="sense-head">
+      <div><p class="eyebrow rv">08 · Multimodal, both ways</p>
+      <h2 class="split">Every signal in. <em>Any surface out.</em></h2></div>
+      <p class="lede rv">Understanding rarely sits in the words alone. Vyakti reads what a learner gives it, with consent: voice, words, hands, screen and time. Each signal alone is a hint; together they are evidence. Then the Director chooses the surface the way it chooses words.</p>
+    </div>
+    <div class="sense-grid">
+      <div class="card tracks rv" id="tracks">
+        <div class="track"><span class="tl">Voice</span><div class="tc"><span class="wave" id="wave" aria-hidden="true"></span></div><span class="note">3 s of silence, then a quick “got it”</span></div>
+        <div class="track"><span class="tl">Words</span><div class="tc"><span class="pill">“okay, makes sense”</span></div><span class="note">no words of her own</span></div>
+        <div class="track"><span class="tl">Hands</span><div class="tc"><span class="ink"><s>3/8</s> → <span>3/5</span></span></div><span class="note">erased her first answer</span></div>
+        <div class="track"><span class="tl">Screen</span><div class="tc"><span class="stuck"><b></b></span><span class="tiny">step 3 · 40 s</span></div><span class="note">stuck on the same step</span></div>
+        <div class="track"><span class="tl">Time</span><div class="tc"><span class="days" aria-hidden="true"><i></i><i></i><i></i><i></i><i class="x"></i><i></i><i class="x"></i><i></i><i></i></span></div><span class="note">skipped decimals twice</span></div>
+        <div class="verdict"><span class="tiny">Together</span><b>probably lost. Plan a quiet check, not a quiz.</b></div>
+        <i class="playhead" aria-hidden="true"></i>
+      </div>
+      <div class="surface rv">
+        <div class="phone" aria-label="A phone whose interface changes to suit the learner">
+          <div class="scr">
+            <div class="pbar"><span>Vyakti</span><span id="phMode">voice</span></div>
+            <div class="pstage" id="phStage">
+              <div class="mode on" data-m="voice"><svg viewBox="0 0 200 170" aria-hidden="true"><g class="wv">
+                <rect x="38" y="65" width="10" height="40" rx="5"/><rect x="58" y="47" width="10" height="76" rx="5" style="animation-delay:.1s"/><rect x="78" y="29" width="10" height="112" rx="5" style="animation-delay:.2s"/>
+                <rect x="98" y="51" width="10" height="68" rx="5" style="animation-delay:.3s"/><rect x="118" y="37" width="10" height="96" rx="5" style="animation-delay:.4s"/><rect x="138" y="61" width="10" height="48" rx="5" style="animation-delay:.5s"/></g></svg></div>
+              <div class="mode" data-m="board"><svg viewBox="0 0 200 170" aria-hidden="true">
+                <line class="ps draw" x1="18" y1="95" x2="182" y2="95"/><line class="ps" x1="18" y1="87" x2="18" y2="103"/><line class="ps" x1="182" y1="87" x2="182" y2="103"/>
+                <text class="pt2" x="15" y="120">0</text><text class="pt2" x="179" y="120">1</text>
+                <circle class="pfa" cx="79" cy="95" r="6"/><text class="pt" x="66" y="76">3/8</text>
+                <circle class="pfo" cx="116" cy="95" r="6"/><text class="pt" x="103" y="76">3/5</text>
+                <path class="pa draw" d="M84 128 Q100 146 112 128"/></svg></div>
+              <div class="mode" data-m="game"><svg viewBox="0 0 200 170" aria-hidden="true">
+                <rect x="26" y="34" width="64" height="74" rx="14" class="ps"/><rect x="110" y="34" width="64" height="74" rx="14" class="pa"/>
+                <text class="pt" x="44" y="78">3/8</text><text class="pt" x="128" y="78">3/5</text>
+                <text class="pt2" x="100" y="134" text-anchor="middle">Gappu: “3/8 is bigger!”</text><text class="pt2" x="100" y="150" text-anchor="middle">Catch his mistake</text></svg></div>
+              <div class="mode" data-m="sim"><svg viewBox="0 0 200 170" aria-hidden="true">
+                <circle cx="60" cy="80" r="38" class="ps"/><path class="pfa" d="M60 80 L60 42 A38 38 0 0 1 97 70 Z"/>
+                <circle cx="142" cy="80" r="38" class="ps"/><path class="pfo" d="M142 80 L142 42 A38 38 0 1 1 106 92 Z"/>
+                <text class="pt2" x="60" y="140" text-anchor="middle">3 of 8</text><text class="pt2" x="142" y="140" text-anchor="middle">3 of 5</text></svg></div>
+              <div class="mode" data-m="story"><svg viewBox="0 0 200 170" aria-hidden="true">
+                <circle cx="100" cy="68" r="34" class="ps"/><path class="pa" d="M76 46 Q100 68 76 90 M124 46 Q100 68 124 90"/>
+                <text class="pt2" x="100" y="128" text-anchor="middle">Rohit hit 3 of his 5 balls.</text><text class="pt2" x="100" y="144" text-anchor="middle">Virat hit 3 of 8. Who did better?</text></svg></div>
+            </div>
+            <div class="psay"><b>Vyakti</b><span id="phSay">I’ll talk, you listen. You’re walking home, right?</span></div>
+          </div>
+        </div>
+        <div class="modes" id="modes">
+          <button type="button" aria-pressed="true" data-m="voice"><b>Voice only</b><span>walking home, eyes busy</span></button>
+          <button type="button" aria-pressed="false" data-m="board"><b>A board, drawn live</b><span>number lines land for her</span></button>
+          <button type="button" aria-pressed="false" data-m="game"><b>A game on her mistake</b><span>catching it feels safe</span></button>
+          <button type="button" aria-pressed="false" data-m="sim"><b>A simulation</b><span>she moves the pieces</span></button>
+          <button type="button" aria-pressed="false" data-m="story"><b>Her world</b><span>she loves cricket</span></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 10 ============ LEARNING ANYTHING ============ -->
+<section class="slide" id="anything" data-name="Learning anything">
+  <div class="inner two">
+    <div class="col-text">
+      <p class="eyebrow rv">09 · Learning anything</p>
+      <h2 class="split">Change the subject. <em>Keep the understanding.</em></h2>
+      <p class="lede rv">The answer key changes from subject to subject. The person doesn’t. What Vyakti learns about how you learn, what you avoid and how you talk travels with you: from fractions to French, from code to chemistry, from a child’s homework to an adult’s new career.</p>
+      <p class="rv muted">That is how one system could make expert one-to-one teaching, the most effective form of teaching we know, available for anything, to anyone.</p>
+      <div class="travels rv"><span class="tiny">What travels with you</span>
+        <div class="tchips"><span>how you learn best</span><span>what you avoid</span><span>stuck or thinking</span><span>what you care about</span><span>how you talk</span><span>how much you trust</span></div>
+      </div>
+    </div>
+    <div class="orbit rv" id="orbit">
+      <div class="orbit-core"><span class="tiny">One theory of you</span><b>Meher</b><span class="oc-sub">learns by predicting first · hides confusion when watched · loves cricket</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- 11 ============ BEYOND ============ -->
+<section class="slide" id="beyond" data-name="Beyond learning">
+  <div class="inner two">
+    <div class="col-text">
+      <p class="eyebrow rv">10 · Beyond one learner</p>
+      <h2 class="split">One mind, <em>many bounded relationships</em></h2>
+      <div class="gpts" id="gpts">
+        <button type="button" class="gpt on rv" data-g="class"><b>A class of forty</b><span>Every student gets their own theory. The teacher finally sees the room: who is lost, who could explain it to whom, which idea broke for half the class.</span></button>
+        <button type="button" class="gpt rv" data-g="friend"><b>A common friend</b><span>One identity, separate relationships. What you tell it stays with you. It bridges only with permission. Privacy by structure, not by asking the model to behave.</span></button>
+        <button type="button" class="gpt rv" data-g="brain"><b>The community brain</b><span>What it learns about how people learn flows into a shared playbook every teacher inherits. What it learns about you stays yours.</span></button>
+      </div>
+    </div>
+    <div class="beyond-right">
+      <div class="card gbox rv"><canvas id="groupCanvas" role="img" aria-label="An animated network of people connected to Vyakti"></canvas></div>
+      <div class="uses rv">
+        <div class="use first"><span class="k">First</span><b>Learning</b></div>
+        <div class="use"><span class="k">Next</span><b>Mentors</b></div>
+        <div class="use"><span class="k">Next</span><b>Companions</b></div>
+        <div class="use"><span class="k">Next</span><b>Elder care</b></div>
+        <div class="use"><span class="k">Next</span><b>Health</b></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 12 ============ FUTURE ============ -->
+<section class="slide" id="future" data-name="The future">
+  <div class="inner">
+    <div class="future-head">
+      <div><p class="eyebrow rv">11 · Built for the models that are coming</p>
+      <h2 class="split">As models get stronger, <em>understanding the person</em> becomes the bottleneck</h2></div>
+      <p class="lede rv">Raw intelligence won’t tell you that a student’s silence means “I’m scared to ask.” Every jump in capability makes that gap matter more. Five bets.</p>
+    </div>
+    <div class="fgrid">
+      <article class="fcard rv"><span class="fn">01</span><p class="when">When thinking is almost free</p><h3>Attention per person, not model size</h3><p>A hundred thoughts on every sentence a learner says.</p></article>
+      <article class="fcard rv"><span class="fn">02</span><p class="when">When models answer instantly</p><h3>Thought that fits inside a pause</h3><p>Real-time theory of mind becomes part of every voice agent.</p></article>
+      <article class="fcard rv"><span class="fn">03</span><p class="when">When models learn continually</p><h3>The theory becomes weights</h3><p>A model that has learned you. You should own it, read it, delete it.</p></article>
+      <article class="fcard rv"><span class="fn">04</span><p class="when">When systems improve themselves</p><h3>A reward that can’t be faked</h3><p>Whether a real person later does what you predicted. Growth, never engagement.</p></article>
+      <article class="fcard dark rv"><span class="fn">05</span><p class="when">When intelligence is general</p><h3>The last mile is one person</h3><p>An AGI aligned with humanity still has to be aligned with this child, today, in this mood.</p></article>
+    </div>
+  </div>
+</section>
+
+<!-- 13 ============ THE RESEARCH ============ -->
+<section class="slide" id="research" data-name="The research">
+  <div class="inner">
+    <p class="eyebrow rv">12 · What we will work on at Lossfunk</p>
+    <h2 class="split">One hard question: <em>can an AI measurably get to know a person?</em></h2>
+    <div class="res-grid">
+      <ol class="qs">
+        <li class="rv"><span class="qn">01</span><div><b>Can understanding be read without testing?</b><p>From conversation, voice and behaviour alone, does Vyakti’s reading of a learner predict how they do on a fresh problem a week later?</p><span class="dims">dimensions 1 · 2 · 3 · 12 · 13</span></div></li>
+        <li class="rv"><span class="qn">02</span><div><b>Does a living theory beat memory?</b><p>Does an explicit, evolving theory of the person predict them better than the same model with plain memory?</p><span class="dims">dimensions 5 · 24 · 25</span></div></li>
+        <li class="rv"><span class="qn">03</span><div><b>Is trust a sensor?</b><p>Do continuity and a steady personality make people reveal more of what they really think?</p><span class="dims">dimensions 11 · 15 · 21</span></div></li>
+        <li class="rv"><span class="qn">04</span><div><b>Can it improve itself from its misses?</b><p>When the system rewrites its own methods from wrong predictions, does it get measurably better at new people?</p><span class="dims">the loop · G</span></div></li>
+      </ol>
+      <div class="res-side">
+        <div class="card exists rv">
+          <p class="eyebrow">What will exist</p>
+          <ul>
+            <li><b>The Vyakti layer</b>an open, LLM-native architecture any agent can use</li>
+            <li><b>“Does it know you?”</b>an evaluation that scores an AI’s beliefs about a person against what they later do</li>
+            <li><b>Living theories</b>real learners’ theories evolving over weeks, shared with consent</li>
+            <li><b>The write-up</b>what worked, what broke and why. Failures first.</li>
+          </ul>
+          <p class="open">Every prediction and every miss is logged in the open.</p>
+        </div>
+        <div class="guard rv">
+          <span>Always says it is an AI</span><span>Helplines built in</span><span>No companion behaviour with minors</span><span>The person owns their theory</span><span>Scored on being right, never on being liked</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 14 ============ CLOSE ============ -->
+<section class="slide close" id="close" data-name="Close">
+  <div class="inner">
+    <div class="close-main">
+      <p class="eyebrow rv">Vyakti · relational intelligence</p>
+      <h2 class="split">Start with a teacher that truly understands. <em>Then everything that talks to you.</em></h2>
+      <p class="lede rv">What this does not claim: that Vyakti understands people the way people do. The claim is narrower and testable. Its beliefs about a person can be scored against that person’s life, and made better with every conversation.</p>
+      <div class="contact rv"><span id="mail">raghavsharma1729@gmail.com</span><button type="button" class="btn sm" id="copyMail">Copy email</button></div>
+    </div>
+    <footer class="foot">
+      <div class="brand-row">
+        <a class="logo" href="https://vyakti.ai" target="_blank" rel="noopener"><span class="mark" lang="hi" aria-hidden="true">व्य</span><span class="word">vyakti<span class="tld">.ai</span></span></a>
+        <p class="brand-line">A relational intelligence lab. Maya, our first AI person, is live in an early version.</p>
+        <nav class="brand-links" aria-label="Vyakti">
+          <a href="https://vyakti.ai/research" target="_blank" rel="noopener">Research</a>
+          <a href="https://vyakti.ai/maya" target="_blank" rel="noopener">Maya</a>
+          <a href="https://vyakti.ai/#principles" target="_blank" rel="noopener">Principles</a>
+          <a href="https://vyakti.ai/company" target="_blank" rel="noopener">Company</a>
+        </nav>
+      </div>
+      <span class="tiny">Research proposal · Lossfunk residency · October 2026 · 3D geometry: Infinite head scan (CC BY 3.0) and Google GNM Head (Apache 2.0)</span>
+      <details class="sources">
+        <summary>Sources</summary>
+        <ol>
+          <li>Graesser &amp; Person (1994). Question asking during tutoring. AERJ 31(1).</li>
+          <li>Dunlosky &amp; Lipko (2007). Metacomprehension. Current Directions in Psychological Science.</li>
+          <li>Bastani et al. (2025). Generative AI without guardrails can harm learning. PNAS.</li>
+          <li>Wu et al. (2025). LongMemEval. ICLR.</li>
+          <li>PersonaMem-v2 (2025); CUPID, COLM 2025.</li>
+          <li>Gu, Tafjord et al. (2026). SimpleToM. ICLR.</li>
+          <li>Flückiger et al. (2018). The alliance in adult psychotherapy. Psychotherapy 55(4).</li>
+          <li>Edmondson (1999). Psychological safety and learning behavior in work teams.</li>
+          <li>D’Mello et al. (2014). Confusion can be beneficial for learning.</li>
+          <li>Li et al. (2024). Measuring and controlling persona drift.</li>
+          <li>Cheng et al. (2026). ELEPHANT: social sycophancy. ICLR.</li>
+          <li>Phang, Fang et al. (2025). Affective use of ChatGPT and loneliness. MIT Media Lab and OpenAI.</li>
+        </ol>
+      </details>
+    </footer>
+  </div>
+</section>
+
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="face.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
