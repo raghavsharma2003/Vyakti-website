@@ -98,10 +98,10 @@ export function HeroStage() {
               </h1>
               <p className="measure mt-7 max-w-[48ch] text-lead text-ash md:mt-9">
                 Vyakti builds multimodal personalities with identity, memory,
-                perception and expression. Meera is our first companion.
+                perception and expression. Maya is our first companion.
               </p>
               <div className="mt-8 flex flex-wrap gap-3">
-                <Cta href="/meera">Meet Meera</Cta>
+                <Cta href="/maya">Meet Maya</Cta>
                 <Cta href="/research" variant="secondary">Explore our research</Cta>
               </div>
             </div>

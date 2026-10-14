@@ -83,11 +83,11 @@ const FRONTIERS = [
     link: { href: PROPOSAL_URL, label: "Read the research proposal" },
   },
   {
-    name: "Meera",
-    status: "In development",
+    name: "Maya",
+    status: "Live, early",
     tone: v.statusLive,
-    body: "Our first AI person. A companion built to remember what mattered, keep one recognizable self, and say plainly what she is.",
-    link: { href: "/meera", label: "Meet Meera" },
+    body: "Our first AI person, live in an early version. A companion built to remember what mattered, keep one recognizable self, and say plainly what she is.",
+    link: { href: SITE.maya, label: "Talk to Maya" },
   },
   {
     name: "Groups",
@@ -133,7 +133,7 @@ const RESEARCH = [
 const PRINCIPLES = [
   {
     title: "Always AI",
-    body: "Meera should never impersonate a person or hide what she is. Presence does not require deception.",
+    body: "Maya should never impersonate a person or hide what she is. Presence does not require deception.",
   },
   {
     title: "Memory you control",
@@ -373,7 +373,7 @@ export default function HomePage() {
             <div className={styles.continuityArrow} aria-hidden="true">→</div>
             <div className={`${styles.continuityNode} ${styles.continuityOutput}`}>
               <small>One continuous identity</small>
-              <strong className={styles.meeraWord}>Meera</strong>
+              <strong className={styles.meeraWord}>Maya</strong>
               <p>More capable over time. Still recognizably herself.</p>
             </div>
             <figcaption id="continuity-caption">
@@ -521,12 +521,12 @@ export default function HomePage() {
                 <span className={v.signal}>Then everyone.</span>
               </h2>
               <p className={styles.sectionCopy}>
-                Meera is our first AI person, in development. The research is
-                open about what works and what breaks.
+                Maya is our first AI person, live in an early version. The
+                research is open about what works and what breaks.
               </p>
             </div>
             <div className={styles.finalActions}>
-              <Cta href="/meera#access">Request early access</Cta>
+              <Cta href={SITE.maya}>Talk to Maya</Cta>
               <Cta href="/research" variant="secondary">
                 Follow the research
               </Cta>
@@ -590,7 +590,7 @@ function RelationalHub() {
   const R = 186;
   const SATS = [
     { label: "Learning", kind: "first" },
-    { label: "Meera", kind: "live" },
+    { label: "Maya", kind: "live" },
     { label: "Groups", kind: "live" },
     { label: "Mentors", kind: "later" },
     { label: "Elder care", kind: "later" },
@@ -601,7 +601,7 @@ function RelationalHub() {
       <svg
         viewBox="0 0 520 520"
         role="img"
-        aria-label="One relational layer at the centre, connected to learning first, then Meera and groups, with mentors, elder care and health later."
+        aria-label="One relational layer at the centre, connected to learning first, then Maya and groups, with mentors, elder care and health later."
       >
         {SATS.map((s, i) => {
           const a = -Math.PI / 2 + (i * Math.PI * 2) / SATS.length;

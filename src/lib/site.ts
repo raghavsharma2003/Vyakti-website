@@ -2,9 +2,12 @@ export const SITE = {
   name: "Vyakti",
   domain: "vyakti.ai",
   url: "https://vyakti.ai",
+  // Maya, the product. The display name changed from Meera on 2026-08-23;
+  // meera-silk.vercel.app still serves the same app for the Android build.
+  maya: "https://maya.vyakti.ai",
   tagline: "A relational intelligence lab.",
   description:
-    "Vyakti researches AI that understands a person over time and remains recognizably itself as the models beneath it change. Meera is our first product in development.",
+    "Vyakti researches AI that understands a person over time and remains recognizably itself as the models beneath it change. Maya is our first AI person.",
   locale: "en_US",
   twitter: "@vyakti_ai",
   email: "hello@vyakti.ai",
@@ -14,7 +17,7 @@ export const SITE = {
 export const NAV = [
   { label: "Vision", href: "/#vision" },
   { label: "Research", href: "/research" },
-  { label: "Meera", href: "/meera" },
+  { label: "Maya", href: "/maya" },
   { label: "Principles", href: "/#principles" },
   { label: "Company", href: "/company" },
 ] as const;
@@ -26,7 +29,7 @@ export const FOOTER_GROUPS = [
       { label: "Research", href: "/research" },
       { label: "Papers", href: "/research#papers" },
       { label: "Release", href: "/research/releases/vyakti-judge-qual" },
-      { label: "Meera", href: "/meera" },
+      { label: "Maya", href: "/maya" },
       { label: "Principles", href: "/#principles" },
     ],
   },
@@ -41,7 +44,7 @@ export const FOOTER_GROUPS = [
   {
     title: "Connect",
     links: [
-      { label: "Request access", href: "/meera#access" },
+      { label: "Talk to Maya", href: "https://maya.vyakti.ai" },
       { label: "Email the lab", href: "mailto:hello@vyakti.ai" },
     ],
   },

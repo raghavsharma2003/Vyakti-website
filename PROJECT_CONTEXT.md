@@ -308,10 +308,19 @@ These are planning hypotheses from the strategy discussion, not public commitmen
   ("one week: did what it predicted about the person come true?"), and two
   research areas (understanding the person; learning from being wrong).
 - Product repo read for this change: `html-portfolio` main at `3a921798`.
-- Open: the product renamed Meera to **Maya** for display on 2026-08-23
-  (`maya-rename-display-only` in the product repo). This site still says
-  Meera everywhere. The rename is an owner decision and was deliberately left
-  out of this change.
+- Renamed Meera to **Maya** on the public site, following the product's
+  2026-08-23 display rename (`maya-rename-display-only` in the product repo)
+  and the owner's go-ahead. The rule is the product's: Maya wherever people
+  read it, internal identifiers unchanged (`MeeraPortrait`, `--c-meera`,
+  `meera-portrait-v1.webp`, CSS module class names). `/meera` permanently
+  redirects to `/maya`, hash included.
+- The product is reached at `https://maya.vyakti.ai` (`SITE.maya`), added as a
+  domain on the Vercel project `meera`. `meera-silk.vercel.app` keeps serving
+  the same app and is deliberately not redirected: the Android build calls
+  its API at that origin, and anonymous users' state lives in that origin's
+  storage, so a blanket redirect would break the app and make Maya forget
+  people. Every "Meet Maya" / "Talk to Maya" link now opens the product;
+  the nav item still opens the `/maya` page.
 
 ### 2026-08-24
 

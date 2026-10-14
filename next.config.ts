@@ -12,6 +12,10 @@ const nextConfig: NextConfig = {
         destination: "/research#papers",
         permanent: true,
       },
+      // The product's display name changed from Meera to Maya on 2026-08-23.
+      // Old links keep working.
+      { source: "/meera", destination: "/maya", permanent: true },
+      { source: "/meera/:path*", destination: "/maya/:path*", permanent: true },
       {
         source: "/research/releases",
         destination: "/research#release",

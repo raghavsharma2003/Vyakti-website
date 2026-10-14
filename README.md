@@ -18,7 +18,7 @@ npx tsc --noEmit # typecheck
 ## Structure
 
 ```
-src/app/            routes: /, /research, /meera, /company
+src/app/            routes: /, /research, /maya (was /meera, redirects), /company
   opengraph-image   generated 1200x630 social card
   sitemap.ts        route list for search engines
   robots.ts
