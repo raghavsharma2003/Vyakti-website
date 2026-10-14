@@ -51,12 +51,13 @@ const LADDER = [
   },
 ] as const;
 
+/* The person's five families on the map below, A to E. */
 const KNOWING = [
-  "What they really understand",
-  "How they think and learn",
-  "What they feel, and what they avoid",
-  "What goes unsaid in how they talk",
-  "How much they trust, and why",
+  { k: "A", t: "What they really understand" },
+  { k: "B", t: "How they think and learn" },
+  { k: "C", t: "What they feel, and what they avoid" },
+  { k: "D", t: "What goes unsaid in how they talk" },
+  { k: "E", t: "How much they trust, and why" },
 ] as const;
 
 const BEING = [
@@ -234,9 +235,12 @@ export default function HomePage() {
                 each with its evidence and its confidence, scored against what
                 they actually do next.
               </p>
-              <ul>
+              <ul className={v.lettered}>
                 {KNOWING.map((item) => (
-                  <li key={item}>{item}</li>
+                  <li key={item.k}>
+                    <b className={v.halfKey}>{item.k}</b>
+                    {item.t}
+                  </li>
                 ))}
               </ul>
             </article>
@@ -275,8 +279,9 @@ export default function HomePage() {
             </h2>
             <p className={styles.sectionCopy}>
               Understanding a person is not one skill. We break it into seven
-              families, from what someone knows to how the relationship itself
-              changes what they reveal. Every dimension has a core question, a
+              families. A to E describe the person, from what they know to how
+              far they trust; F and G describe the AI, its own self and the loop
+              that makes it better. Every dimension has a core question, a
               reason it is still open, and a ground truth that could prove an AI
               right or wrong. That last column decides where research starts.
             </p>

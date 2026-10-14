@@ -241,6 +241,24 @@
   background: var(--color-ember);
 }
 
+/* knowing someone: the list is the map's families A to E, so it carries their letters */
+.lettered li {
+  align-items: baseline;
+}
+
+.lettered li::before {
+  display: none;
+}
+
+.halfKey {
+  flex: none;
+  width: 1.1rem;
+  color: var(--color-ember);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
 .bridge {
   position: relative;
   display: flex;
@@ -309,7 +327,24 @@
 .famChips {
   display: flex;
   flex-wrap: wrap;
+  gap: 0.75rem 1.6rem;
+}
+
+/* A to E (the person) and F, G (the AI) read as two groups */
+.famGroup {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
   gap: 0.5rem;
+}
+
+.famSide {
+  margin-right: 0.25rem;
+  color: var(--color-slate);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
 }
 
 .famChips button {
@@ -407,6 +442,11 @@
   stroke-width: 3;
   stroke-linecap: round;
   transition: stroke 300ms;
+}
+
+/* the AI's own families are drawn dashed, the person's solid */
+.arcAi {
+  stroke-dasharray: 2 8;
 }
 
 .arcOn {
@@ -1489,6 +1529,10 @@
   }
 
   .famChips {
+    gap: 0.6rem;
+  }
+
+  .famGroup {
     gap: 0.4rem;
   }
 

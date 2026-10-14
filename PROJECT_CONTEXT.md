@@ -333,6 +333,12 @@ These are planning hypotheses from the strategy discussion, not public commitmen
   re-measured after the change (min slack 21px on the hypothesis slide, at
   1536x730). Reverse if a first-time reader finds the family letters noise
   rather than a thread: drop the inline badges first, keep the H-card tags.
+- Homepage map, same thread: families now carry a `side` (`person` for A to
+  E, `ai` for F and G) in `vision-data.ts`; the map's chips are grouped "The
+  person" / "The AI", the F and G arcs are drawn dashed, and the section copy
+  says which is which. The "Knowing someone" list is the person's five
+  families, so it now carries their letters A to E. The theory card already
+  labelled its rows by family. Reverse with the Lossfunk change above.
 
 ### 2026-08-24
 

@@ -5,7 +5,7 @@ import {
   usePrefersReducedMotion,
   useSelfReveal,
 } from "@/components/figures/figure-shared";
-import { DIMENSIONS, FAMILIES, type FamilyKey } from "./vision-data";
+import { DIMENSIONS, FAMILIES, FAMILY_SIDES, type FamilyKey } from "./vision-data";
 import { useAutoAdvance, useInView } from "./use-in-view";
 import styles from "./vision.module.css";
 
@@ -55,6 +55,7 @@ const GEOMETRY = (() => {
     const dy = sin > 0.4 ? 16 : sin < -0.4 ? -6 : 5;
     return {
       key: f.key,
+      side: f.side,
       arc: `M ${x1} ${y1} A ${R_ARC} ${R_ARC} 0 ${a2 - a1 > Math.PI ? 1 : 0} 1 ${x2} ${y2}`,
       label: { x: lx, y: Number((ly + dy).toFixed(1)), anchor },
     };
@@ -88,17 +89,22 @@ export function PersonMap() {
 
   return (
     <div ref={viewRef} className={styles.mapWrap}>
-      <div className={styles.famChips} role="group" aria-label="Families">
-        {FAMILIES.map((f) => (
-          <button
-            key={f.key}
-            type="button"
-            aria-pressed={current.family === f.key}
-            onClick={() => choose(DIMENSIONS.findIndex((d) => d.family === f.key))}
-          >
-            <b>{f.key}</b>
-            {f.name}
-          </button>
+      <div className={styles.famChips}>
+        {FAMILY_SIDES.map((side) => (
+          <div key={side.key} className={styles.famGroup} role="group" aria-label={`Families: ${side.label.toLowerCase()}`}>
+            <span className={styles.famSide}>{side.label}</span>
+            {FAMILIES.filter((f) => f.side === side.key).map((f) => (
+              <button
+                key={f.key}
+                type="button"
+                aria-pressed={current.family === f.key}
+                onClick={() => choose(DIMENSIONS.findIndex((d) => d.family === f.key))}
+              >
+                <b>{f.key}</b>
+                {f.name}
+              </button>
+            ))}
+          </div>
         ))}
       </div>
 
@@ -110,7 +116,7 @@ export function PersonMap() {
           <svg
             viewBox="0 0 700 700"
             role="img"
-            aria-label="A map of 25 dimensions of understanding a person, grouped into seven families around the person at the centre."
+            aria-label="A map of 25 dimensions of understanding a person, grouped into seven families around the person at the centre: five describe the person, and two, drawn dashed, describe the AI."
           >
             {[84, 128, 172].map((r, i) => (
               <circle
@@ -139,7 +145,7 @@ export function PersonMap() {
               const fam = FAMILIES.find((x) => x.key === f.key)!;
               return (
                 <g key={f.key}>
-                  <path d={f.arc} className={[styles.arc, on ? styles.arcOn : ""].join(" ")} />
+                  <path d={f.arc} className={[styles.arc, f.side === "ai" ? styles.arcAi : "", on ? styles.arcOn : ""].join(" ")} />
                   <text
                     x={f.label.x}
                     y={f.label.y}

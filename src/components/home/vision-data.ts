@@ -10,14 +10,22 @@
 
 export type FamilyKey = "A" | "B" | "C" | "D" | "E" | "F" | "G";
 
-export const FAMILIES: ReadonlyArray<{ key: FamilyKey; name: string; long: string }> = [
-  { key: "A", name: "Knows", long: "What the person knows" },
-  { key: "B", name: "Learns", long: "How they think and learn" },
-  { key: "C", name: "Feels", long: "Their inner state" },
-  { key: "D", name: "Talks", long: "The signal in how they talk" },
-  { key: "E", name: "Relates", long: "The relationship" },
-  { key: "F", name: "Self", long: "The AI’s own self" },
-  { key: "G", name: "Evolves", long: "The loop that makes it grow" },
+/** A to E describe the person being understood; F and G describe the AI doing the understanding. */
+export type FamilySide = "person" | "ai";
+
+export const FAMILY_SIDES: ReadonlyArray<{ key: FamilySide; label: string }> = [
+  { key: "person", label: "The person" },
+  { key: "ai", label: "The AI" },
+];
+
+export const FAMILIES: ReadonlyArray<{ key: FamilyKey; name: string; long: string; side: FamilySide }> = [
+  { key: "A", name: "Knows", long: "What the person knows", side: "person" },
+  { key: "B", name: "Learns", long: "How they think and learn", side: "person" },
+  { key: "C", name: "Feels", long: "Their inner state", side: "person" },
+  { key: "D", name: "Talks", long: "The signal in how they talk", side: "person" },
+  { key: "E", name: "Relates", long: "The relationship", side: "person" },
+  { key: "F", name: "Self", long: "The AI’s own self", side: "ai" },
+  { key: "G", name: "Evolves", long: "The loop that makes it grow", side: "ai" },
 ];
 
 export type Dimension = {
