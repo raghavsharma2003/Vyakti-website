@@ -339,6 +339,16 @@ These are planning hypotheses from the strategy discussion, not public commitmen
   says which is which. The "Knowing someone" list is the person's five
   families, so it now carries their letters A to E. The theory card already
   labelled its rows by family. Reverse with the Lossfunk change above.
+- Lossfunk proposal now records every visit (owner's request: know who
+  opens it and what they read). First-party, no third-party analytics:
+  `sites/lossfunk/v/s.js` (events + rrweb replay), `api/e.js` (ingest into the
+  Neon project `vyakti-lossfunk-analytics`), `middleware.js` (every page fetch,
+  including link-preview bots), `/admin` + `api/q.js` behind `ADMIN_KEY`.
+  Identification is by tagged links (`?r=<name>`), IP and city; nothing names
+  a person on its own. Tested end to end with scripted desktop and phone
+  visits; replay averages about 100 KB compressed per minute of reading.
+  Reverse or trim if storage or visitor trust becomes the constraint: drop
+  replay first, keep the structured events.
 
 ### 2026-08-24
 
