@@ -46,7 +46,7 @@ export const metadata: Metadata = {
     "full-duplex conversation",
     "cultural intelligence",
     "AI companion",
-    "Meera",
+    "Maya",
     "Vyakti",
   ],
   authors: [{ name: SITE.name, url: SITE.url }],

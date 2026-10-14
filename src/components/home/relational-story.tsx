@@ -8,6 +8,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { MeeraPortrait } from "@/components/meera";
 import { Cta } from "@/components/ui/cta";
+import { SITE } from "@/lib/site";
 import { createStoryRuntime } from "./story-runtime";
 import styles from "./home.module.css";
 
@@ -29,7 +30,7 @@ const CHAPTERS = [
     side: "left",
     label: "Vyakti is a relational intelligence lab",
     title: "Intelligence is becoming abundant. Continuity is not.",
-    body: "We research AI identities that remain recognizable as the intelligence beneath them changes.",
+    body: "We research AI that comes to understand a person over time, and remains recognizably itself as the intelligence beneath it changes.",
   },
   {
     at: 0.165,
@@ -53,14 +54,14 @@ const CHAPTERS = [
     at: 0.595,
     side: "left",
     title: "The engine can change. The person should remain.",
-    body: "Better models should make Meera more capable, not make her someone else.",
+    body: "Better models should make Maya more capable, not make her someone else.",
   },
   {
     at: 0.765,
     side: "right",
-    label: "Meet Meera",
-    title: "You do not configure Meera. You meet her.",
-    body: "One AI person in development, designed around stable identity, selective memory, and shared context.",
+    label: "Meet Maya",
+    title: "You do not configure Maya. You meet her.",
+    body: "One AI person, live in an early version, designed around stable identity, selective memory, and shared context.",
   },
   {
     at: 0.925,
@@ -225,7 +226,7 @@ export function RelationalStory() {
           leftMask.current.style.opacity = String(1 - visualHandoff);
         }
 
-        // Noor exits completely before Meera's authored portrait enters.
+        // Noor exits completely before Maya's authored portrait enters.
         // The clear-paper interval keeps the lab identity and product identity
         // spatially separate instead of implying a transformation.
         const rawNoorExit = gsap.utils.clamp(0, 1, (progress - 0.625) / 0.04);
@@ -419,7 +420,7 @@ export function RelationalStory() {
                       </>
                     ) : index === 5 ? (
                       <>
-                        You do not configure <span className={styles.meeraWord}>Meera</span>.
+                        You do not configure <span className={styles.meeraWord}>Maya</span>.
                         You meet her.
                       </>
                     ) : (
@@ -429,7 +430,7 @@ export function RelationalStory() {
                   <p className={styles.chapterBody}>
                     {index === 4 ? (
                       <>
-                        Better models should make <span className={styles.meeraWord}>Meera</span>{" "}
+                        Better models should make <span className={styles.meeraWord}>Maya</span>{" "}
                         more capable, not make her someone else.
                       </>
                     ) : (
@@ -438,7 +439,7 @@ export function RelationalStory() {
                   </p>
                   {index === 0 ? (
                     <div className={styles.chapterActions}>
-                      <Cta href="/meera">Meet Meera</Cta>
+                      <Cta href={SITE.maya}>Meet Maya</Cta>
                       <Cta href="/research" variant="secondary">
                         Explore the research
                       </Cta>
@@ -446,7 +447,7 @@ export function RelationalStory() {
                   ) : null}
                   {index === CHAPTERS.length - 1 ? (
                     <div className={styles.chapterActions}>
-                      <Cta href="/meera#access">Request early access</Cta>
+                      <Cta href={SITE.maya}>Talk to Maya</Cta>
                     </div>
                   ) : null}
                 </article>
