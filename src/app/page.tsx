@@ -167,7 +167,8 @@ export default function HomePage() {
               AI knows almost everything. <span className={v.signal}>Except you.</span>
             </h2>
             <p className={styles.sectionCopy}>
-              Models now solve olympiad problems and write production code. Yet
+              Models now write production code, and an AI system has produced a
+              machine-checked proof for Navier–Stokes, a Millennium Prize problem. Yet
               a tutor still can’t tell whether a child understood, a coach
               can’t tell when someone is about to quit, and an assistant agrees
               when it should push back. Vyakti works on what intelligence alone
