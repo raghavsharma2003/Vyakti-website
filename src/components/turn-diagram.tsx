@@ -8,11 +8,11 @@ import { SeamNote } from "@/components/research/seam-note";
  */
 const EXCHANGE = [
   { who: "Person", line: "so I did end up quitting, which I know sounds" },
-  { seam: "overlap", note: "Meera comes in on the last word, not after it" },
-  { who: "Meera", line: "wait, you actually did it?" },
+  { seam: "overlap", note: "Maya comes in on the last word, not after it" },
+  { who: "Maya", line: "wait, you actually did it?" },
   { who: "Person", line: "yeah. yeah, on Tuesday." },
   { seam: "gap", note: "It lets the pause sit instead of filling it" },
-  { who: "Meera", line: "okay. how do you feel this morning?" },
+  { who: "Maya", line: "okay. how do you feel this morning?" },
 ] as const;
 
 export function TurnDiagram() {
@@ -34,7 +34,7 @@ export function TurnDiagram() {
                 </span>
                 <span
                   className={
-                    row.who === "Meera"
+                    row.who === "Maya"
                       ? "text-body text-ember"
                       : "text-body text-bone"
                   }

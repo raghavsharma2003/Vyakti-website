@@ -1,0 +1,9 @@
+{
+  "name": "vyakti-lossfunk",
+  "private": true,
+  "type": "module",
+  "description": "lossfunk.vyakti.ai: static proposal, plus the visit recorder's API (api/) and middleware.",
+  "dependencies": {
+    "@neondatabase/serverless": "1.1.0"
+  }
+}

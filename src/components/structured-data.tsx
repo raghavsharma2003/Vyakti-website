@@ -36,12 +36,12 @@ export function StructuredData() {
       },
       {
         "@type": "SoftwareApplication",
-        "@id": `${SITE.url}/meera#software`,
-        name: "Meera",
+        "@id": `${SITE.url}/maya#software`,
+        name: "Maya",
         applicationCategory: "Conversational AI",
         description:
-          "Vyakti's first product in development: a text and voice AI companion designed around stable identity, selective memory and user-controlled shared context.",
-        url: `${SITE.url}/meera`,
+          "Vyakti's first AI person: a text and voice AI companion designed around stable identity, selective memory and user-controlled shared context.",
+        url: SITE.maya,
         publisher: { "@id": `${SITE.url}/#organization` },
       },
     ],

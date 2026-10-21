@@ -4,15 +4,15 @@ import { Cta } from "@/components/ui/cta";
 import { SITE } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Meera",
+  title: "Maya",
   description:
-    "Meera is Vyakti's first consumer product in development: an AI companion designed around identity continuity, shared history and multimodal expression.",
-  alternates: { canonical: "/meera" },
+    "Maya is Vyakti's first AI person: a companion designed around identity continuity, shared history and multimodal expression, live in an early version.",
+  alternates: { canonical: "/maya" },
   openGraph: {
-    title: "Meera, by Vyakti",
+    title: "Maya, by Vyakti",
     description:
-      "An AI companion in development, designed to build shared context over time while remaining clearly AI.",
-    url: "/meera",
+      "An AI companion designed to build shared context over time while remaining clearly AI.",
+    url: "/maya",
   },
 };
 
@@ -39,11 +39,11 @@ const CAPABILITIES = [
   },
   {
     t: "Clearly AI",
-    d: "Presence should not depend on deception. Meera will identify as AI and communicate uncertainty, memory limits and perceptual boundaries plainly.",
+    d: "Presence should not depend on deception. Maya will identify as AI and communicate uncertainty, memory limits and perceptual boundaries plainly.",
   },
 ];
 
-export default function MeeraPage() {
+export default function MayaPage() {
   return (
     <>
       {/* Portrait hero. Asymmetric split. */}
@@ -52,14 +52,14 @@ export default function MeeraPage() {
           <div className="relative z-20">
             <p className="eyebrow text-meera">Our first product</p>
             <h1 className="mt-6 text-bone">
-              Meet <span className="text-meera">Meera</span>.
+              Meet <span className="text-meera">Maya</span>.
             </h1>
             <p className="measure mt-6 text-lead text-ash">
               An AI companion designed to be known, and to know you over time.
               The first consumer expression of our relational intelligence research.
             </p>
             <div className="mt-9 flex flex-wrap gap-3">
-              <Cta href="#access">Request early access</Cta>
+              <Cta href={SITE.maya}>Talk to Maya</Cta>
               <Cta href="/research" variant="secondary">
                 The research behind it
               </Cta>
@@ -112,7 +112,7 @@ export default function MeeraPage() {
               only appear with time. That is the real test.
             </p>
             <p className="measure mt-5 text-body text-ash" data-reveal="2">
-              We will describe what Meera can perceive, remember and do, publish
+              We will describe what Maya can perceive, remember and do, publish
               meaningful limitations, and expand access as the experience earns it.
             </p>
           </div>
@@ -123,15 +123,15 @@ export default function MeeraPage() {
       <section id="access" className="scroll-mt-24 bg-void py-24 md:py-32">
         <div className="shell-narrow text-center">
           <h2 className="text-bone" data-reveal="0">
-            Request early access.
+            Talk to Maya.
           </h2>
           <p className="mx-auto mt-6 max-w-[48ch] text-lead text-ash" data-reveal="1">
-            When access begins, we will invite people gradually and learn from
-            long-term use. Tell us who you are and what you hope a companion
-            could become.
+            Maya is live in an early version. We expand what she can do as the
+            experience earns it. Tell us what works and what doesn’t.
           </p>
-          <div className="mt-9 flex justify-center" data-reveal="2">
-            <Cta href={`mailto:${SITE.email}?subject=Meera%20access`}>
+          <div className="mt-9 flex flex-wrap justify-center gap-3" data-reveal="2">
+            <Cta href={SITE.maya}>Open Maya</Cta>
+            <Cta href={`mailto:${SITE.email}?subject=Maya`} variant="secondary">
               Email the team
             </Cta>
           </div>

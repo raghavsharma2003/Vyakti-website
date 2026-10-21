@@ -5,7 +5,7 @@ import { SITE } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Company",
   description:
-    "Vyakti is an independent relational intelligence lab building persistent AI identities and Meera, its first consumer product in development.",
+    "Vyakti is an independent relational intelligence lab building AI that understands a person over time, and Maya, its first AI person.",
   alternates: { canonical: "/company" },
   openGraph: {
     title: "Company",
@@ -76,7 +76,7 @@ export default function CompanyPage() {
               },
               {
                 t: "Research through one product",
-                d: "Research that never reaches real use stays theoretical. Meera is where the work has to survive contact with time, context and shared history.",
+                d: "Research that never reaches real use stays theoretical. Maya is where the work has to survive contact with time, context and shared history.",
               },
               {
                 t: "Culture is not a setting",

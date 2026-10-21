@@ -282,6 +282,74 @@ These are planning hypotheses from the strategy discussion, not public commitmen
 
 ## Decision log
 
+### 2026-10-14
+
+- Widened the public thesis from "an AI identity that persists" to its full
+  shape: AI that comes to understand a person over time *and* remains
+  recognizably itself. The two halves (knowing someone, being someone) are one
+  loop, joined by the relationship. Hero structure and story timing are
+  unchanged; only chapter one's body line moved.
+- Added five homepage sections after the story, in order: the vision (with a
+  ladder of published external results: LongMemEval, PersonaMem-v2/CUPID,
+  SimpleToM, each cited, none ours), an interactive map of a person (seven
+  families, 25 dimensions, each with core question, why it is open, and ground
+  truth), the relationship as instrument (Flückiger et al. 2018, r ≈ .28),
+  persistence (a living theory of an illustrative learner whose beliefs are
+  revised, scored by bets, and fade without fresh evidence, plus the existing
+  continuity map), and where the layer begins (learning first, Meera, groups,
+  later domains), each with an explicit status.
+- The map and living theory are ported from the Lossfunk research proposal
+  (lossfunk.vyakti.ai), which the learning row links to. Learning is the first
+  proving ground because it is the one domain with an answer key.
+- The continuity-map caption now states that the base model still sets a
+  strong identity ceiling (the 38 to 2 swap result), so model independence is
+  presented as a measured question, not a promise.
+- Added "Beliefs, not labels" to the principles, a fourth evaluation horizon
+  ("one week: did what it predicted about the person come true?"), and two
+  research areas (understanding the person; learning from being wrong).
+- Product repo read for this change: `html-portfolio` main at `3a921798`.
+- Renamed Meera to **Maya** on the public site, following the product's
+  2026-08-23 display rename (`maya-rename-display-only` in the product repo)
+  and the owner's go-ahead. The rule is the product's: Maya wherever people
+  read it, internal identifiers unchanged (`MeeraPortrait`, `--c-meera`,
+  `meera-portrait-v1.webp`, CSS module class names). `/meera` permanently
+  redirects to `/maya`, hash included.
+- The product is reached at `https://maya.vyakti.ai` (`SITE.maya`), added as a
+  domain on the Vercel project `meera`. `meera-silk.vercel.app` keeps serving
+  the same app and is deliberately not redirected: the Android build calls
+  its API at that origin, and anonymous users' state lives in that origin's
+  storage, so a blanket redirect would break the app and make Maya forget
+  people. Every "Meet Maya" / "Talk to Maya" link now opens the product;
+  the nav item still opens the `/maya` page.
+- Lossfunk proposal (`sites/lossfunk`): the hypothesis now names the families
+  it is about. Before, H1–H4 were written in learner terms and never pointed
+  back to the map, so the core claim read narrower than the vision (the
+  owner asked why A–E were missing). Now the hypothesis text names A–E (know,
+  learn, feel, talk, trust), and each H card carries the families it tests
+  (H1 A–D, H2 B·G, H3 C·E·F, H4 A–E·G). The chart has one gradable bet per family
+  that lights as the line reaches the week it is graded, and the theory
+  card's rows show family names, not bare letters. The map text now says A
+  to E describe the person and F and G describe the AI. Desktop deck fit was
+  re-measured after the change (min slack 21px on the hypothesis slide, at
+  1536x730). Reverse if a first-time reader finds the family letters noise
+  rather than a thread: drop the inline badges first, keep the H-card tags.
+- Homepage map, same thread: families now carry a `side` (`person` for A to
+  E, `ai` for F and G) in `vision-data.ts`; the map's chips are grouped "The
+  person" / "The AI", the F and G arcs are drawn dashed, and the section copy
+  says which is which. The "Knowing someone" list is the person's five
+  families, so it now carries their letters A to E. The theory card already
+  labelled its rows by family. Reverse with the Lossfunk change above.
+- Lossfunk proposal now records every visit (owner's request: know who
+  opens it and what they read). First-party, no third-party analytics:
+  `sites/lossfunk/v/s.js` (events + rrweb replay), `api/e.js` (ingest into the
+  Neon project `vyakti-lossfunk-analytics`), `middleware.js` (every page fetch,
+  including link-preview bots), `/admin` + `api/q.js` behind `ADMIN_KEY`.
+  Identification is by tagged links (`?r=<name>`), IP and city; nothing names
+  a person on its own. Tested end to end with scripted desktop and phone
+  visits; replay averages about 100 KB compressed per minute of reading.
+  Reverse or trim if storage or visitor trust becomes the constraint: drop
+  replay first, keep the structured events.
+
 ### 2026-08-24
 
 - Removed numeric GSAP scrub from the touch layout. Native mobile momentum now drives story progress directly, so the face no longer trails the finger or keeps catching up after a swipe.

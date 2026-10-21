@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Visits · lossfunk.vyakti.ai</title>
+<link rel="stylesheet" href="/v/p.css">
+<style>
+  :root { --bg:#f6f6f1; --card:#fff; --line:#e0e0d8; --ink:#0d0f0e; --ink2:#3c3f3b; --ink3:#6b6d67; --sig:#c13a26; --ok:#1f6b54; color-scheme: light; }
+  * { box-sizing: border-box; } body { margin:0; background:var(--bg); color:var(--ink); font:14px/1.45 ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; }
+  header { position:sticky; top:0; z-index:5; background:var(--bg); border-bottom:1px solid var(--line); padding:12px 16px; display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
+  header b { font-size:15px; } header .sp { flex:1; }
+  input, button, select { font:inherit; } button { border:1px solid var(--line); background:var(--card); border-radius:8px; padding:6px 12px; cursor:pointer; }
+  button.on { background:var(--ink); color:#fff; border-color:var(--ink); }
+  main { padding:16px; display:grid; gap:16px; max-width:1500px; margin:0 auto; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:14px; overflow:auto; }
+  h2 { font-size:13px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink3); margin:0 0 10px; font-weight:600; }
+  table { border-collapse:collapse; width:100%; font-size:13px; } th, td { text-align:left; padding:6px 8px; border-bottom:1px solid var(--line); vertical-align:top; white-space:nowrap; }
+  th { color:var(--ink3); font-weight:500; position:sticky; top:0; background:var(--card); } tr.row { cursor:pointer; } tr.row:hover { background:#f3f3ee; } tr.sel { background:#fbefe9; }
+  .tag { display:inline-block; padding:1px 7px; border-radius:99px; background:#efefe9; font-size:11px; color:var(--ink2); }
+  .tag.ref { background:#fbe3dc; color:var(--sig); font-weight:600; } .tag.bot { background:#eee; color:#888; } .tag.me { background:#e3efe9; color:var(--ok); }
+  .kpis { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:10px; } .kpi { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:12px; } .kpi b { display:block; font-size:24px; } .kpi span { color:var(--ink3); font-size:12px; }
+  .bar { height:8px; background:#efefe9; border-radius:9px; overflow:hidden; min-width:120px; } .bar i { display:block; height:100%; background:var(--sig); }
+  #detail { display:none; } .split { display:grid; grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr); gap:16px; } @media (max-width:1000px){ .split{ grid-template-columns:1fr; } }
+  .ev { font:12px/1.4 ui-monospace,Menlo,Consolas,monospace; border-bottom:1px solid var(--line); padding:4px 0; display:grid; grid-template-columns:70px 120px minmax(0,1fr); gap:8px; }
+  .ev .ty { font-weight:600; } .ev.click .ty, .ev.copy .ty, .ev.select_text .ty { color:var(--sig); } .ev.slide_enter .ty { color:var(--ok); } .ev .dd { color:var(--ink2); white-space:pre-wrap; word-break:break-word; }
+  #events { max-height:70vh; overflow:auto; } #player { min-height:200px; } .muted { color:var(--ink3); }
+  .filters label { display:inline-flex; gap:6px; align-items:center; margin-right:12px; }
+</style>
+</head>
+<body>
+<header>
+  <b>lossfunk.vyakti.ai · visits</b>
+  <span class="filters"><label><input type="checkbox" id="fBots"> show bots</label><label><input type="checkbox" id="fMe"> show my own visits</label></span>
+  <span class="sp"></span>
+  <span class="muted" id="stamp"></span>
+  <button id="reload">Refresh</button>
+  <button id="lock">Lock</button>
+</header>
+<main>
+  <section id="login" class="card" style="max-width:420px">
+    <h2>Admin key</h2>
+    <form id="lf"><input id="key" type="password" autocomplete="current-password" style="width:100%;padding:8px;border:1px solid var(--line);border-radius:8px"><p><button>Open</button></p></form>
+    <p class="muted">Opening this page also marks this browser as yours, so your own visits to the proposal are flagged and hidden by default.</p>
+  </section>
+  <div id="app" hidden>
+    <div class="kpis" id="kpis"></div>
+    <section class="card" style="margin-top:16px"><h2>Sessions</h2><div style="max-height:48vh;overflow:auto"><table id="sessions"></table></div></section>
+    <section id="detail" class="card" style="margin-top:16px">
+      <h2 id="dTitle">Session</h2>
+      <div id="dMeta" class="muted" style="margin-bottom:12px"></div>
+      <div class="split">
+        <div><h2>Replay</h2><div id="player"><p class="muted">Loading…</p></div><p class="muted">The 3D face is a WebGL canvas and is not recorded; it shows as an empty box in replays.</p><h2 style="margin-top:14px">Time on each slide</h2><table id="dSlides"></table></div>
+        <div><h2>Every event</h2><div id="events"></div></div>
+      </div>
+    </section>
+    <div class="split" style="margin-top:16px">
+      <section class="card"><h2>Reading funnel (people, not bots or you)</h2><table id="slides"></table></section>
+      <section class="card"><h2>Raw page fetches (incl. link previews when someone shares the URL)</h2><div style="max-height:50vh;overflow:auto"><table id="hits"></table></div></section>
+    </div>
+  </div>
+</main>
+<script src="/v/p.js"></script>
+<script>
+(() => {
+  try { localStorage.setItem("vy_me", "1"); } catch (e) {}
+  const $ = s => document.querySelector(s);
+  const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+  const dur = ms => { ms = +ms || 0; const s = Math.round(ms / 1000); return s < 60 ? s + "s" : Math.floor(s / 60) + "m " + (s % 60) + "s"; };
+  const when = t => new Date(t).toLocaleString([], { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit", second: "2-digit" });
+  const dev = ua => { ua = ua || ""; const os = /iPhone|iPad/.test(ua) ? (/iPad/.test(ua) ? "iPad" : "iPhone") : /Android/.test(ua) ? "Android" : /Mac OS X/.test(ua) ? "Mac" : /Windows/.test(ua) ? "Windows" : /Linux/.test(ua) ? "Linux" : "?"; const br = /Edg\//.test(ua) ? "Edge" : /OPR\//.test(ua) ? "Opera" : /Chrome\//.test(ua) ? "Chrome" : /Firefox\//.test(ua) ? "Firefox" : /Safari\//.test(ua) ? "Safari" : "?"; return os + " · " + br; };
+  let key = sessionStorage.getItem("vy_admin") || "", data = null, sel = null, player = null;
+  async function api(q) { const r = await fetch("/api/q?" + q, { headers: { "x-key": key }, cache: "no-store" }); if (r.status === 401) { throw new Error("unauthorized"); } return r.json(); }
+  async function load() {
+    try { data = await api("a=overview"); } catch (e) { $("#login").hidden = false; $("#app").hidden = true; sessionStorage.removeItem("vy_admin"); return; }
+    $("#login").hidden = true; $("#app").hidden = false; $("#stamp").textContent = "updated " + new Date().toLocaleTimeString(); render();
+  }
+  function shown() { return data.sessions.filter(s => ($("#fBots").checked || !s.is_bot) && ($("#fMe").checked || !s.internal)); }
+  function render() {
+    const ss = shown(), people = new Set(ss.map(s => s.visitor_id));
+    const act = ss.reduce((a, s) => a + (+s.active_ms || 0), 0);
+    const hits = data.hits.filter(h => h.is_bot).length;
+    $("#kpis").innerHTML = [[ss.length, "sessions"], [people.size, "distinct browsers"], [new Set(ss.filter(s => s.ref).map(s => s.ref)).size, "tagged links seen"], [dur(ss.length ? act / ss.length : 0), "avg active time"], [ss.length ? Math.round(ss.reduce((a, s) => a + (+s.max_slide || 0), 0) / ss.length * 10) / 10 : 0, "avg furthest slide"], [hits, "link-preview fetches"]]
+      .map(([v, l]) => `<div class="kpi"><b>${esc(v)}</b><span>${l}</span></div>`).join("");
+    $("#sessions").innerHTML = `<tr><th>Started</th><th>Who</th><th>Where</th><th>Device</th><th>Active</th><th>Furthest</th><th>Scroll</th><th>Clicks</th><th>Copied</th><th>Visit #</th><th>Came from</th></tr>` +
+      ss.map(s => `<tr class="row${s.id === sel ? " sel" : ""}" data-id="${esc(s.id)}"><td>${when(s.started_at)}</td>
+        <td>${s.ref ? `<span class="tag ref">${esc(s.ref)}</span> ` : ""}${s.internal ? '<span class="tag me">you</span> ' : ""}${s.is_bot ? '<span class="tag bot">bot</span> ' : ""}<span class="muted">${esc(s.visitor_id.slice(0, 6))}</span></td>
+        <td>${esc([s.city, s.region, s.country].filter(Boolean).join(", "))}<br><span class="muted">${esc(s.ip)}</span></td>
+        <td>${esc(dev(s.user_agent))}<br><span class="muted">${esc((s.viewport || []).join("×"))}${s.deck === true ? " · deck" : ""}</span></td>
+        <td>${dur(s.active_ms)}</td><td>${esc(s.max_slide || 0)} / 14</td><td>${Math.round(s.max_scroll || 0)}%</td><td>${esc(s.clicks)}</td><td>${esc(s.copies)}</td><td>${esc(s.visitor_sessions)}</td>
+        <td class="muted">${esc((s.referrer || "").replace(/^https?:\/\//, "").slice(0, 40))}</td></tr>`).join("");
+    $("#sessions").querySelectorAll("tr.row").forEach(tr => tr.onclick = () => open(tr.dataset.id));
+    const max = Math.max(1, ...data.slides.map(r => +r.sessions));
+    $("#slides").innerHTML = `<tr><th>#</th><th>Slide</th><th>People</th><th></th><th>Avg time</th></tr>` + data.slides.map(r => `<tr><td>${r.i}</td><td>${esc(r.name)}</td><td>${r.sessions}</td><td><div class="bar"><i style="width:${100 * r.sessions / max}%"></i></div></td><td>${dur(r.avg_ms)}</td></tr>`).join("");
+    $("#hits").innerHTML = `<tr><th>When</th><th>Who</th><th>Where</th><th>Agent</th></tr>` + data.hits.map(h => `<tr><td>${when(h.at)}</td><td>${h.ref ? `<span class="tag ref">${esc(h.ref)}</span> ` : ""}${h.is_bot ? '<span class="tag bot">preview/bot</span>' : ""}<br><span class="muted">${esc(h.ip)}</span></td><td>${esc([h.city, h.country].filter(Boolean).join(", "))}</td><td class="muted" style="white-space:normal;max-width:380px">${esc(h.user_agent)}</td></tr>`).join("");
+  }
+  async function open(id) {
+    sel = id; render(); $("#detail").style.display = "block"; $("#detail").scrollIntoView({ behavior: "smooth" });
+    const { session: s, events } = await api("a=session&id=" + encodeURIComponent(id));
+    $("#dTitle").textContent = (s.ref ? s.ref + " · " : "") + [s.city, s.country].filter(Boolean).join(", ") + " · " + when(s.started_at);
+    const c = s.context || {};
+    $("#dMeta").innerHTML = esc([dev(s.user_agent), c.viewport && "viewport " + c.viewport.join("×"), c.screen && "screen " + c.screen.slice(0, 2).join("×") + " @" + c.dpr + "x", c.tz, c.langs && c.langs.join(" "), c.gpu, c.net && c.net.type, "visitor " + s.visitor_id, "visit #" + (c.visits || 1), "IP " + s.ip].filter(Boolean).join(" · "));
+    const per = {}; events.filter(e => e.type === "slide_leave").forEach(e => { const k = e.data.i + " " + e.data.name; per[k] = (per[k] || 0) + (+e.data.ms || 0); });
+    const pm = Math.max(1, ...Object.values(per));
+    $("#dSlides").innerHTML = Object.entries(per).sort((a, b) => parseInt(a[0]) - parseInt(b[0])).map(([k, v]) => `<tr><td>${esc(k)}</td><td><div class="bar"><i style="width:${100 * v / pm}%"></i></div></td><td>${dur(v)}</td></tr>`).join("");
+    const t0 = events.length ? new Date(events[0].at).getTime() : 0;
+    $("#events").innerHTML = events.map(e => `<div class="ev ${esc(e.type)}"><span class="muted">+${dur(new Date(e.at).getTime() - t0)}</span><span class="ty">${esc(e.type)}</span><span class="dd">${esc(e.slide ? "[" + e.slide + "] " : "")}${esc(e.data ? JSON.stringify(e.data) : "")}</span></div>`).join("");
+    $("#player").innerHTML = '<p class="muted">Loading replay…</p>';
+    const rr = await api("a=replay&id=" + encodeURIComponent(id));
+    $("#player").innerHTML = "";
+    if (!rr.length || rr.length < 2) { $("#player").innerHTML = '<p class="muted">No replay recorded for this session.</p>'; return; }
+    const w = Math.min($("#player").clientWidth, 900);
+    const P = window.rrwebPlayer && (rrwebPlayer.default || rrwebPlayer.Player || rrwebPlayer);
+    player = new P({ target: $("#player"), props: { events: rr, width: w, height: Math.round(w * 0.62), autoPlay: false, skipInactive: true, showDebug: false } });
+  }
+  $("#lf").onsubmit = e => { e.preventDefault(); key = $("#key").value.trim(); sessionStorage.setItem("vy_admin", key); load(); };
+  $("#reload").onclick = load; $("#lock").onclick = () => { sessionStorage.removeItem("vy_admin"); location.reload(); };
+  $("#fBots").onchange = $("#fMe").onchange = () => data && render();
+  if (key) load();
+})();
+</script>
+</body>
+</html>

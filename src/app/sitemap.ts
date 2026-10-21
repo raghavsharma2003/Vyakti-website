@@ -6,7 +6,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const routes = [
     { path: "", priority: 1, changeFrequency: "monthly" as const },
     { path: "/research", priority: 0.9, changeFrequency: "monthly" as const },
-    { path: "/meera", priority: 0.9, changeFrequency: "monthly" as const },
+    { path: "/maya", priority: 0.9, changeFrequency: "monthly" as const },
     { path: "/company", priority: 0.7, changeFrequency: "monthly" as const },
     // Papers and releases come from the content module, so publishing one is
     // a data edit rather than a code edit here.

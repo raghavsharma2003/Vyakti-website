@@ -87,7 +87,7 @@ export default function OpengraphImage() {
               letterSpacing: "-0.01em",
             }}
           >
-            A relational intelligence lab. Meera is our first product in development.
+            A relational intelligence lab. Maya is our first AI person.
           </div>
         </div>
       </div>
